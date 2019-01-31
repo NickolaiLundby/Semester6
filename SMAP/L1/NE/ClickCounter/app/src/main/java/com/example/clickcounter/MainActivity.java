@@ -8,8 +8,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    int counter;
+    TextView txtCounterText;
+    TextView txtCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,13 +22,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        counter = 0;
+        txtCounter = findViewById(R.id.txtCounter);
+        txtCounterText = findViewById(R.id.txtCounterText);
 
-       FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                counter++;
+                txtCounter.setText(""+counter);
             }
         });
     }
