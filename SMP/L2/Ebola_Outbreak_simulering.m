@@ -5,6 +5,7 @@ function Ebola
 Population=rand(1,1000); %Number of population
 
 for n=1:length(Population)
+<<<<<<< HEAD
     if Population(n)<=0.2 %Infected and symptoms
         Infected(n)=1;
         Symptoms(n)=1;
@@ -18,6 +19,21 @@ for n=1:length(Population)
         Infected(n)=0;
         Symptoms(n)=0;
     end
+=======
+if Population(n)<=0.2 %Infected and symptoms
+    Infected(n)=1;
+    Symptoms(n)=1;
+elseif 0.2<Population(n) && Population(n)<=0.5 %Symptoms but not infected
+    Infected(n)=0;
+    Symptoms(n)=1;
+elseif Population(n)>0.99 %Infected and no symptoms
+    Infected(n)=1;
+    Symptoms(n)=0;
+else %No symptoms and not infected
+    Infected(n)=0;
+    Symptoms(n)=0;
+end
+>>>>>>> 2faae7e2a33d17908bbc62654850b5a5539cabcd
 end
 
 
