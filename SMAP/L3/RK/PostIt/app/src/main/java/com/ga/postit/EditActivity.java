@@ -1,6 +1,7 @@
 package com.ga.postit;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +24,10 @@ public class EditActivity extends AppCompatActivity {
         btn_cancel = findViewById(R.id.btn_cancel);
         txt_edit = findViewById(R.id.txt_edit);
 
+        if (savedInstanceState != null){
+            txt_edit.setText(savedInstanceState.getString("userinput"));
+        }
+
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,5 +46,11 @@ public class EditActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putString("userinput", txt_edit.getText().toString());
     }
 }
