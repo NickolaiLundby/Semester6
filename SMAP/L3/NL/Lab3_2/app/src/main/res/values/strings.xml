@@ -6,4 +6,6 @@
     <string name="editView_editText">Input text here</string>
     <string name="text_responseEditView" />
     <string name="btnCancel">Cancel</string>
+    <string name="btnPhotoContent">Picture</string>
+    <string name="btnToCameraViewContent">CAMERA</string>
 </resources>
