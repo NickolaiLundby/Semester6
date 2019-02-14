@@ -1,6 +1,7 @@
 package com.nickolailisberglundby.lab3_2;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,12 @@ public class EditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+
+        if(savedInstanceState == null){ }
+        else
+        {
+            editText.setText(savedInstanceState.getString("userInput"));
+        }
 
         btnToMainView = findViewById(R.id.btn_editOk);
         btnToMainView.setOnClickListener(new View.OnClickListener() {
@@ -35,6 +42,12 @@ public class EditActivity extends AppCompatActivity {
         });
 
         editText = findViewById(R.id.editText_input);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putString("userInput", editText.getText().toString());
     }
 
     private void btnCancelClick() {
