@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ThereAndBackAgain</string>
+    <string name="gotosecond">Go to second</string>
+    <string name="returnback">Return</string>
+</resources>
