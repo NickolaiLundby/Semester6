@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LessonThree</string>
+    <string name="btn_tosecondactivity">To second activity</string>
+    <string name="btn_tomainactivity">To main activity</string>
+</resources>

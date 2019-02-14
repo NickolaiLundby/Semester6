@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Lab3_2</string>
+    <string name="btn_toEditView">To edit view</string>
+    <string name="btn_editOk">OK</string>
+    <string name="editViewTextInput">Input text here</string>
+    <string name="editView_editText">Input text here</string>
+    <string name="text_responseEditView" />
+    <string name="btnCancel">Cancel</string>
+</resources>
