@@ -11,6 +11,7 @@ import android.widget.EditText;
 public class EditActivity extends AppCompatActivity {
     Button btnToMainView;
     Button btnCancel;
+    String editTextContent;
 
     EditText editText;
 
@@ -18,12 +19,6 @@ public class EditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-
-        if(savedInstanceState == null){ }
-        else
-        {
-            editText.setText(savedInstanceState.getString("userInput"));
-        }
 
         btnToMainView = findViewById(R.id.btn_editOk);
         btnToMainView.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +42,14 @@ public class EditActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-        outState.putString("userInput", editText.getText().toString());
+        outState.putString(ViewActivity.EDITTEXTCONTENT_STORAGE_KEY, editText.getText().toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        editTextContent = savedInstanceState.getString(ViewActivity.EDITTEXTCONTENT_STORAGE_KEY);
+        editText.setText(editTextContent);
     }
 
     private void btnCancelClick() {

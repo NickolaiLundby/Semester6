@@ -2,6 +2,7 @@ package com.nickolailisberglundby.lab3_2;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,12 +14,20 @@ import android.widget.Toast;
 
 public class ViewActivity extends AppCompatActivity {
     Button btnToEditView;
-    Button btnToCameraView;
+    Button btnCamera;
     TextView txtResponseEditView;
     ImageView imageView;
+    Bitmap myBitmap;
+    String txtViewContent;
 
+    //Request constants
     public final static int REQUEST_TO_EDIT_VIEW = 100;
-    public final static int REQUEST_TO_CAMERA_VIEW = 101;
+    public final static int REQUEST_TO_CAMERA = 101;
+
+    //Other constants
+    public final static String BITMAP_STORAGE_KEY = "bitmapstorekey";
+    public final static String TXTVIEWCONTENT_STORAGE_KEY = "txtviewstorekey";
+    public final static String EDITTEXTCONTENT_STORAGE_KEY = "edittextstorekey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +42,11 @@ public class ViewActivity extends AppCompatActivity {
             }
         });
 
-        btnToCameraView = findViewById(R.id.btn_toCameraView);
-        btnToCameraView.setOnClickListener(new View.OnClickListener() {
+        btnCamera = findViewById(R.id.btn_toCameraView);
+        btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnToCameraViewClick();
+                btnCameraClick();
             }
         });
 
@@ -52,10 +61,10 @@ public class ViewActivity extends AppCompatActivity {
         startActivityForResult(toEditView, REQUEST_TO_EDIT_VIEW);
     }
 
-    private void btnToCameraViewClick()
+    private void btnCameraClick()
     {
-        Intent toCameraView = new Intent(this, CameraActivity.class);
-        startActivityForResult(toCameraView, REQUEST_TO_CAMERA_VIEW);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, REQUEST_TO_CAMERA);
     }
 
     @Override
@@ -66,7 +75,8 @@ public class ViewActivity extends AppCompatActivity {
             case REQUEST_TO_EDIT_VIEW:
                 switch(resultCode){
                     case RESULT_OK:
-                        txtResponseEditView.setText(data.getExtras().getString("input"));
+                        txtViewContent = data.getExtras().getString("input");
+                        txtResponseEditView.setText(txtViewContent);
                         break;
                     case RESULT_CANCELED:
                         break;
@@ -74,11 +84,11 @@ public class ViewActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-            case REQUEST_TO_CAMERA_VIEW:
+            case REQUEST_TO_CAMERA:
                 switch(resultCode){
                     case RESULT_OK:
-                        Bitmap photo = (Bitmap) data.getParcelableExtra("picture");
-                        imageView.setImageBitmap(photo);
+                        myBitmap = (Bitmap)data.getExtras().get("data");
+                        imageView.setImageBitmap(myBitmap);
 
                     case RESULT_CANCELED:
                         break;
@@ -89,5 +99,21 @@ public class ViewActivity extends AppCompatActivity {
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(BITMAP_STORAGE_KEY, myBitmap);
+        outState.putString(TXTVIEWCONTENT_STORAGE_KEY, txtViewContent);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        myBitmap = savedInstanceState.getParcelable(BITMAP_STORAGE_KEY);
+        txtViewContent = savedInstanceState.getString(TXTVIEWCONTENT_STORAGE_KEY);
+        imageView.setImageBitmap(myBitmap);
+        txtResponseEditView.setText(txtViewContent);
     }
 }
