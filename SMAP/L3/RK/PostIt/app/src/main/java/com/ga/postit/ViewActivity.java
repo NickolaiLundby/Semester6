@@ -1,6 +1,7 @@
 package com.ga.postit;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,10 @@ public class ViewActivity extends AppCompatActivity {
         btn_edit = findViewById(R.id.btn_ok);
         txt_view = findViewById(R.id.txt_view);
 
+        if (savedInstanceState != null){
+            txt_view.setText(savedInstanceState.getString("txt", "default text"));
+        }
+
         btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,4 +47,10 @@ public class ViewActivity extends AppCompatActivity {
                 txt_view.setText(data.getExtras().getString("result"));
             }
         }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("txt", txt_view.getText().toString());
+    }
 }
