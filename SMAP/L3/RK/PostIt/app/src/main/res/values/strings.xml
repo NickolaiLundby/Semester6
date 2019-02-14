@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PostIt</string>
+    <string name="edit">edit</string>
+</resources>
