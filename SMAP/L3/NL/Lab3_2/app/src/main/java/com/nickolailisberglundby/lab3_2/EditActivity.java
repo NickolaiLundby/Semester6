@@ -37,6 +37,11 @@ public class EditActivity extends AppCompatActivity {
         });
 
         editText = findViewById(R.id.editText_input);
+
+        if(savedInstanceState.getString(ViewActivity.EDITTEXTCONTENT_STORAGE_KEY) != null)
+        {
+            editText.setText(savedInstanceState.getString(ViewActivity.EDITTEXTCONTENT_STORAGE_KEY));
+        }
     }
 
     @Override
