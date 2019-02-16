@@ -57,6 +57,15 @@ public class ViewActivity extends AppCompatActivity {
         imageView = findViewById(R.id.img_viewActivity);
 
         txtResponseEditView = findViewById(R.id.textView_viewActivity);
+
+        if (savedInstanceState != null)
+        {
+            myBitmap = savedInstanceState.getParcelable(BITMAP_STORAGE_KEY);
+            imageView.setImageBitmap(myBitmap);
+
+            txtViewContent = savedInstanceState.getString(TXTVIEWCONTENT_STORAGE_KEY);
+            txtResponseEditView.setText(txtViewContent);
+        }
     }
 
     private void btnToEditViewClick()
@@ -67,16 +76,18 @@ public class ViewActivity extends AppCompatActivity {
 
     private void btnCameraClick()
     {
-        // Permissions
-        if(checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-        {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        if(getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            // Permissions
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+            } else {
+                // Camera request
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, REQUEST_TO_CAMERA);
+            }
         }
-        else{
-            // Camera request
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(cameraIntent, REQUEST_TO_CAMERA);
-        }
+        else
+            Toast.makeText(this, "Phone does not have camera feature", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -115,33 +126,37 @@ public class ViewActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         outState.putParcelable(BITMAP_STORAGE_KEY, myBitmap);
         outState.putString(TXTVIEWCONTENT_STORAGE_KEY, txtViewContent);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
         myBitmap = savedInstanceState.getParcelable(BITMAP_STORAGE_KEY);
         txtViewContent = savedInstanceState.getString(TXTVIEWCONTENT_STORAGE_KEY);
         imageView.setImageBitmap(myBitmap);
         txtResponseEditView.setText(txtViewContent);
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(requestCode == CAMERA_PERMISSION_CODE)
-        {
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, REQUEST_TO_CAMERA);
-            }
-            else{
-                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+        switch(requestCode){
+            case CAMERA_PERMISSION_CODE:
+            {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, REQUEST_TO_CAMERA);
+                }
+                else
+                {
+                    Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+                }
             }
         }
     }

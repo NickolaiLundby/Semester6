@@ -38,23 +38,24 @@ public class EditActivity extends AppCompatActivity {
 
         editText = findViewById(R.id.editText_input);
 
-        if(savedInstanceState.getString(ViewActivity.EDITTEXTCONTENT_STORAGE_KEY) != null)
+        if (savedInstanceState != null)
         {
-            editText.setText(savedInstanceState.getString(ViewActivity.EDITTEXTCONTENT_STORAGE_KEY));
+            editTextContent = savedInstanceState.getString(ViewActivity.EDITTEXTCONTENT_STORAGE_KEY);
+            editText.setText(editTextContent);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
         outState.putString(ViewActivity.EDITTEXTCONTENT_STORAGE_KEY, editText.getText().toString());
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
         editTextContent = savedInstanceState.getString(ViewActivity.EDITTEXTCONTENT_STORAGE_KEY);
         editText.setText(editTextContent);
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     private void btnCancelClick() {
