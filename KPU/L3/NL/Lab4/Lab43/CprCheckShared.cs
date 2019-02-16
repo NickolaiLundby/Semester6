@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Lab41
+namespace Lab43
 {
     public enum CprError
     {
@@ -11,7 +11,7 @@ namespace Lab41
         Check11Error
     };
 
-    public class CprCheck
+    public class CprCheckShared
     {
         public bool Check(string cprTxt, out CprError error)
         {
