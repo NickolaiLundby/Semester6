@@ -38,6 +38,12 @@ public class EditActivity extends AppCompatActivity {
 
         editText = findViewById(R.id.editText_input);
 
+        String s = getIntent().getStringExtra("text");
+
+        if(s != null && !s.isEmpty())
+            editText.setText(s);
+
+
         if (savedInstanceState != null)
         {
             editTextContent = savedInstanceState.getString(ViewActivity.EDITTEXTCONTENT_STORAGE_KEY);

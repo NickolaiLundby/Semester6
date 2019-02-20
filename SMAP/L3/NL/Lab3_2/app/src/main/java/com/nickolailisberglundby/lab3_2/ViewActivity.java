@@ -71,6 +71,12 @@ public class ViewActivity extends AppCompatActivity {
     private void btnToEditViewClick()
     {
         Intent toEditView = new Intent(this, EditActivity.class);
+        if(txtViewContent != null)
+        {
+            toEditView.putExtra("text", txtViewContent);
+        }
+        else
+            toEditView.putExtra("text", "");
         startActivityForResult(toEditView, REQUEST_TO_EDIT_VIEW);
     }
 
