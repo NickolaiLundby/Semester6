@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">UI Demons</string>
+    <string name="BtnToPickerContent">Picker demo</string>
+    <string name="BtnToEditTextContent">EditText demo</string>
+    <string name="BtnToSlidersContent">Sliders demo</string>
+    <string name="BtnPickerViewOkay">OK</string>
+    <string name="BtnPickerViewCancel">CANCEL</string>
+    <string name="TextViewPickerResult">Value selected:</string>
+    <string name="TextViewMainSliderResult">Slider result:</string>
+    <string name="TextViewMainEditTextResult">EditText result:</string>
+    <string name="TextViewMainPickerResult">Picker result:</string>
+</resources>
