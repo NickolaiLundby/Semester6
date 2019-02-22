@@ -1,12 +1,14 @@
 package com.nickolailisberglundby.uidemons;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,8 +18,11 @@ public class MainActivity extends AppCompatActivity {
     Button btnToSliders;
 
     // TextViews
+    TextView pickerResultText;
     TextView pickerResult;
+    TextView editTextResultText;
     TextView editTextResult;
+    TextView sliderResultText;
     TextView sliderResult;
 
     // Request constants
@@ -30,6 +35,15 @@ public class MainActivity extends AppCompatActivity {
     public final static String EDIT_TEXT_RESULT = "editTextResult";
     public final static String SLIDER_RESULT = "sliderResult";
 
+    // Storage constants
+    public final static String PICKER_RESULT_STORAGE = "strpkrres";
+    public final static String EDIT_TEXT_RESULT_STORAGE = "stredtres";
+    public final static String SLIDER_RESULT_STORAGE = "strsldres";
+
+    // Debugging
+    Toast toast;
+    int picky;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +55,17 @@ public class MainActivity extends AppCompatActivity {
         btnToEditText = findViewById(R.id.id_btn_to_editText);
         btnToSliders = findViewById(R.id.id_btn_to_sliders);
 
+        // Debugging
+        toast = new Toast(this);
+        picky = 0;
+
         // TextView initialization
-        pickerResult = findViewById(R.id.id_textView_picker_res);
-        editTextResult = findViewById(R.id.id_textView_editText_res);
-        sliderResult = findViewById(R.id.id_textView_slider_res);
+        pickerResultText = findViewById(R.id.id_textView_picker_text);
+        pickerResult = findViewById(R.id.id_textView_picker_result);
+        editTextResultText = findViewById(R.id.id_textView_editText_text);
+        editTextResult = findViewById(R.id.id_textView_editText_result);
+        sliderResultText = findViewById(R.id.id_textView_slider_text);
+        sliderResult = findViewById(R.id.id_textView_slider_result);
 
         // Button listeners
         btnToPicker.setOnClickListener(new View.OnClickListener() {
@@ -53,20 +74,29 @@ public class MainActivity extends AppCompatActivity {
                 BtnToPickerClick();
             }
         });
-
         btnToEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BtnToEditTextClick();
             }
         });
-
         btnToSliders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BtnToSlidersClick();
             }
         });
+
+        // Get saved instances
+        if (savedInstanceState != null)
+        {
+            sliderResult.setText(savedInstanceState.getString(MainActivity.SLIDER_RESULT_STORAGE, "" + 5));
+
+            editTextResult.setText(savedInstanceState.getString(MainActivity.EDIT_TEXT_RESULT_STORAGE, "" + 5));
+
+            picky = savedInstanceState.getInt(PICKER_RESULT_STORAGE, 5);
+            pickerResult.setText("" + picky);
+        }
     }
 
     public void BtnToPickerClick()
@@ -94,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
                 switch(resultCode)
                 {
                     case RESULT_OK:
-                        pickerResult.setText("Picker result: " + data.getExtras().getInt(PICKER_RESULT));
+                        picky = data.getExtras().getInt(PICKER_RESULT);
+                        pickerResult.setText(Integer.toString(picky));
                         break;
                     case RESULT_CANCELED:
                         break;
@@ -105,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 switch(resultCode)
                 {
                     case RESULT_OK:
-                        editTextResult.setText("EditText result: " + data.getExtras().getString(EDIT_TEXT_RESULT));
+                        editTextResult.setText(data.getExtras().getString(EDIT_TEXT_RESULT));
                         break;
                     case RESULT_CANCELED:
                         break;
@@ -116,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 switch(resultCode)
                 {
                     case RESULT_OK:
-                        sliderResult.setText("Slider result: " + data.getExtras().getString(SLIDER_RESULT));
+                        sliderResult.setText(data.getExtras().getString(SLIDER_RESULT));
                         break;
                     case RESULT_CANCELED:
                         break;
@@ -127,4 +158,26 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putInt(MainActivity.PICKER_RESULT_STORAGE, picky);
+        outState.putString(MainActivity.EDIT_TEXT_RESULT_STORAGE, editTextResult.getText().toString());
+        outState.putString(MainActivity.SLIDER_RESULT_STORAGE, sliderResult.getText().toString());
+    }
+
+    /*@Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState.getString(SLIDER_RESULT_STORAGE) != null && !savedInstanceState.getString(SLIDER_RESULT_STORAGE).isEmpty())
+            sliderResult.setText(savedInstanceState.getString(SLIDER_RESULT_STORAGE));
+
+        if(savedInstanceState.getString(EDIT_TEXT_RESULT_STORAGE) != null && !savedInstanceState.getString(EDIT_TEXT_RESULT_STORAGE).isEmpty())
+            editTextResult.setText(savedInstanceState.getString(EDIT_TEXT_RESULT_STORAGE));
+
+        if(savedInstanceState.getString(PICKER_RESULT_STORAGE) != null && !savedInstanceState.getString(PICKER_RESULT_STORAGE).isEmpty())
+            pickerResult.setText(savedInstanceState.getString(PICKER_RESULT_STORAGE));
+    }
+    */
 }

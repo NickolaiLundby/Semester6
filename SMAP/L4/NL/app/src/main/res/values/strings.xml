@@ -9,4 +9,8 @@
     <string name="TextViewMainSliderResult">Slider result:</string>
     <string name="TextViewMainEditTextResult">EditText result:</string>
     <string name="TextViewMainPickerResult">Picker result:</string>
+    <string name="FramePicker">Picker Demo</string>
+    <string name="TextViewSliderRes">0</string>
+    <string name="TextViewPickerRes">0</string>
+    <string name="TextViewEditTextRes">0</string>
 </resources>

@@ -24,14 +24,14 @@ public class PickerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_picker);
 
         // Widget initialization
-        btnOkay.findViewById(R.id.id_btn_picker_okay);
-        btnCancel.findViewById(R.id.id_btn_picker_cancel);
-        sliderNumber.findViewById(R.id.id_seekbar_picker);
+        btnOkay = findViewById(R.id.id_btn_picker_okay);
+        btnCancel = findViewById(R.id.id_btn_picker_cancel);
+        sliderNumber = findViewById(R.id.id_seekbar_picker);
         sliderNumber.setMax(1000);
-        numberPicker.findViewById(R.id.id_np_picker);
+        numberPicker = findViewById(R.id.id_np_picker);
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(1000);
-        resultText.findViewById(R.id.id_picker_result_text);
+        resultText = findViewById(R.id.id_picker_result_text);
 
         // Widget listeners
         btnOkay.setOnClickListener(new View.OnClickListener() {
