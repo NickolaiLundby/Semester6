@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">WhyIsntThisWorking</string>
+    <string name="btn_main2_text">Edit Text</string>
+    <string name="btn_main_slider">Slider</string>
+    <string name="textView_main_slider_result">0</string>
+    <string name="textView_result_slider">Slider result:</string>
+    <string name="textView_result_edit">Edit Text result:</string>
+    <string name="textView_main_edit_result">Plaintext result</string>
+    <string name="OKAYBUTTON">OKAY</string>
+    <string name="CANCELBUTTON">CANCEL</string>
+    <string name="editText_input">Input text here</string>
+    <string name="btn_main_picker">Picker</string>
+    <string name="textView_result_picker">Picker result:</string>
+    <string name="textView_main_picker_result">0</string>
+    <string name="btn_main3_text">Slider</string>
+    <string name="emailInput">input@yourmail.here</string>
+    <string name="passwordInput">yourpasswordhere</string>
+    <string name="textView_main_edit_result_email">Email result</string>
+    <string name="textView_main_edit_result_password">Password result</string>
+    <string name="txtViewRed">Red</string>
+    <string name="txtViewBlue">Blue</string>
+    <string name="txtViewGreen">Green</string>
+</resources>

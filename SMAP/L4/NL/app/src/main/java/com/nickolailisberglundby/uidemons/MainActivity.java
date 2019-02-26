@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
     Toast toast;
     int picky;
 
+    // Content constats
+    public final static String PICKER_RESULT_CONTENT = "strpkrcontent";
+    public final static String SLIDER_RESULT_CONTENT = "strsldcontent";
+    public final static String EDIT_TEXT_RESULT_CONTENT = "stredtcontent";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,17 +95,20 @@ public class MainActivity extends AppCompatActivity {
         // Get saved instances
         if (savedInstanceState != null)
         {
-            sliderResult.setText(savedInstanceState.getString(MainActivity.SLIDER_RESULT_STORAGE, "" + 5));
+            sliderResult.setText(savedInstanceState.getString(MainActivity.SLIDER_RESULT_STORAGE));
 
-            editTextResult.setText(savedInstanceState.getString(MainActivity.EDIT_TEXT_RESULT_STORAGE, "" + 5));
+            editTextResult.setText(savedInstanceState.getString(MainActivity.EDIT_TEXT_RESULT_STORAGE));
 
-            picky = savedInstanceState.getInt(PICKER_RESULT_STORAGE, 5);
-            pickerResult.setText("" + picky);
+            picky = savedInstanceState.getInt(PICKER_RESULT_STORAGE);
+            pickerResult.setText(String.valueOf(picky));
         }
     }
 
     public void BtnToPickerClick()
     {
+        Intent pickerIntent = new Intent(this, PickerActivity.class);
+        pickerIntent.putExtra(SLIDER_RESULT_CONTENT, sliderResult.getText());
+        pickerIntent.putExtra(EDIT_TEXT_RESULT_CONTENT, editTextResult.getText());
         startActivityForResult(new Intent(this, PickerActivity.class), REQUEST_PICKER_VIEW);
     }
 
@@ -125,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     case RESULT_OK:
                         picky = data.getExtras().getInt(PICKER_RESULT);
-                        pickerResult.setText(Integer.toString(picky));
+                        pickerResult.setText(String.valueOf(picky));
                         break;
                     case RESULT_CANCELED:
                         break;
