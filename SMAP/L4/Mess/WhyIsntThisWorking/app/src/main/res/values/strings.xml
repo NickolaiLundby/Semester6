@@ -2,7 +2,7 @@
     <string name="app_name">WhyIsntThisWorking</string>
     <string name="btn_main2_text">Edit Text</string>
     <string name="btn_main_slider">Slider</string>
-    <string name="textView_main_slider_result">0</string>
+    <string name="textView_main_slider_result">Color here</string>
     <string name="textView_result_slider">Slider result:</string>
     <string name="textView_result_edit">Edit Text result:</string>
     <string name="textView_main_edit_result">Plaintext result</string>

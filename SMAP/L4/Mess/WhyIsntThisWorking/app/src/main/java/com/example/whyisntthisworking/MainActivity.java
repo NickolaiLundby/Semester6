@@ -26,7 +26,10 @@ public class MainActivity extends AppCompatActivity {
     String editResultPlainText;
     String editResultPassword;
     String editResultEmail;
-    int sliderResult;
+    int sliderResultRed;
+    int sliderResultBlue;
+    int sliderResultGreen;
+    int backgroundColor;
 
     //--Constants--//
     // Requests
@@ -38,18 +41,25 @@ public class MainActivity extends AppCompatActivity {
     public final static String EDIT_VIEW_RESULT_PLAINTEXT = "editViewResultPlainText";
     public final static String EDIT_VIEW_RESULT_EMAIL = "editViewResultEmail";
     public final static String EDIT_VIEW_RESULT_PASSWORD = "editViewResultPassword";
-    public final static String SLIDER_VIEW_RESULT = "sliderViewResult";
+    public final static String SLIDER_VIEW_RESULT_RED = "sliderViewResultRed";
+    public final static String SLIDER_VIEW_RESULT_GREEN = "sliderViewResultGreen";
+    public final static String SLIDER_VIEW_RESULT_BLUE = "sliderViewResultBlue";
     // Storage
     public final static String PICKER_STORAGE_KEY = "pickerStorage";
     public final static String EDIT_PLAINTEXT_STORAGE_KEY = "editStoragePlainText";
     public final static String EDIT_PASSWORD_STORAGE_KEY = "editStorageEmail";
     public final static String EDIT_EMAIL_STORAGE_KEY = "editStoragePassword";
-    public final static String SLIDER_STORAGE_KEY = "sliderStorage";
+    public final static String SLIDER_RED_STORAGE_KEY = "sliderRedStorage";
+    public final static String SLIDER_BLUE_STORAGE_KEY = "sliderBlueStorage";
+    public final static String SLIDER_GREEN_STORAGE_KEY = "sliderGreenStorage";
     // Global content key
     public final static String CONTENT_KEY = "contentFromMain";
     public final static String CONTENT_KEY_EMAIL = "emailContentFromMain";
     public final static String CONTENT_KEY_PASSWORD = "passwordContentFromMain";
     public final static String CONTENT_KEY_PLAINTEXT = "plainTextContentFromMain";
+    public final static String CONTENT_KEY_RED = "redContentFromMain";
+    public final static String CONTENT_KEY_BLUE = "blueContentFromMain";
+    public final static String CONTENT_KEY_GREEN = "greenContentFromMain";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +78,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Variable initialization
         pickerResult = 0;
-        sliderResult = 0;
+        sliderResultBlue = 0;
+        sliderResultGreen = 0;
+        sliderResultRed = 0;
+        backgroundColor = 0;
 
         // Listeners
         btnPicker.setOnClickListener(new View.OnClickListener() {
@@ -114,10 +127,10 @@ public class MainActivity extends AppCompatActivity {
             {
                 txtViewEditResultEmail.setText(editResultEmail);
             }
-            sliderResult = savedInstanceState.getInt(SLIDER_STORAGE_KEY);
-            if(sliderResult != 0){
-                txtViewSliderResult.setText(String.valueOf(sliderResult));
-            }
+            sliderResultRed = savedInstanceState.getInt(SLIDER_RED_STORAGE_KEY);
+            sliderResultGreen = savedInstanceState.getInt(SLIDER_GREEN_STORAGE_KEY);
+            sliderResultBlue = savedInstanceState.getInt(SLIDER_BLUE_STORAGE_KEY);
+            SetBackgroundColor(sliderResultRed, sliderResultGreen, sliderResultBlue);
         }
     }
 
@@ -140,8 +153,16 @@ public class MainActivity extends AppCompatActivity {
     public void BtnSliderClick()
     {
         Intent sliderIntent = new Intent(this, SliderActivity.class);
-        sliderIntent.putExtra(CONTENT_KEY, sliderResult);
+        sliderIntent.putExtra(CONTENT_KEY_BLUE, sliderResultBlue);
+        sliderIntent.putExtra(CONTENT_KEY_GREEN, sliderResultGreen);
+        sliderIntent.putExtra(CONTENT_KEY_RED, sliderResultRed);
         startActivityForResult(sliderIntent, REQUEST_SLIDER_VIEW);
+    }
+
+    public void SetBackgroundColor(int red, int green, int blue)
+    {
+        backgroundColor = 0xff000000 + red * 0x10000 + green * 0x100 + blue;
+        txtViewSliderResult.setBackgroundColor(backgroundColor);
     }
 
     @Override
@@ -170,8 +191,10 @@ public class MainActivity extends AppCompatActivity {
         }
         if(requestCode == REQUEST_SLIDER_VIEW && resultCode == RESULT_OK)
         {
-            sliderResult = data.getExtras().getInt(SLIDER_VIEW_RESULT);
-            txtViewSliderResult.setText(String.valueOf(sliderResult));
+            sliderResultRed = data.getExtras().getInt(SLIDER_VIEW_RESULT_RED);
+            sliderResultBlue = data.getExtras().getInt(SLIDER_VIEW_RESULT_BLUE);
+            sliderResultGreen = data.getExtras().getInt(SLIDER_VIEW_RESULT_GREEN);
+            SetBackgroundColor(sliderResultRed, sliderResultGreen, sliderResultBlue);
         }
     }
 
@@ -182,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
         outState.putString(EDIT_PLAINTEXT_STORAGE_KEY, editResultPlainText);
         outState.putString(EDIT_EMAIL_STORAGE_KEY, editResultEmail);
         outState.putString(EDIT_PASSWORD_STORAGE_KEY, editResultPassword);
-        outState.putInt(SLIDER_STORAGE_KEY, sliderResult);
+        outState.putInt(SLIDER_RED_STORAGE_KEY, sliderResultRed);
+        outState.putInt(SLIDER_GREEN_STORAGE_KEY, sliderResultGreen);
+        outState.putInt(SLIDER_BLUE_STORAGE_KEY, sliderResultBlue);
     }
 }
