@@ -20,4 +20,11 @@
     <string name="txtViewRed">Red</string>
     <string name="txtViewBlue">Blue</string>
     <string name="txtViewGreen">Green</string>
+    <string name="menu_action_search">Search</string>
+    <string-array name="arrayDemoList">
+        <item>EditText Demo</item>
+        <item>Picker Demo</item>
+        <item>Slider Demo</item>
+        <item>Main</item>
+    </string-array>
 </resources>

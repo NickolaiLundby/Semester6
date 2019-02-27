@@ -4,9 +4,20 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     TextView txtViewEditResultPassword;
     TextView txtViewSliderResult;
 
+    ListView listView;
+
     // Variables
     int pickerResult;
     String editResultPlainText;
@@ -30,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     int sliderResultBlue;
     int sliderResultGreen;
     int backgroundColor;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> demoList;
 
     //--Constants--//
     // Requests
@@ -65,6 +80,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Variable initialization
+        pickerResult = 0;
+        sliderResultBlue = 0;
+        sliderResultGreen = 0;
+        sliderResultRed = 0;
+        backgroundColor = 0;
+        demoList = new ArrayList<>();
+        demoList.addAll(Arrays.asList(getResources().getStringArray(R.array.arrayDemoList)));
+        adapter = new ArrayAdapter<String>(
+                MainActivity.this,
+                android.R.layout.simple_list_item_1,
+                demoList);
 
         // Widget initialization
         btnPicker = findViewById(R.id.btn_main);
@@ -75,13 +102,8 @@ public class MainActivity extends AppCompatActivity {
         txtViewEditResultEmail = findViewById(R.id.textView_edit_result_email);
         txtViewEditResultPassword = findViewById(R.id.textView_edit_result_password);
         txtViewSliderResult = findViewById(R.id.textView_slider_result);
-
-        // Variable initialization
-        pickerResult = 0;
-        sliderResultBlue = 0;
-        sliderResultGreen = 0;
-        sliderResultRed = 0;
-        backgroundColor = 0;
+        listView = findViewById(R.id.listViewMain);
+        listView.setAdapter(adapter);
 
         // Listeners
         btnPicker.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +124,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 BtnSliderClick();
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = (String) parent.getItemAtPosition(position);
+                switch(selectedItem)
+                {
+                    case "Picker Demo":
+                        BtnPickerClick();
+                        break;
+                    case "Slider Demo":
+                        BtnSliderClick();
+                        break;
+                    case "EditText Demo":
+                        BtnEditClick();
+                        break;
+                    case "Main":
+                        break;
+                }
             }
         });
 
@@ -132,6 +175,28 @@ public class MainActivity extends AppCompatActivity {
             sliderResultBlue = savedInstanceState.getInt(SLIDER_BLUE_STORAGE_KEY);
             SetBackgroundColor(sliderResultRed, sliderResultGreen, sliderResultBlue);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.my_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView)item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(MainActivity.this, "Now searching for " + query, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return true;
     }
 
     public void BtnPickerClick()
