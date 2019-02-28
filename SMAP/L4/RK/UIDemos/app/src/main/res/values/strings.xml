@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">UI Demos</string>
+    <string name="picker">Picker Demo</string>
+    <string name="edtitText">Edit Text Demo</string>
+    <string name="slider">Slider Demo</string>
+    <string name="unknownemail">example@email.com</string>
+    <string name="unknownpassword">password</string>
+    <string name="red">red</string>
+    <string name="green">green</string>
+    <string name="blue">blue</string>
+    <string name="search">search</string>
+</resources>
