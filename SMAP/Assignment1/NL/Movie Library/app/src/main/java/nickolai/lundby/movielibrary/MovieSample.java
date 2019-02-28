@@ -8,6 +8,13 @@ public class MovieSample {
     private List<String> Genres;
     private int Rating;
 
+    public MovieSample(String title, String plot, List<String> genres, int rating) {
+        Title = title;
+        Plot = plot;
+        Genres = genres;
+        Rating = rating;
+    }
+
     public String getTitle() {
         return Title;
     }

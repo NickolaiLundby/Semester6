@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Private String Ryan</string>
+    <string name="FirstName">First name</string>
+    <string name="LastName">Last name</string>
+    <string name="Age">0</string>
+    <string name="PhoneNumber">88888888</string>
+</resources>
