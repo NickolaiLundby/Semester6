@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Nickolai Lisberg</Authors>
+    <Product>Lab41 Simple Dll</Product>
+    <Description>First package</Description>
+    <PackageId>N.L.Lab41</PackageId>
+    <PackageReleaseNotes>Very first try at making a nuget package</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>

@@ -3,7 +3,7 @@ package nickolai.lisberg.lundby.alldatabasesbelongtous;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
-/*
+
 public class DatabaseApplication extends Application {
     public AppDatabase database;
 
@@ -15,4 +15,4 @@ public class DatabaseApplication extends Application {
         return database;
     }
 }
-*/
+

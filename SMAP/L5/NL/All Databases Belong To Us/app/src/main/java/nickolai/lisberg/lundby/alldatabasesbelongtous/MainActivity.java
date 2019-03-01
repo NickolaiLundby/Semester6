@@ -3,6 +3,7 @@ package nickolai.lisberg.lundby.alldatabasesbelongtous;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     // Variables
     ArrayList<Task> arrayOfTasks;
     TaskAdapter taskAdapter;
-    //AppDatabase db;
+    AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +30,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Variable initialization
-        // DatabaseApplication dba = (DatabaseApplication) getApplicationContext();
-        // db = dba.GetDatabase();
-        // List<Task> tasks = db.taskDao().getAll();
-        arrayOfTasks = new ArrayList<Task>()
-        {{
-            arrayOfTasks.add(new Task("School", "Work on homework"));
-            arrayOfTasks.add(new Task("Danskebank", "Work for the moneys"));
-            arrayOfTasks.add(new Task("Home", "Gotta chill"));
-        }};
+        DatabaseApplication dba = (DatabaseApplication) getApplicationContext();
+        db = dba.GetDatabase();
+        List<Task> tasks = db.taskDao().getAll();
+        arrayOfTasks = new ArrayList<Task>();
+
+        for(int i = 0; i < tasks.size(); i++){
+            arrayOfTasks.add(tasks.get(i));
+        }
+
         taskAdapter = new TaskAdapter(MainActivity.this, arrayOfTasks);
 
         // Widget initialization
@@ -54,12 +55,22 @@ public class MainActivity extends AppCompatActivity {
                 BtnAddClick();
             }
         });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Task t = (Task) parent.getItemAtPosition(position);
+                db.taskDao().delete(t);
+                taskAdapter.remove(t);
+                return true;
+            }
+        });
     }
 
     private void BtnAddClick()
     {
         Task addTask = new Task(editPlace.getText().toString(), editTask.getText().toString());
-        //db.taskDao().insertTask(addTask);
+        db.taskDao().insertTask(addTask);
         taskAdapter.add(addTask);
     }
 }
