@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>cprcheck</PackageId>
+    <Authors>Nickolai</Authors>
+    <Company>Nickolai A/S</Company>
+    <Product>CPR Checker</Product>
+    <Description>This is a CPR checker</Description>
+    <PackageTags>CPR</PackageTags>
+    <PackageReleaseNotes>This is the only version!</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>
