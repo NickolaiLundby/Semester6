@@ -24,7 +24,7 @@ public class MovieAdapter extends ArrayAdapter {
     }
 
     public MovieAdapter(Context context, ArrayList<Movie> movies){
-        super(context, R.layout.listview_item, movies);
+        super(context, R.layout.list_view_item, movies);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class MovieAdapter extends ArrayAdapter {
         if(convertView == null){
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.listview_item, parent, false);
+            convertView = inflater.inflate(R.layout.list_view_item, parent, false);
             viewHolder.title = (TextView) convertView.findViewById(R.id.lvItem_title);
             viewHolder.userRating = (TextView) convertView.findViewById(R.id.lvItem_userrating);
             viewHolder.imdbRating = (TextView) convertView.findViewById(R.id.lvItem_imdbrating);

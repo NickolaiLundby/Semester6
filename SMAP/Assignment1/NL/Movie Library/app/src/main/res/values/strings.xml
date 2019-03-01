@@ -13,4 +13,7 @@
     <string name="editTitle">TITLE</string>
     <string name="editWatched">Watched?</string>
     <string name="editComment">None</string>
+    <string name="lvTitle">TITLE</string>
+    <string name="lvRating">9.0</string>
+    <string name="pictureDescriber">Picture reflecting genre</string>
 </resources>

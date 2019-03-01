@@ -94,7 +94,7 @@ public class OverviewActivity extends AppCompatActivity {
                 break;
             case REQUEST_EDIT:
                 if (resultCode == RESULT_OK) {
-
+                    Toast.makeText(this, "Came back from edit", Toast.LENGTH_SHORT).show();
                 }
                 else {
 

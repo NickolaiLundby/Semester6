@@ -54,7 +54,7 @@ public class Movie implements Parcelable {
         return ImdbRating;
     }
 
-    public void setImdbRating(int imdbRating) {
+    public void setImdbRating(double imdbRating) {
         ImdbRating = imdbRating;
     }
 
@@ -62,7 +62,7 @@ public class Movie implements Parcelable {
         return UserRating;
     }
 
-    public void setUserRating(int userRating) {
+    public void setUserRating(double userRating) {
         UserRating = userRating;
     }
 

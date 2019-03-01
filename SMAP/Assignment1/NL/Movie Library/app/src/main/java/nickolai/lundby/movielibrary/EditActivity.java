@@ -1,5 +1,6 @@
 package nickolai.lundby.movielibrary;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +17,7 @@ public class EditActivity extends AppCompatActivity {
 
     // Widgets
     Button btnOkay, btnCancel;
-    TextView yourRating;
+    TextView yourRating, title;
     SeekBar ratingSeekbar;
     CheckBox watched;
     EditText comment;
@@ -33,10 +34,16 @@ public class EditActivity extends AppCompatActivity {
         btnOkay = findViewById(R.id.edit_buttonOkay);
         btnCancel = findViewById(R.id.edit_buttonCancel);
         yourRating = findViewById(R.id.edit_yourRating);
+        title = findViewById(R.id.edit_title);
         ratingSeekbar = findViewById(R.id.edit_slider);
+        ratingSeekbar.setMax(10);
         watched = findViewById(R.id.edit_watched);
         comment = findViewById(R.id.edit_comment);
 
+        yourRating.setText(Double.toString(movie.getUserRating()));
+        title.setText(movie.getTitle());
+        comment.setText(movie.getComment());
+        watched.setChecked(movie.isWatched());
 
         // Listeners
         btnOkay.setOnClickListener(new View.OnClickListener() {
@@ -56,11 +63,16 @@ public class EditActivity extends AppCompatActivity {
 
     private void BtnOkayClick()
     {
-
+        movie.setWatched(watched.isChecked());
+        movie.setComment(comment.getText().toString());
+        movie.setUserRating(Double.parseDouble(yourRating.getText().toString()));
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(OverviewActivity.RESULT_EDIT, (Movie) movie);
     }
 
     private void BtnCancelClick()
     {
-
+        setResult(RESULT_CANCELED);
+        finish();
     }
 }
