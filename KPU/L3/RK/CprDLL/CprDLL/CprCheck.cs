@@ -15,7 +15,14 @@ namespace CprDLL
 		public bool Check(string cprTxt, out CprError error)
 		{
 
-			return true;
+			CprError cprError = CheckFormat(cprTxt);
+			if (cprError == CprError.NoError)
+				cprError = CheckDate(cprTxt);
+			if (cprError == CprError.NoError)
+				cprError = Check11(cprTxt);
+
+			error = cprError;
+			return (cprError == CprError.NoError);
 
 		}
 

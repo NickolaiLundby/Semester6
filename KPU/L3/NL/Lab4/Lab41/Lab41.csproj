@@ -2,11 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+<<<<<<< HEAD
     <Authors>Nickolai Lisberg</Authors>
     <Product>Lab41 Simple Dll</Product>
     <Description>First package</Description>
     <PackageId>N.L.Lab41</PackageId>
     <PackageReleaseNotes>Very first try at making a nuget package</PackageReleaseNotes>
+=======
+    <PackageId>cprcheck</PackageId>
+    <Authors>Nickolai</Authors>
+    <Company>Nickolai A/S</Company>
+    <Product>CPR Checker</Product>
+    <Description>This is a CPR checker</Description>
+    <PackageTags>CPR</PackageTags>
+    <PackageReleaseNotes>This is the only version!</PackageReleaseNotes>
+>>>>>>> 20c2d370951fd406901584e17d62196c8c698c0f
   </PropertyGroup>
 
 </Project>
