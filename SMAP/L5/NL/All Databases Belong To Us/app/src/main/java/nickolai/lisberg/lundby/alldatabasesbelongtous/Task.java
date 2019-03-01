@@ -14,12 +14,6 @@ public class Task {
     private String place;
     private String description;
 
-    public Task(int uid, String place, String description) {
-        this.uid = uid;
-        this.place = place;
-        this.description = description;
-    }
-
     public Task(String place, String description){
         Random r = new Random();
         this.uid = r.nextInt(999999);

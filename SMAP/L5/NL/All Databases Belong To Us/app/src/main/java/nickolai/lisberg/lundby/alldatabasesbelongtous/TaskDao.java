@@ -19,7 +19,7 @@ public interface TaskDao {
     Task findById(int uid);
 
     @Insert
-    void insertAll(Task... tasks);
+    void insertTask(Task task);
 
     @Delete
     void delete(Task task);
