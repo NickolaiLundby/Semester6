@@ -3,4 +3,11 @@
     <string name="ExitButton">EXIT</string>
     <string name="ButtonOkay">OKAY</string>
     <string name="ButtonCancel">CANCEL</string>
+    <string name="detailsTitle">TITLE</string>
+    <string name="textImdbRating">IMDB Rating:</string>
+    <string name="textUserRating">Your Rating:</string>
+    <string name="placeHolder">0</string>
+    <string name="detailsPlot">PLOT</string>
+    <string name="detailsComment">None</string>
+    <string name="detailsWatched">Watched?</string>
 </resources>
