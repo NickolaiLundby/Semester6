@@ -1,6 +1,7 @@
 package nickolai.lundby.movielibrary;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -26,7 +28,7 @@ public class MovieAdapter extends ArrayAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         Movie movie = (Movie) getItem(position);
 
         ViewHolder viewHolder;
@@ -50,6 +52,28 @@ public class MovieAdapter extends ArrayAdapter {
         viewHolder.imdbRating.setText(String.valueOf(movie.getImdbRating()));
         viewHolder.picture.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(),movie.getPoster()));
         viewHolder.watched.setChecked(movie.isWatched());
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent detailsIntent = new Intent(getContext(), DetailsActivity.class);
+                detailsIntent.putExtra(OverviewActivity.MOVIE_DETAILS_CONTENT, (Movie) getItem(position));
+                if(getContext() instanceof OverviewActivity){
+                    ((OverviewActivity)getContext()).DetailsClick(detailsIntent);
+                }
+            }
+        });
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent editItent = new Intent(getContext(), EditActivity.class);
+                editItent.putExtra(OverviewActivity.MOVIE_EDIT_CONTENT, (Movie) getItem(position));
+                if(getContext() instanceof OverviewActivity){
+                    ((OverviewActivity)getContext()).EditClick(editItent);
+                }
+                return true;
+            }
+        });
 
         return convertView;
     }

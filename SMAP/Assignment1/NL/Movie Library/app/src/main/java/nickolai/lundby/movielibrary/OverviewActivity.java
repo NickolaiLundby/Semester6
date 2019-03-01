@@ -67,24 +67,16 @@ public class OverviewActivity extends AppCompatActivity {
                 BtnExitClick();
             }
         });
+    }
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent detailsIntent = new Intent(OverviewActivity.this, DetailsActivity.class);
-                detailsIntent.putExtra(MOVIE_DETAILS_CONTENT, (Movie) parent.getItemAtPosition(position));
-                startActivityForResult(detailsIntent, REQUEST_DETAIL);
-            }
-        });
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent editIntent = new Intent(OverviewActivity.this, EditActivity.class);
-                editIntent.putExtra(MOVIE_EDIT_CONTENT, (Movie) parent.getItemAtPosition(position));
-                startActivityForResult(editIntent, REQUEST_EDIT);
-                return true;
-            }
-        });
+    public void DetailsClick(Intent intent)
+    {
+        startActivityForResult(intent, REQUEST_DETAIL);
+    }
+
+    public void EditClick(Intent intent)
+    {
+        startActivityForResult(intent, REQUEST_EDIT);
     }
 
     @Override
@@ -94,7 +86,7 @@ public class OverviewActivity extends AppCompatActivity {
         switch(requestCode){
             case REQUEST_DETAIL:
                 if (resultCode == RESULT_OK){
-
+                    Toast.makeText(this, "Came back from details", Toast.LENGTH_SHORT).show();
                 }
                 else{
 
