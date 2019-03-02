@@ -36,15 +36,14 @@
         android:id="@+id/lvItem_imdbrating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="24dp"
         android:fontFamily="@font/fff_tusj"
         android:text="@string/lvRating"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/lvItem_imdb_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/lvItem_imdb_text" />
+        app:layout_constraintBottom_toBottomOf="@+id/lvItem_user_text"
+        app:layout_constraintEnd_toStartOf="@+id/lvItem_user_text"
+        app:layout_constraintTop_toTopOf="@+id/lvItem_user_text" />
 
     <TextView
         android:id="@+id/lvItem_userrating"
@@ -56,9 +55,9 @@
         android:text="@string/lvRating"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/lvItem_user_text"
+        app:layout_constraintBottom_toBottomOf="@+id/lvItem_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/lvItem_user_text" />
+        app:layout_constraintTop_toTopOf="@+id/lvItem_title" />
 
     <CheckBox
         android:id="@+id/lvItem_checkbox"
@@ -76,26 +75,26 @@
         android:id="@+id/lvItem_imdb_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_margin="8dp"
         android:fontFamily="@font/fff_tusj"
         android:text="@string/lvTextImdbRating"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/lvItem_title"
+        app:layout_constraintBottom_toBottomOf="@+id/lvItem_imdbrating"
         app:layout_constraintEnd_toStartOf="@+id/lvItem_imdbrating"
-        app:layout_constraintTop_toTopOf="@+id/lvItem_title" />
+        app:layout_constraintTop_toTopOf="@+id/lvItem_imdbrating" />
 
     <TextView
         android:id="@+id/lvItem_user_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/fff_tusj"
         android:text="@string/lvTextUserRating"
         android:textSize="12sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/lvItem_userrating"
         app:layout_constraintEnd_toStartOf="@+id/lvItem_userrating"
-        app:layout_constraintTop_toBottomOf="@+id/lvItem_imdb_text" />
+        app:layout_constraintTop_toTopOf="@+id/lvItem_userrating" />
 
 </android.support.constraint.ConstraintLayout>

@@ -69,7 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void BtnAddClick()
     {
-        Task addTask = new Task(editPlace.getText().toString(), editTask.getText().toString());
+        List<String> ls = new ArrayList<>();
+        ls.add("En");
+        ls.add("To");
+        ls.add("Tre");
+        Task addTask = new Task(editPlace.getText().toString(), editTask.getText().toString(), ls);
         db.taskDao().insertTask(addTask);
         taskAdapter.add(addTask);
     }

@@ -21,46 +21,45 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:fontFamily="@font/fff_tusj"
         android:text="@string/ExitButton"
         android:textSize="12sp"
         android:textStyle="bold"
-        android:fontFamily="@font/fff_tusj"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline11"
         app:layout_constraintTop_toTopOf="@+id/overview_guideline_horizontal_bottom" />
 
     <ListView
         android:id="@+id/overview_listview_movies"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/overview_guideline_horizontal_bottom"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline11"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/overview_guideline_horizontal_top" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/overview_guideline_horizontal_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.07" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/overview_mymovies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/fff_tusj"
         android:text="@string/overviewMyMovies"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:fontFamily="@font/fff_tusj"
-        app:layout_constraintBottom_toTopOf="@+id/overview_guideline_horizontal_top"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline11"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
 </android.support.constraint.ConstraintLayout>
