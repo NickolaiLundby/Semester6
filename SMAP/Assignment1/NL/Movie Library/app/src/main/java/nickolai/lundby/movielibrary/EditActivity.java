@@ -14,6 +14,7 @@ public class EditActivity extends AppCompatActivity {
 
     // Variables
     Movie movie;
+    int moviePosition;
 
     // Widgets
     Button btnOkay, btnCancel;
@@ -29,6 +30,7 @@ public class EditActivity extends AppCompatActivity {
 
         // Variable initialization
         movie = getIntent().getExtras().getParcelable(OverviewActivity.MOVIE_EDIT_CONTENT);
+        moviePosition = getIntent().getExtras().getInt(OverviewActivity.MOVIE_POSITION);
 
         // Widget initialization
         btnOkay = findViewById(R.id.edit_buttonOkay);
@@ -36,11 +38,12 @@ public class EditActivity extends AppCompatActivity {
         yourRating = findViewById(R.id.edit_yourRating);
         title = findViewById(R.id.edit_title);
         ratingSeekbar = findViewById(R.id.edit_slider);
-        ratingSeekbar.setMax(10);
+        ratingSeekbar.setMax(100);
         watched = findViewById(R.id.edit_watched);
         comment = findViewById(R.id.edit_comment);
 
         yourRating.setText(Double.toString(movie.getUserRating()));
+        ratingSeekbar.setProgress((int) movie.getUserRating()*10);
         title.setText(movie.getTitle());
         comment.setText(movie.getComment());
         watched.setChecked(movie.isWatched());
@@ -59,6 +62,24 @@ public class EditActivity extends AppCompatActivity {
                 BtnCancelClick();
             }
         });
+
+        ratingSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                double rating = progress / 10.0;
+                yourRating.setText(Double.toString(rating));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     private void BtnOkayClick()
@@ -68,6 +89,9 @@ public class EditActivity extends AppCompatActivity {
         movie.setUserRating(Double.parseDouble(yourRating.getText().toString()));
         Intent resultIntent = new Intent();
         resultIntent.putExtra(OverviewActivity.RESULT_EDIT, (Movie) movie);
+        resultIntent.putExtra(OverviewActivity.MOVIE_POSITION, moviePosition);
+        setResult(RESULT_OK, resultIntent);
+        finish();
     }
 
     private void BtnCancelClick()

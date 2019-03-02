@@ -2,7 +2,6 @@ package nickolai.lundby.movielibrary;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.List;
 
 public class Movie implements Parcelable {

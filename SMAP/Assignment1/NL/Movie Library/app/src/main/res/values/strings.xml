@@ -5,15 +5,19 @@
     <string name="ButtonCancel">CANCEL</string>
     <string name="detailsTitle">TITLE</string>
     <string name="textImdbRating">IMDB Rating:</string>
-    <string name="textUserRating">Your Rating:</string>
+    <string name="textUserRating">User Rating:</string>
+    <string name="lvTextImdbRating">IMDB:</string>
+    <string name="lvTextUserRating">USER:</string>
     <string name="placeHolder">0</string>
     <string name="detailsPlot">PLOT</string>
     <string name="detailsComment">COMMENT</string>
     <string name="detailsWatched">Watched?</string>
     <string name="editTitle">TITLE</string>
     <string name="editWatched">Watched?</string>
-    <string name="editComment">None</string>
+    <string name="editComment">User comment</string>
     <string name="lvTitle">TITLE</string>
     <string name="lvRating">9.0</string>
     <string name="pictureDescriber">Picture reflecting genre</string>
+    <string name="detailsPlotText">Plot of the movie:</string>
+    <string name="detailsCommentText">User comment:</string>
 </resources>

@@ -21,6 +21,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/ButtonCancel"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edit_guideline" />
@@ -33,6 +36,9 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
         android:text="@string/ButtonOkay"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edit_guideline" />
@@ -45,6 +51,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/editTitle"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -56,6 +65,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/textUserRating"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/guideline7" />
 
@@ -66,6 +78,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/placeHolder"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/guideline7" />
 
@@ -118,6 +133,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/editWatched"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -128,8 +146,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:minWidth="100dp"
         android:background="@android:color/transparent"
         android:text="@string/editComment"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline9" />

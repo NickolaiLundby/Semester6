@@ -27,8 +27,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/lvTitle"
-        android:textSize="20sp"
+        android:textSize="12sp"
         android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/lvItem_image"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,24 +40,27 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_marginStart="8dp"
+        android:fontFamily="@font/fff_tusj"
         android:text="@string/lvRating"
-        android:textSize="20sp"
+        android:textSize="12sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/lvItem_imdb_text"
         app:layout_constraintStart_toEndOf="@+id/lvItem_imdb_text"
-        app:layout_constraintTop_toBottomOf="@+id/lvItem_image" />
+        app:layout_constraintTop_toTopOf="@+id/lvItem_imdb_text" />
 
     <TextView
         android:id="@+id/lvItem_userrating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:fontFamily="@font/fff_tusj"
         android:text="@string/lvRating"
-        android:textSize="20sp"
+        android:textSize="12sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/lvItem_user_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lvItem_image" />
+        app:layout_constraintTop_toTopOf="@+id/lvItem_user_text" />
 
     <CheckBox
         android:id="@+id/lvItem_checkbox"
@@ -65,7 +69,8 @@
         android:layout_margin="10dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text=""
+        android:text="@string/editWatched"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lvItem_imdb_text" />
 
@@ -75,11 +80,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/textImdbRating"
-        android:textSize="20sp"
+        android:text="@string/lvTextImdbRating"
+        android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lvItem_image" />
+        android:fontFamily="@font/fff_tusj"
+        app:layout_constraintStart_toEndOf="@+id/lvItem_image"
+        app:layout_constraintTop_toBottomOf="@+id/lvItem_title" />
 
     <TextView
         android:id="@+id/lvItem_user_text"
@@ -87,10 +93,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="@string/textUserRating"
-        android:textSize="20sp"
+        android:text="@string/lvTextUserRating"
+        android:textSize="12sp"
         android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintEnd_toStartOf="@+id/lvItem_userrating"
-        app:layout_constraintTop_toBottomOf="@+id/lvItem_image" />
+        app:layout_constraintTop_toBottomOf="@+id/lvItem_title" />
 
 </android.support.constraint.ConstraintLayout>

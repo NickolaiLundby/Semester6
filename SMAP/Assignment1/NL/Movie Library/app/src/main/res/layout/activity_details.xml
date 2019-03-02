@@ -22,6 +22,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/ButtonOkay"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,6 +50,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="@string/detailsTitle"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/details_picture" />
@@ -65,6 +71,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/textImdbRating"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
 
@@ -79,10 +88,13 @@
         android:id="@+id/textUserRating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/fff_tusj"
         android:text="@string/textUserRating"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/details_yourRating"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <TextView
@@ -92,6 +104,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/placeHolder"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintStart_toEndOf="@+id/textImdbRating"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
 
@@ -107,10 +122,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:fontFamily="@font/fff_tusj"
         android:text="@string/detailsPlot"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+        app:layout_constraintTop_toBottomOf="@+id/details_text_plot" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline4"
@@ -136,6 +159,9 @@
         android:layout_marginBottom="8dp"
         android:clickable="false"
         android:text="@string/detailsWatched"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintBottom_toTopOf="@+id/details_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -145,10 +171,13 @@
         android:id="@+id/details_yourRating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/fff_tusj"
         android:text="@string/placeHolder"
-        app:layout_constraintStart_toEndOf="@+id/textUserRating"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <TextView
@@ -156,7 +185,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:fontFamily="@font/fff_tusj"
         android:text="@string/detailsComment"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/details_text_comment" />
+
+    <TextView
+        android:id="@+id/details_text_plot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/detailsPlotText"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+
+    <TextView
+        android:id="@+id/details_text_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/detailsCommentText"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline4" />

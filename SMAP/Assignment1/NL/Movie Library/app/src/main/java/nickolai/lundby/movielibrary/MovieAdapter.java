@@ -66,10 +66,11 @@ public class MovieAdapter extends ArrayAdapter {
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Intent editItent = new Intent(getContext(), EditActivity.class);
-                editItent.putExtra(OverviewActivity.MOVIE_EDIT_CONTENT, (Movie) getItem(position));
+                Intent editIntent = new Intent(getContext(), EditActivity.class);
+                editIntent.putExtra(OverviewActivity.MOVIE_EDIT_CONTENT, (Movie) getItem(position));
+                editIntent.putExtra(OverviewActivity.MOVIE_POSITION, position);
                 if(getContext() instanceof OverviewActivity){
-                    ((OverviewActivity)getContext()).EditClick(editItent);
+                    ((OverviewActivity)getContext()).EditClick(editIntent);
                 }
                 return true;
             }
