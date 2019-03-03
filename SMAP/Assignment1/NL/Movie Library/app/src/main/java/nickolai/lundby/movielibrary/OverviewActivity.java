@@ -18,6 +18,7 @@ public class OverviewActivity extends AppCompatActivity {
     ArrayList<Movie> arrayOfMovies;
     MovieAdapter movieAdapter;
     CSVReader csvReader;
+    MovieDatabase db;
 
     // Widgets
     Button btnExit;
@@ -46,12 +47,16 @@ public class OverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_overview);
 
         // Variable initialization
-        arrayOfMovies = new ArrayList<>();
+        DatabaseApplication dba = (DatabaseApplication) getApplicationContext();
+        db = dba.GetDatabase();
+        arrayOfMovies = new ArrayList<>(db.movieDao().getAll());
         if(arrayOfMovies.isEmpty())
         {
             InputStream inputStream = getResources().openRawResource(R.raw.movielist);
             csvReader = new CSVReader(inputStream);
             arrayOfMovies = csvReader.read();
+            for(Movie m : arrayOfMovies)
+                db.movieDao().insertMovie(m);
         }
         movieAdapter = new MovieAdapter(this, arrayOfMovies);
 
@@ -86,10 +91,11 @@ public class OverviewActivity extends AppCompatActivity {
         switch(requestCode){
             case REQUEST_EDIT:
                 if (resultCode == RESULT_OK) {
-                    Movie m = data.getExtras().getParcelable(RESULT_EDIT);
                     int i = data.getExtras().getInt(MOVIE_POSITION);
+                    Movie add = data.getExtras().getParcelable(RESULT_EDIT);
                     movieAdapter.remove(movieAdapter.getItem(i));
-                    movieAdapter.insert(m, i);
+                    movieAdapter.insert(add, i);
+                    db.movieDao().update(add);
                 }
             default:
                 break;

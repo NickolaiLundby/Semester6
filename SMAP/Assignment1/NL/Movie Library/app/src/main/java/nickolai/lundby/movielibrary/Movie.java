@@ -1,10 +1,18 @@
 package nickolai.lundby.movielibrary;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
+@Entity
 public class Movie implements Parcelable {
+
+    @PrimaryKey
+    @NonNull
     private String Title;
     private String Plot;
     private List<String> Genres;
@@ -14,7 +22,7 @@ public class Movie implements Parcelable {
     private int Poster;
     private String Comment;
 
-    public Movie(String title, String plot, List<String> genres, double imdbRating, double userRating, boolean watched, int poster, String comment) {
+    public Movie(@NonNull String title, String plot, List<String> genres, double imdbRating, double userRating, boolean watched, int poster, String comment) {
         Title = title;
         Plot = plot;
         Genres = genres;
@@ -23,6 +31,11 @@ public class Movie implements Parcelable {
         Watched = watched;
         Poster = poster;
         Comment = comment;
+    }
+
+    public Movie()
+    {
+
     }
 
     public String getTitle() {
