@@ -1,0 +1,14 @@
+<layer-list>
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#EC407A"/>
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+    <item>
+        <vector android:height="100dp" android:viewportHeight="720"
+            android:viewportWidth="720" android:width="100dp" xmlns:android="http://schemas.android.com/apk/res/android">
+            <path android:fillColor="#FF000000" android:pathData="m180,45c-99.36,0 -180,80.64 -180,180 0,47.801 18.66,91.259 49.094,123.5l309.91,326.5 315.34,-329.31c31.318,-38.01 41.845,-70.209 45.656,-120.69 0,-99.36 -80.64,-180 -180,-180 -91.554,0 -167.21,68.478 -178.53,156.97h-2.938c-11.323,-88.491 -86.978,-156.97 -178.53,-156.97z"/>
+        </vector>
+    </item>
+</layer-list>

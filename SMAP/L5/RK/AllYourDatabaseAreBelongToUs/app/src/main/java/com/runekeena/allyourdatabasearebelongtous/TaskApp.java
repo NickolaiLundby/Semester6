@@ -9,9 +9,7 @@ public class TaskApp extends Application {
     public TaskDatabase getTaskDatabase(){
         if(taskDatabase == null){
             taskDatabase= Room.databaseBuilder(getApplicationContext(), TaskDatabase.class, "task-database").allowMainThreadQueries().build();
-            //return taskDatabase;
         }
-
         return taskDatabase;
     }
 }

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name" translatable="false">Movie Tracker</string>
+    <string name="overview_top">My Movies</string>
+    <string name="exit">Exit</string>
+    <string name="rating">Rating:</string>
+    <string name="user_rating">User rating:</string>
+    <string name="plot">Plot</string>
+    <string name="user_comment">User comment</string>
+    <string name="watched">Watched</string>
+    <string name="genres">Genres</string>
+    <string name="ur">UR:</string>
+    <string name="r">R:</string>
+</resources>
