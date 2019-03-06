@@ -8,14 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MovieAdapter extends ArrayAdapter {
-    // View lookup cache
+
+// Filter inspiration:
+// https://stackoverflow.com/questions/24769257/custom-listview-adapter-with-filter-android
+public class MovieAdapter extends ArrayAdapter implements Filterable {
+    private ArrayList<Movie> originalData = null;
+    private ArrayList<Movie> filteredData = null;
+    private ItemFilter myFilter = new ItemFilter();
+
     private static class ViewHolder {
         TextView title, userRating, imdbRating;
         ImageView picture;
@@ -25,6 +34,8 @@ public class MovieAdapter extends ArrayAdapter {
 
     public MovieAdapter(Context context, ArrayList<Movie> movies){
         super(context, R.layout.list_view_item, movies);
+        originalData = movies;
+        filteredData = movies;
     }
 
     @Override
@@ -77,5 +88,44 @@ public class MovieAdapter extends ArrayAdapter {
         });
 
         return convertView;
+    }
+
+    public Filter getFilter() {
+        return myFilter;
+    }
+
+    private class ItemFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            String filterString = constraint.toString().toLowerCase();
+
+            FilterResults results = new FilterResults();
+
+            final ArrayList<Movie> list = originalData;
+            int count = list.size();
+
+            final ArrayList<Movie> nlist = new ArrayList<Movie>(count);
+
+            String filterableString;
+
+            for (int i = 0; i < count; i++) {
+                filterableString = list.get(i).getTitle();
+                if (filterableString.toLowerCase().contains(filterString)){
+                    nlist.add(list.get(i));
+                }
+            }
+
+            results.values = nlist;
+            results.count = nlist.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredData = (ArrayList<Movie>) results.values;
+            notifyDataSetChanged();
+        }
     }
 }

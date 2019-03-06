@@ -3,12 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_search"
+        android:enabled="true"
+        android:title="@string/menu_action_search"
+        android:visible="true"
         app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="ifRoom"
-        android:title="@string/menu_action_search" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/select_language"
+        android:enabled="true"
         android:title="@string/menuLanguage"
+        android:visible="true"
         app:actionViewClass="android.widget.Button"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|withText" />
 </menu>

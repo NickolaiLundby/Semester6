@@ -1,8 +1,10 @@
 package nickolai.lundby.movielibrary;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -27,8 +30,6 @@ public class OverviewActivity extends AppCompatActivity {
     MovieAdapter movieAdapter;
     CSVReader csvReader;
     MovieDatabase db;
-    String currentLanguage = "en";
-    Locale myLocale;
 
     // Widgets
     Button btnExit;
@@ -40,10 +41,8 @@ public class OverviewActivity extends AppCompatActivity {
 
     // Result constants
     public final static String RESULT_EDIT = "resultFromEdit";
-    public final static String RESULT_DETAIL = "resultFromDetail";
 
     // Storage constants
-    public final static String STORAGE_EDIT = "storageEdit";
     public final static String STORAGE_DETAIL = "storageDetail";
 
     // Content keys
@@ -57,7 +56,7 @@ public class OverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_overview);
 
         // Variable initialization
-        currentLanguage = currentLanguage = getIntent().getStringExtra("currentLanguage");
+        LocaleClass.onAttach(OverviewActivity.this);
         DatabaseApplication dba = (DatabaseApplication) getApplicationContext();
         db = dba.GetDatabase();
         arrayOfMovies = new ArrayList<>(db.movieDao().getAll());
@@ -101,24 +100,7 @@ public class OverviewActivity extends AppCompatActivity {
         System.exit(0);
     }
 
-    public void setLocale(String localeName) {
-        if (!localeName.equals(currentLanguage)) {
-            myLocale = new Locale(localeName);
-            Resources res = getResources();
-            DisplayMetrics dm = res.getDisplayMetrics();
-            Configuration conf = res.getConfiguration();
-            conf.locale = myLocale;
-            res.updateConfiguration(conf, dm);
-            Intent refresh = new Intent(this, OverviewActivity.class);
-            refresh.putExtra("currentLanguage", localeName);
-            startActivity(refresh);
-        } else {
-            Toast.makeText(OverviewActivity.this, "Language already selected!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-        @Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -140,34 +122,40 @@ public class OverviewActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.movie_menu, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search);
-        Button languageBtn = (Button)menu.findItem(R.id.select_language);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) item.getActionView();
+        MenuItem item2 = menu.findItem(R.id.select_language);
+        Button languageBtn = (Button)item2.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(OverviewActivity.this, "Now searching for " + query, Toast.LENGTH_SHORT).show();
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                movieAdapter.getFilter().filter(newText);
+                return true;
             }
         });
 
         languageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch(currentLanguage){
+                switch(LocaleClass.getLanguage(OverviewActivity.this)){
                     case "en":
-                        setLocale("dk");
+                        LocaleClass.setLocale(OverviewActivity.this, "dk");
+                        recreate();
                         break;
                     case "dk":
-                        setLocale("en");
+                        LocaleClass.setLocale(OverviewActivity.this, "en");
+                        recreate();
                         break;
                     default:
-                        setLocale("en");
+                        LocaleClass.setLocale(OverviewActivity.this, "en");
+                        recreate();
+                        break;
                 }
             }
         });

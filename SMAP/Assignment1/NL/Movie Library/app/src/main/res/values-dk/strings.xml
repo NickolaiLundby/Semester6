@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Movie Library</string>
     <string name="ExitButton">AFSLUT</string>
     <string name="ButtonOkay">OKAY</string>
-    <string name="ButtonCancel">FORTRYD</string>
+    <string name="ButtonCancel">Fortryd</string>
     <string name="detailsTitle">TITEL</string>
     <string name="textImdbRating">IMDB karakter:</string>
     <string name="textUserRating">Bruger karakter:</string>
@@ -13,7 +13,7 @@
     <string name="detailsComment">Kommentar</string>
     <string name="detailsWatched">Set?</string>
     <string name="editTitle">TITEL</string>
-    <string name="editWatched">Seet?</string>
+    <string name="editWatched">Set?</string>
     <string name="editComment">Bruger kommentar</string>
     <string name="lvTitle">Titel</string>
     <string name="lvRating">9.0</string>
@@ -22,5 +22,5 @@
     <string name="detailsCommentText">Bruger kommentar:</string>
     <string name="overviewMyMovies">MINE FILM</string>
     <string name="menu_action_search">Søg</string>
-    <string name="menuLanguage">DANSK</string>
+    <string name="menuLanguage">ENGLISH</string>
 </resources>
