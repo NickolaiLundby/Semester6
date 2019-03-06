@@ -4,15 +4,25 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.Random;
+
 @Entity
 public class Task {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int uid;
+
     @ColumnInfo(name = "description")
     private String description;
+
     @ColumnInfo(name = "place")
     private String place;
+
+    public Task(int uid, String description, String place) {
+        this.uid = uid;
+        this.description = description;
+        this.place = place;
+    }
 
     public int getUid() {
         return uid;
@@ -34,7 +44,5 @@ public class Task {
         return place;
     }
 
-    public void setPlace(String place) {
-        place = place;
-    }
+    public void setPlace(String place) { this.place = place;}
 }
