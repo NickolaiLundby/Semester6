@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ExitButton">AFSLUT</string>
+    <string name="ButtonOkay">OKAY</string>
+    <string name="ButtonCancel">FORTRYD</string>
+    <string name="detailsTitle">TITEL</string>
+    <string name="textImdbRating">IMDB karakter:</string>
+    <string name="textUserRating">Bruger karakter:</string>
+    <string name="lvTextImdbRating">IMDB:</string>
+    <string name="lvTextUserRating">BRUGER:</string>
+    <string name="placeHolder">0</string>
+    <string name="detailsPlot">PLOT</string>
+    <string name="detailsComment">Kommentar</string>
+    <string name="detailsWatched">Set?</string>
+    <string name="editTitle">TITEL</string>
+    <string name="editWatched">Seet?</string>
+    <string name="editComment">Bruger kommentar</string>
+    <string name="lvTitle">Titel</string>
+    <string name="lvRating">9.0</string>
+    <string name="pictureDescriber">Billede af genren</string>
+    <string name="detailsPlotText">Filmens plot:</string>
+    <string name="detailsCommentText">Bruger kommentar:</string>
+    <string name="overviewMyMovies">MINE FILM</string>
+    <string name="menu_action_search">Søg</string>
+    <string name="menuLanguage">DANSK</string>
+</resources>

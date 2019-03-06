@@ -1,15 +1,23 @@
 package nickolai.lundby.movielibrary;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class OverviewActivity extends AppCompatActivity {
@@ -19,6 +27,8 @@ public class OverviewActivity extends AppCompatActivity {
     MovieAdapter movieAdapter;
     CSVReader csvReader;
     MovieDatabase db;
+    String currentLanguage = "en";
+    Locale myLocale;
 
     // Widgets
     Button btnExit;
@@ -47,6 +57,7 @@ public class OverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_overview);
 
         // Variable initialization
+        currentLanguage = currentLanguage = getIntent().getStringExtra("currentLanguage");
         DatabaseApplication dba = (DatabaseApplication) getApplicationContext();
         db = dba.GetDatabase();
         arrayOfMovies = new ArrayList<>(db.movieDao().getAll());
@@ -84,7 +95,30 @@ public class OverviewActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_EDIT);
     }
 
-    @Override
+    private void BtnExitClick()
+    {
+        finish();
+        System.exit(0);
+    }
+
+    public void setLocale(String localeName) {
+        if (!localeName.equals(currentLanguage)) {
+            myLocale = new Locale(localeName);
+            Resources res = getResources();
+            DisplayMetrics dm = res.getDisplayMetrics();
+            Configuration conf = res.getConfiguration();
+            conf.locale = myLocale;
+            res.updateConfiguration(conf, dm);
+            Intent refresh = new Intent(this, OverviewActivity.class);
+            refresh.putExtra("currentLanguage", localeName);
+            startActivity(refresh);
+        } else {
+            Toast.makeText(OverviewActivity.this, "Language already selected!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+        @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -102,9 +136,41 @@ public class OverviewActivity extends AppCompatActivity {
         }
     }
 
-    private void BtnExitClick()
-    {
-        finish();
-        System.exit(0);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.movie_menu, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search);
+        Button languageBtn = (Button)menu.findItem(R.id.select_language);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(OverviewActivity.this, "Now searching for " + query, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        languageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch(currentLanguage){
+                    case "en":
+                        setLocale("dk");
+                        break;
+                    case "dk":
+                        setLocale("en");
+                        break;
+                    default:
+                        setLocale("en");
+                }
+            }
+        });
+        return true;
     }
 }
