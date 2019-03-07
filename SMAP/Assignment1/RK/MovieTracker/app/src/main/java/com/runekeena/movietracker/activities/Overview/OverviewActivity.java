@@ -22,18 +22,18 @@ import java.util.ArrayList;
 public class OverviewActivity extends AppCompatActivity {
 
     //UI elements
-    Button btnExit;
-    ListView listMovies;
+    private Button btnExit;
+    private ListView listMovies;
 
     // Constants
-    public final static int REQUEST_EDIT = 10;
     public final static String MOVIE_DETAILS = "movie_details";
     public final static String MOVIE_POSITION = "movie_position";
-    public final static  String MOVIE_ARRAY_LIST = "movie_array_list";
+    private final static int REQUEST_EDIT = 10;
+    private final static  String MOVIE_ARRAY_LIST = "movie_array_list";
 
     // Variables
-    MovieAdapter movieAdapter;
-    ArrayList<Movie> movieArrayList;
+    private MovieAdapter movieAdapter;
+    private ArrayList<Movie> movieArrayList;
 
 
     @Override
@@ -41,6 +41,7 @@ public class OverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
+        // get saved instance state or load movie data from CSV file
         if(savedInstanceState == null){
             InputStream inputStream = this.getResources().openRawResource(R.raw.movielist);
             CSVReader csvReader = new CSVReader();
@@ -49,32 +50,25 @@ public class OverviewActivity extends AppCompatActivity {
             movieArrayList = savedInstanceState.getParcelableArrayList(MOVIE_ARRAY_LIST);
         }
 
-        //ArrayList<Movie> movieArrayList = new ArrayList<>();
+        // Setup ListView
         movieAdapter = new MovieAdapter(this, movieArrayList);
-
         listMovies = findViewById(R.id.listMovies);
         listMovies.setAdapter(movieAdapter);
         listMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent detailsIntent = new Intent(OverviewActivity.this, DetailsActivity.class);
-                Movie m = (Movie) parent.getItemAtPosition(position);
-                detailsIntent.putExtra("movie_details", m);
-                startActivity(detailsIntent);
+                startDetailActivity(parent, position);
             }
         });
         listMovies.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent editIntent = new Intent(OverviewActivity.this, EditActivity.class);
-                Movie m = (Movie) parent.getItemAtPosition(position);
-                editIntent.putExtra(MOVIE_DETAILS, m);
-                editIntent.putExtra(MOVIE_POSITION, position);
-                startActivityForResult(editIntent, REQUEST_EDIT);
+                startEditActivity(parent, position);
                 return true;
             }
         });
 
+        // Setup exit button
         btnExit = findViewById(R.id.btnExit);
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +76,21 @@ public class OverviewActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void startDetailActivity(AdapterView<?> parent, int position){
+        Intent detailsIntent = new Intent(OverviewActivity.this, DetailsActivity.class);
+        Movie m = (Movie) parent.getItemAtPosition(position);
+        detailsIntent.putExtra("movie_details", m);
+        startActivity(detailsIntent);
+    }
+
+    private void startEditActivity(AdapterView<?> parent, int position){
+        Intent editIntent = new Intent(OverviewActivity.this, EditActivity.class);
+        Movie m = (Movie) parent.getItemAtPosition(position);
+        editIntent.putExtra(MOVIE_DETAILS, m);
+        editIntent.putExtra(MOVIE_POSITION, position);
+        startActivityForResult(editIntent, REQUEST_EDIT);
     }
 
     @Override

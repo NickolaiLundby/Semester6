@@ -16,16 +16,19 @@ import java.util.ArrayList;
 
 public class MovieAdapter extends ArrayAdapter {
 
+    // viewholder class for holding ui elements
     private static class ViewHolder {
         TextView title, rating, userRating;
         ImageView image;
         CheckBox watched;
     }
 
+    // constructor
     public MovieAdapter(Context context, ArrayList<Movie> movies){
         super(context, 0, movies);
     }
 
+    // create or get view and set values
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -63,7 +66,6 @@ public class MovieAdapter extends ArrayAdapter {
             viewHolder.watched.setChecked(movie.isWatched());
             viewHolder.watched.setText(null);
         }
-
 
         return convertView;
 
