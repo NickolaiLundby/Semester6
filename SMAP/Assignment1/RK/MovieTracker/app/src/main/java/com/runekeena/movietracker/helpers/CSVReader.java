@@ -12,6 +12,7 @@ import java.util.List;
 
 public class CSVReader {
 
+    // reads from CSV file and returns ArrayList of movie objects
     public ArrayList<Movie> readMovieData(InputStream inputStream){
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         ArrayList<Movie> movieArrayList = new ArrayList<>();
@@ -28,9 +29,6 @@ public class CSVReader {
                 int imgId = getImgId(genreList.get(0));
 
                 Movie m = new Movie(columns[0], columns[1], genreList, Double.parseDouble(columns[3]), false, imgId);
-                //List<String> myTestGenre = new ArrayList<>();
-                //myTestGenre.add("GENRE");
-                //Movie m = new Movie("Ttile", "Plot", myTestGenre, 1.0, false, R.drawable.ic_movie);
                 movieArrayList.add(m);
             }
         }catch (IOException ex) {
@@ -46,6 +44,7 @@ public class CSVReader {
         return movieArrayList;
     }
 
+    // adds icon resource depending on genre
     private int getImgId(String genre){
         int imgId;
         switch (genre.toUpperCase()){

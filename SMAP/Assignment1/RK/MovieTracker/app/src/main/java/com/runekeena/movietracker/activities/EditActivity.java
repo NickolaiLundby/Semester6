@@ -18,37 +18,32 @@ import com.runekeena.movietracker.R;
 public class EditActivity extends AppCompatActivity {
 
     //UI elements
-    TextView txtTitle;
-    TextView txtUserRating;
-    SeekBar sbRating;
-    CheckBox checkWatched;
-    EditText editTxtComment;
-    Button btnOk;
-    Button btnCancel;
+    private TextView txtTitle, txtUserRating;
+    private SeekBar sbRating;
+    private CheckBox checkWatched;
+    private EditText editTxtComment;
+    private Button btnOk, btnCancel;
 
     //Variables
-    Movie m;
-    int position;
+    private Movie m;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        // Init UI elements
-        txtTitle = findViewById(R.id.txtTitle);
-        txtUserRating = findViewById(R.id.txtUserRating);
-        sbRating = findViewById(R.id.sbRating);
-        sbRating.setMax(100);
-        checkWatched = findViewById(R.id.checkWatched);
-        editTxtComment = findViewById(R.id.editTxtComment);
-        btnOk = findViewById(R.id.btnOk);
-        btnCancel = findViewById(R.id.btnCancel);
-
+        // get movie object and position from intent
         m = getIntent().getExtras().getParcelable(OverviewActivity.MOVIE_DETAILS);
         position = getIntent().getExtras().getInt(OverviewActivity.MOVIE_POSITION);
+
+        // set title
+        txtTitle = findViewById(R.id.txtTitle);
         txtTitle.setText(m.getTitle());
+
+        // setup text for rating
         double userRating = m.getUserRating();
+        txtUserRating = findViewById(R.id.txtUserRating);
         if(userRating>-1){
             sbRating.setProgress((int)userRating*10);
             txtUserRating.setText(""+userRating);
@@ -56,9 +51,14 @@ public class EditActivity extends AppCompatActivity {
             txtUserRating.setText(null);
             sbRating.setProgress(0);
         }
+
+        // setup rating seekbar
+        sbRating = findViewById(R.id.sbRating);
+        sbRating.setMax(100);
         sbRating.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // set user rating when seekbar progress changes and update rating text
                 int p = sbRating.getProgress();
                 if (p>0){
                     m.setUserRating((double)(p/10));
@@ -79,6 +79,9 @@ public class EditActivity extends AppCompatActivity {
 
             }
         });
+
+        // setup checkbox watched
+        checkWatched = findViewById(R.id.checkWatched);
         checkWatched.setChecked(m.isWatched());
         checkWatched.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -86,26 +89,39 @@ public class EditActivity extends AppCompatActivity {
                 m.setWatched(checkWatched.isChecked());
             }
         });
+        // set up comment edittext
+        editTxtComment = findViewById(R.id.editTxtComment);
         editTxtComment.setText(m.getUserComment());
+
+        // setup ok button
+        btnOk = findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent resultIntent = new Intent(EditActivity.this, OverviewActivity.class);
-                m.setComment(editTxtComment.getText().toString());
-                resultIntent.putExtra(OverviewActivity.MOVIE_DETAILS, m);
-                resultIntent.putExtra(OverviewActivity.MOVIE_POSITION, position);
-                setResult(RESULT_OK, resultIntent);
-                finish();
+                returnEdits();
             }
         });
+
+        // setup cancel button
+        btnCancel = findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // return resultcode canceled and finish activity
                 Intent cancelIntent = new Intent(EditActivity.this, OverviewActivity.class);
                 setResult(RESULT_CANCELED, cancelIntent);
                 finish();
             }
         });
+    }
 
+    private void returnEdits(){
+        // return result code ok and intent with movie object and position. Finish activity
+        Intent resultIntent = new Intent(EditActivity.this, OverviewActivity.class);
+        m.setComment(editTxtComment.getText().toString());
+        resultIntent.putExtra(OverviewActivity.MOVIE_DETAILS, m);
+        resultIntent.putExtra(OverviewActivity.MOVIE_POSITION, position);
+        setResult(RESULT_OK, resultIntent);
+        finish();
     }
 }

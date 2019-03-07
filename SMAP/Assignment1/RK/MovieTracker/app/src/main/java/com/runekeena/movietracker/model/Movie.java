@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Movie implements Parcelable {
 
+    // variables
     private String Title;
     private String Plot;
     private List<String> Genres;
@@ -16,6 +17,7 @@ public class Movie implements Parcelable {
     private int ImgId;
     private String UserComment;
 
+    // getters and setters
     public String getTitle() {
         return Title;
     }
@@ -80,6 +82,7 @@ public class Movie implements Parcelable {
         UserComment = comment;
     }
 
+    // Constructors
     public Movie(String title, String plot, List<String> genres, double rating, double userRating, boolean watched, int imgId, String userComment) {
         Title = title;
         Plot = plot;
@@ -101,6 +104,8 @@ public class Movie implements Parcelable {
         Watched = watched;
         ImgId = imgId;
     }
+
+    // Parcelable
 
     @Override
     public int describeContents() {
