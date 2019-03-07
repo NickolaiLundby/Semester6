@@ -1,4 +1,4 @@
-package nickolai.lundby.movielibrary;
+package nickolai.lundby.movielibrary.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import nickolai.lundby.movielibrary.Models.Movie;
+import nickolai.lundby.movielibrary.R;
 
 public class EditActivity extends AppCompatActivity {
 

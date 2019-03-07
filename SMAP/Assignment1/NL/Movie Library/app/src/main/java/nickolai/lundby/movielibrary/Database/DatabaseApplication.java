@@ -1,4 +1,4 @@
-package nickolai.lundby.movielibrary;
+package nickolai.lundby.movielibrary.Database;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;

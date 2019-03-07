@@ -1,4 +1,4 @@
-package nickolai.lundby.movielibrary;
+package nickolai.lundby.movielibrary.Models;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
@@ -7,6 +7,8 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import java.util.List;
+
+import nickolai.lundby.movielibrary.Models.Movie;
 
 @Dao
 public interface MovieDao {
