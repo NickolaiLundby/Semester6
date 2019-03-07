@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -125,16 +126,15 @@ public class OverviewActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.movie_menu, menu);
         MenuItem item = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) item.getActionView();
+        final SearchView searchView = (SearchView) item.getActionView();
         MenuItem item2 = menu.findItem(R.id.select_language);
         Button languageBtn = (Button)item2.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(query.isEmpty()){
-                    Toast.makeText(OverviewActivity.this, "hej", Toast.LENGTH_SHORT).show();
-                    movieAdapter.getFilter().filter(null);
+                if (searchView.getQuery().toString().isEmpty() || searchView.getQuery().toString() == "") {
+                    movieAdapter.getFilter().filter("");
                 }
                 movieAdapter.getFilter().filter(query);
                 return true;
@@ -142,7 +142,10 @@ public class OverviewActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                if(newText.isEmpty() || newText == ""){
+                    this.onQueryTextSubmit("");
+                }
+                return true;
             }
         });
 
@@ -167,4 +170,12 @@ public class OverviewActivity extends AppCompatActivity {
         });
         return true;
     }
+
+    /*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        item.getItemId() == R.id.action_search
+        return super.onOptionsItemSelected(item);
+    */
 }

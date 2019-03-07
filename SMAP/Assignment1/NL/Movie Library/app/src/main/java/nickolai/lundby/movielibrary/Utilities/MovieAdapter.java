@@ -115,18 +115,11 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 movies = (ArrayList<Movie>) results.values;
-                Toast.makeText(getContext(), String.valueOf(movies.size()), Toast.LENGTH_SHORT).show();
                 notifyDataSetChanged();
             }
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                /*
-                if(originalData == null) {
-                    originalData = new ArrayList<Movie>(movies);
-                }
-                */
-
                 String filterString = constraint.toString().toLowerCase();
                 String filterableString;
                 FilterResults results = new FilterResults();
@@ -135,7 +128,6 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
                 if(constraint == null || constraint.length() == 0) {
                     results.count = originalData.size();
                     results.values = originalData;
-                    Toast.makeText(getContext(), constraint.toString(), Toast.LENGTH_SHORT).show();
                 }
                 else {
                     for (int i = 0; i < originalData.size(); i++) {
