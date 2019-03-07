@@ -1,4 +1,4 @@
-package nickolai.lundby.movielibrary;
+package nickolai.lundby.movielibrary.Utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;

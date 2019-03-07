@@ -1,4 +1,4 @@
-package nickolai.lundby.movielibrary;
+package nickolai.lundby.movielibrary.Utilities;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import nickolai.lundby.movielibrary.Models.Movie;
+import nickolai.lundby.movielibrary.R;
 
 public class CSVReader {
     InputStream inputStream;

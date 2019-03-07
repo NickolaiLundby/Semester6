@@ -1,4 +1,4 @@
-package nickolai.lundby.movielibrary;
+package nickolai.lundby.movielibrary.Utilities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,16 +14,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
+
+import nickolai.lundby.movielibrary.Activities.DetailsActivity;
+import nickolai.lundby.movielibrary.Activities.EditActivity;
+import nickolai.lundby.movielibrary.Activities.OverviewActivity;
+import nickolai.lundby.movielibrary.Models.Movie;
+import nickolai.lundby.movielibrary.R;
 
 
 // Filter inspiration:
 // https://stackoverflow.com/questions/24769257/custom-listview-adapter-with-filter-android
 public class MovieAdapter extends ArrayAdapter implements Filterable {
-    private ArrayList<Movie> originalData = null;
-    private ArrayList<Movie> filteredData = null;
-    private ItemFilter myFilter = new ItemFilter();
+    private ArrayList<Movie> originalData;
+    private ArrayList<Movie> movies;
 
     private static class ViewHolder {
         TextView title, userRating, imdbRating;
@@ -34,8 +39,8 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
 
     public MovieAdapter(Context context, ArrayList<Movie> movies){
         super(context, R.layout.list_view_item, movies);
-        originalData = movies;
-        filteredData = movies;
+        this.movies = movies;
+        this.originalData = movies;
     }
 
     @Override
@@ -90,6 +95,65 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
         return convertView;
     }
 
+    @Override
+    public int getCount() {
+        return movies.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public Movie getItem(int position) {
+        return movies.get(position);
+    }
+
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                movies = (ArrayList<Movie>) results.values;
+                Toast.makeText(getContext(), String.valueOf(movies.size()), Toast.LENGTH_SHORT).show();
+                notifyDataSetChanged();
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                /*
+                if(originalData == null) {
+                    originalData = new ArrayList<Movie>(movies);
+                }
+                */
+
+                String filterString = constraint.toString().toLowerCase();
+                String filterableString;
+                FilterResults results = new FilterResults();
+                ArrayList<Movie> filteredArr = new ArrayList<Movie>();
+
+                if(constraint == null || constraint.length() == 0) {
+                    results.count = originalData.size();
+                    results.values = originalData;
+                    Toast.makeText(getContext(), constraint.toString(), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    for (int i = 0; i < originalData.size(); i++) {
+                        filterableString = originalData.get(i).getTitle();
+                        if (filterableString.toLowerCase().contains(filterString)){
+                            filteredArr.add(originalData.get(i));
+                        }
+                    }
+                    results.values = filteredArr;
+                    results.count = filteredArr.size();
+                }
+
+                return results;
+            }
+        };
+        return filter;
+    }
+    /*
     public Filter getFilter() {
         return myFilter;
     }
@@ -119,6 +183,7 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
 
             results.values = nlist;
             results.count = nlist.size();
+            Toast.makeText(getContext(), String.valueOf(nlist.size()), Toast.LENGTH_SHORT).show();
             return results;
         }
 
@@ -128,4 +193,5 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
             notifyDataSetChanged();
         }
     }
+    */
 }
