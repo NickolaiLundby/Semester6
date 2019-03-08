@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">At your service</string>
+    <string name="background_service">Background service:</string>
+    <string name="btnStartBackground">Start Background</string>
+    <string name="btnStopBackground">Stop background</string>
+</resources>
