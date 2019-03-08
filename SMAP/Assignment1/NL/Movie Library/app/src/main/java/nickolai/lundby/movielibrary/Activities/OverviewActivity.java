@@ -168,14 +168,8 @@ public class OverviewActivity extends AppCompatActivity {
                 }
             }
         });
+
         return true;
     }
 
-    /*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        item.getItemId() == R.id.action_search
-        return super.onOptionsItemSelected(item);
-    */
 }
