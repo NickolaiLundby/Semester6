@@ -1,9 +1,14 @@
 package nickolai.lundby.movielibrary.Utilities;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
+
 import java.util.Locale;
 
 // Inspiration for externalizing all the locale functions goes to DevDeeds:
@@ -24,6 +29,29 @@ public class LocaleClass {
     public static Context setLocale(Context context, String language) {
         persist(context, language);
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            return updateResources(context, language);
+        }
+
+        return updateResourcesDeprecated(context, language);
+    }
+
+    private static void persist(Context context, String language) {
+        SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = myPref.edit();
+
+        editor.putString(SELECTED_LANGUAGE, language);
+        editor.apply();
+    }
+
+    private static String getPersistedData(Context context, String defaultLanguage) {
+        SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(context);
+        return myPref.getString(SELECTED_LANGUAGE, defaultLanguage);
+    }
+
+    // New SDK uses the configuration.setLocale
+    @TargetApi(Build.VERSION_CODES.N)
+    private static Context updateResources(Context context, String language) {
         Locale locale = new Locale(language);
         Locale.setDefault(locale);
 
@@ -34,15 +62,18 @@ public class LocaleClass {
         return context.createConfigurationContext(config);
     }
 
-    private static void persist(Context context, String language) {
-        SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = myPref.edit();
+    // Old SDK uses the configuration.locale, which has been deprecated
+    // but since min API is 16, we need to support this
+    @SuppressWarnings("deprecation")
+    private static Context updateResourcesDeprecated(Context context, String language) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
 
-        editor.putString(SELECTED_LANGUAGE, language);
-        editor.apply();
-    }
-    private static String getPersistedData(Context context, String defaultLanguage) {
-        SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(context);
-        return myPref.getString(SELECTED_LANGUAGE, defaultLanguage);
+        Configuration config = context.getResources().getConfiguration();
+        config.locale = locale;
+
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+
+        return context;
     }
 }

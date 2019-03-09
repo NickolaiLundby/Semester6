@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,9 +19,11 @@ public class DetailsActivity extends AppCompatActivity {
 
     // Variables
     Movie movie;
+    String genres = "";
+
     // Widgets
     Button btnOkay;
-    TextView title, imdbRating, yourRating, plot, comment;
+    TextView title, imdbRating, yourRating, plot, comment, genre;
     CheckBox watched;
     ImageView picture;
 
@@ -38,8 +41,12 @@ public class DetailsActivity extends AppCompatActivity {
         comment = findViewById(R.id.details_comment);
         watched = findViewById(R.id.details_watched);
         picture = findViewById(R.id.details_picture);
+        genre = findViewById(R.id.details_genres);
+
 
         movie = getIntent().getExtras().getParcelable(OverviewActivity.MOVIE_DETAILS_CONTENT);
+        for (String s: movie.getGenres())
+            genres = genres + " " + s;
         title.setText(movie.getTitle());
         imdbRating.setText(String.valueOf(movie.getImdbRating()));
         yourRating.setText(String.valueOf(movie.getUserRating()));
@@ -47,6 +54,7 @@ public class DetailsActivity extends AppCompatActivity {
         comment.setText(movie.getComment());
         watched.setChecked(movie.isWatched());
         picture.setImageBitmap(BitmapFactory.decodeResource(getResources(), movie.getPoster()));
+        genre.setText(genres);
 
         // Listeners
         btnOkay.setOnClickListener(new View.OnClickListener() {

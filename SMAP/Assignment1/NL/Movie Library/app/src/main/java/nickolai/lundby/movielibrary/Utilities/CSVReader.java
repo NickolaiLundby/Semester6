@@ -38,28 +38,49 @@ public class CSVReader {
                 int myPoster;
                 switch(genreList.get(0).toUpperCase()){
                     case "ACTION":
-                        //myPoster = R.drawable.icons8_action_50;
-                        myPoster = R.drawable.icons8_crime_24;
+                        myPoster = R.drawable.action_50;
                         break;
                     case "ADVENTURE":
-                        //myPoster = R.drawable.icons8_adventure_50;
-                        myPoster = R.drawable.icons8_comedy_24;
-                        break;
-                    case "BIOGRAPHY":
-                        //myPoster = R.drawable.icons8_documentary_48;
-                        myPoster = R.drawable.icons8_comedy_24;
-                        break;
-                    case "DRAMA":
-                        //myPoster = R.drawable.icons8_popcorn_50;
-                        myPoster = R.drawable.icons8_comedy_24;
+                        myPoster = R.drawable.adventure_50;
                         break;
                     case "ANIMATION":
-                        //myPoster = R.drawable.icons8_animation_50;
-                        myPoster = R.drawable.icons8_comedy_24;
+                        myPoster = R.drawable.animation_50;
+                        break;
+                    case "ANIME":
+                        myPoster = R.drawable.anime_50;
+                        break;
+                    case "BIOGRAPHY":
+                        myPoster = R.drawable.biography_50;
+                        break;
+                    case "COMEDY":
+                        myPoster = R.drawable.comedy_50;
+                        break;
+                    case "DOCUMENTARY":
+                        myPoster = R.drawable.documentary_50;
+                        break;
+                    case "DRAMA":
+                        myPoster = R.drawable.drama_50;
+                        break;
+                    case "HORROR":
+                        myPoster = R.drawable.horror_50;
+                        break;
+                    case "MUSICAL":
+                        myPoster = R.drawable.musical_50;
+                        break;
+                    case "NATURE":
+                        myPoster = R.drawable.nature_50;
+                        break;
+                    case "ROMANCE":
+                        myPoster = R.drawable.romance_50;
+                        break;
+                    case "SCIFI":
+                        myPoster = R.drawable.scifi_50;
+                        break;
+                    case "WESTERN":
+                        myPoster = R.drawable.western_50;
                         break;
                     default:
-                        //myPoster = R.drawable.icons8_default_50;
-                        myPoster = R.drawable.icons8_comedy_24;
+                        myPoster = R.drawable.default_50;
                         break;
                 }
                 Movie m = new Movie(row[0], row[1], genreList, Double.parseDouble(row[3]), Double.parseDouble(row[4]), myBool, myPoster, row[6]);

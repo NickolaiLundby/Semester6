@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -43,15 +44,15 @@ public class OverviewActivity extends AppCompatActivity {
     public final static int REQUEST_DETAIL = 101;
 
     // Result constants
-    public final static String RESULT_EDIT = "resultFromEdit";
+    public final static String RESULT_EDIT = "Result.Helper.EditActivity";
 
     // Storage constants
-    public final static String STORAGE_DETAIL = "storageDetail";
+    public final static String STORAGE_DETAIL = "Storage.Helper.DetailActivity";
 
     // Content keys
-    public final static String MOVIE_DETAILS_CONTENT = "movieDetailsContent";
-    public final static String MOVIE_EDIT_CONTENT = "movieEditContent";
-    public final static String MOVIE_POSITION = "moviePosition";
+    public final static String MOVIE_DETAILS_CONTENT = "Content.Helper.Movie.Details";
+    public final static String MOVIE_EDIT_CONTENT = "Content.Helper.Movie.Edit";
+    public final static String MOVIE_POSITION = "Content.Helper.Movie.Position";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,8 +128,6 @@ public class OverviewActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.movie_menu, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) item.getActionView();
-        MenuItem item2 = menu.findItem(R.id.select_language);
-        Button languageBtn = (Button)item2.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -149,27 +148,27 @@ public class OverviewActivity extends AppCompatActivity {
             }
         });
 
-        languageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch(LocaleClass.getLanguage(OverviewActivity.this)){
-                    case "en":
-                        LocaleClass.setLocale(OverviewActivity.this, "dk");
-                        recreate();
-                        break;
-                    case "dk":
-                        LocaleClass.setLocale(OverviewActivity.this, "en");
-                        recreate();
-                        break;
-                    default:
-                        LocaleClass.setLocale(OverviewActivity.this, "en");
-                        recreate();
-                        break;
-                }
-            }
-        });
-
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.select_language){
+            switch(LocaleClass.getLanguage(OverviewActivity.this)){
+                case "en":
+                    LocaleClass.setLocale(OverviewActivity.this, "dk");
+                    recreate();
+                    break;
+                case "dk":
+                    LocaleClass.setLocale(OverviewActivity.this, "en");
+                    recreate();
+                    break;
+                default:
+                    LocaleClass.setLocale(OverviewActivity.this, "en");
+                    recreate();
+                    break;
+            }
+        }
+        return true;
+    }
 }

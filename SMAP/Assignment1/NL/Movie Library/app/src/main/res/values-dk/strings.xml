@@ -23,4 +23,6 @@
     <string name="overviewMyMovies">MINE FILM</string>
     <string name="menu_action_search">Søg</string>
     <string name="menuLanguage">ENGLISH</string>
+    <string name="detailsGenresText">Genrer:</string>
+    <string name="detailsGenres">GENRER</string>
 </resources>

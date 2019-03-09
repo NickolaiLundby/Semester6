@@ -5,14 +5,10 @@
         android:id="@+id/action_search"
         android:enabled="true"
         android:title="@string/menu_action_search"
-        android:visible="true"
         app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/select_language"
-        android:enabled="true"
         android:title="@string/menuLanguage"
-        android:visible="true"
-        app:actionViewClass="android.widget.Button"
-        app:showAsAction="ifRoom|withText" />
+        app:showAsAction="always" />
 </menu>

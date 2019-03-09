@@ -34,7 +34,6 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
         TextView title, userRating, imdbRating;
         ImageView picture;
         CheckBox watched;
-        //ImageView picture;
     }
 
     public MovieAdapter(Context context, ArrayList<Movie> movies){
@@ -66,7 +65,7 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
         viewHolder.title.setText(movie.getTitle());
         viewHolder.userRating.setText(String.valueOf(movie.getUserRating()));
         viewHolder.imdbRating.setText(String.valueOf(movie.getImdbRating()));
-        viewHolder.picture.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(),movie.getPoster()));
+        viewHolder.picture.setImageResource(movie.getPoster());
         viewHolder.watched.setChecked(movie.isWatched());
 
         convertView.setOnClickListener(new View.OnClickListener() {
@@ -145,45 +144,4 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
         };
         return filter;
     }
-    /*
-    public Filter getFilter() {
-        return myFilter;
-    }
-
-    private class ItemFilter extends Filter {
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-
-            String filterString = constraint.toString().toLowerCase();
-
-            FilterResults results = new FilterResults();
-
-            final ArrayList<Movie> list = originalData;
-            int count = list.size();
-
-            final ArrayList<Movie> nlist = new ArrayList<Movie>(count);
-
-            String filterableString;
-
-            for (int i = 0; i < count; i++) {
-                filterableString = list.get(i).getTitle();
-                if (filterableString.toLowerCase().contains(filterString)){
-                    nlist.add(list.get(i));
-                }
-            }
-
-            results.values = nlist;
-            results.count = nlist.size();
-            Toast.makeText(getContext(), String.valueOf(nlist.size()), Toast.LENGTH_SHORT).show();
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredData = (ArrayList<Movie>) results.values;
-            notifyDataSetChanged();
-        }
-    }
-    */
 }

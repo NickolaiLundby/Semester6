@@ -23,4 +23,6 @@
     <string name="overviewMyMovies">MY MOVIES</string>
     <string name="menu_action_search">Search</string>
     <string name="menuLanguage">ENGLISH</string>
+    <string name="detailsGenresText">Genres:</string>
+    <string name="detailsGenres">GENRES</string>
 </resources>
