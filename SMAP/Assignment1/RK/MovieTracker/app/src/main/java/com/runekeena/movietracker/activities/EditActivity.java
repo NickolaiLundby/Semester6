@@ -41,9 +41,11 @@ public class EditActivity extends AppCompatActivity {
         txtTitle = findViewById(R.id.txtTitle);
         txtTitle.setText(m.getTitle());
 
-        // setup text for rating
-        double userRating = m.getUserRating();
+        // setup user rating
         txtUserRating = findViewById(R.id.txtUserRating);
+        sbRating = findViewById(R.id.sbRating);
+        sbRating.setMax(100);
+        double userRating = m.getUserRating();
         if(userRating>-1){
             sbRating.setProgress((int)userRating*10);
             txtUserRating.setText(""+userRating);
@@ -52,9 +54,7 @@ public class EditActivity extends AppCompatActivity {
             sbRating.setProgress(0);
         }
 
-        // setup rating seekbar
-        sbRating = findViewById(R.id.sbRating);
-        sbRating.setMax(100);
+        // setup rating seekbar listninger
         sbRating.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

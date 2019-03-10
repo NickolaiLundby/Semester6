@@ -68,7 +68,7 @@ public class OverviewActivity extends AppCompatActivity {
             }
         });
 
-        // Setup exit button
+        // Setup e xit button
         btnExit = findViewById(R.id.btnExit);
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
