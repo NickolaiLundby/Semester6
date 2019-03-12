@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.List;
 
+// Parsable generated with plugin - https://github.com/mcharmas/android-parcelable-intellij-plugin
 public class Movie implements Parcelable {
 
     // variables

@@ -14,6 +14,7 @@ import com.runekeena.movietracker.model.Movie;
 
 import java.util.ArrayList;
 
+// Inspiration - https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView
 public class MovieAdapter extends ArrayAdapter {
 
     // viewholder class for holding ui elements
