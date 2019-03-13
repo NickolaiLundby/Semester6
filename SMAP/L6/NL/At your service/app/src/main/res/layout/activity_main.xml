@@ -15,7 +15,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/btnStartBackground"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/backgroundService_textView" />
 
     <Button
         android:id="@+id/btn_stopbackground"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="@+id/btn_startbackground" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/backgroundService_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -38,4 +38,98 @@
         android:text="@string/background_service"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/boundService_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/bound_service"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.33" />
+
+    <Button
+        android:id="@+id/btn_startbound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/start_bound"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/boundService_textView" />
+
+    <Button
+        android:id="@+id/btn_stopbound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/stop_bound"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_startbound"
+        app:layout_constraintEnd_toStartOf="@+id/btn_callbound"
+        app:layout_constraintStart_toEndOf="@+id/btn_startbound"
+        app:layout_constraintTop_toTopOf="@+id/btn_startbound" />
+
+    <Button
+        android:id="@+id/btn_callbound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/call_bound"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_stopbound"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_stopbound" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.66" />
+
+    <TextView
+        android:id="@+id/intentService_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/intent_service"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+    <Button
+        android:id="@+id/btn_intentFoo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/foo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/intentService_textView" />
+
+    <Button
+        android:id="@+id/btn_intentBaz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="@string/baz"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_intentFoo"
+        app:layout_constraintStart_toEndOf="@+id/btn_intentFoo"
+        app:layout_constraintTop_toTopOf="@+id/btn_intentFoo" />
 </android.support.constraint.ConstraintLayout>

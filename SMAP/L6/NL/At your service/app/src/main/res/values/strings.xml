@@ -3,4 +3,11 @@
     <string name="background_service">Background service:</string>
     <string name="btnStartBackground">Start Background</string>
     <string name="btnStopBackground">Stop background</string>
+    <string name="bound_service">Bound service:</string>
+    <string name="call_bound">Call bound</string>
+    <string name="stop_bound">Stop bound</string>
+    <string name="start_bound">Start bound</string>
+    <string name="intent_service">Intent service:</string>
+    <string name="foo">Foo</string>
+    <string name="baz">Baz</string>
 </resources>
