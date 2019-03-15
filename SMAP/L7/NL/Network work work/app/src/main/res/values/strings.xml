@@ -4,4 +4,6 @@
     <string name="connection_details">Connection Details</string>
     <string name="get_aarhus_weather">Get Aarhus Weather</string>
     <string name="aarhus_weather_details">Aarhus Weather Details</string>
+    <string name="parse_json">Parse JSON</string>
+    <string name="temperature_from_json">Temperature from JSON</string>
 </resources>

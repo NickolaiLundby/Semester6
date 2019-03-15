@@ -10,12 +10,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import nickolai.lisberg.lundby.networkworkwork.Utils.DownloadCallback;
 import nickolai.lisberg.lundby.networkworkwork.Utils.DownloadTask;
+import nickolai.lisberg.lundby.networkworkwork.WeatherResponse.WeatherResponse;
 
 public class MainActivity extends AppCompatActivity  implements DownloadCallback {
-    Button btnCheckConnection, btnGetWeather;
-    TextView weatherDetails;
+    Button btnCheckConnection, btnGetWeather, btnParseJson;
+    TextView weatherDetails, jsonTextView;
+    String downloadResult;
 
     public static final String WEATHER_URL_KEY = "k";
     public static final String WEATHER_API_KEY = "32b48f79191e458466c3f517369b0d79";
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity  implements DownloadCallback
 
         btnCheckConnection = findViewById(R.id.btn_checkConnection);
         btnGetWeather = findViewById(R.id.btn_getAarhusWeather);
+        btnParseJson = findViewById(R.id.btn_parseToJson);
         btnCheckConnection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,7 +49,14 @@ public class MainActivity extends AppCompatActivity  implements DownloadCallback
                 BtnGetWeather();
             }
         });
+        btnParseJson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BtnParseJson();
+            }
+        });
         weatherDetails = findViewById(R.id.tv_weatherDetails);
+        jsonTextView = findViewById(R.id.textView_jsonRespose);
     }
 
     private void BtnCheckConnection()
@@ -75,10 +87,19 @@ public class MainActivity extends AppCompatActivity  implements DownloadCallback
         return url;
     }
 
+    private void BtnParseJson()
+    {
+        WeatherResponse wr = new WeatherResponse();
+        Gson gson = new Gson();
+        wr = gson.fromJson(downloadResult, WeatherResponse.class);
+        jsonTextView.setText(String.valueOf(wr.getMain().getTemp()));
+    }
+
 
     @Override
     public void updateFromDownload(Object result) {
         weatherDetails.setText(result.toString());
+        downloadResult = result.toString();
     }
 
     @Override
