@@ -6,4 +6,10 @@
     <string name="aarhus_weather_details">Aarhus Weather Details</string>
     <string name="parse_json">Parse JSON</string>
     <string name="temperature_from_json">Temperature from JSON</string>
+    <string name="to_volley">To Volley</string>
+    <string name="to_main">To Main</string>
+    <string name="get_weather">Get Weather</string>
+    <string name="weather_result">Weather Result</string>
+    <string name="parse_json">Parse JSON</string>
+    <string name="weatherresult_json">WeatherResult JSON</string>
 </resources>

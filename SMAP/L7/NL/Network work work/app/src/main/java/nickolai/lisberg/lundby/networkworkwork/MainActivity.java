@@ -1,6 +1,7 @@
 package nickolai.lisberg.lundby.networkworkwork;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +18,7 @@ import nickolai.lisberg.lundby.networkworkwork.Utils.DownloadTask;
 import nickolai.lisberg.lundby.networkworkwork.WeatherResponse.WeatherResponse;
 
 public class MainActivity extends AppCompatActivity  implements DownloadCallback {
-    Button btnCheckConnection, btnGetWeather, btnParseJson;
+    Button btnCheckConnection, btnGetWeather, btnParseJson, btnToVolley;
     TextView weatherDetails, jsonTextView;
     String downloadResult;
 
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity  implements DownloadCallback
         btnCheckConnection = findViewById(R.id.btn_checkConnection);
         btnGetWeather = findViewById(R.id.btn_getAarhusWeather);
         btnParseJson = findViewById(R.id.btn_parseToJson);
+        btnToVolley = findViewById(R.id.btn_toVolley);
         btnCheckConnection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,6 +55,12 @@ public class MainActivity extends AppCompatActivity  implements DownloadCallback
             @Override
             public void onClick(View v) {
                 BtnParseJson();
+            }
+        });
+        btnToVolley.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BtnToVolleyClicked();
             }
         });
         weatherDetails = findViewById(R.id.tv_weatherDetails);
@@ -82,7 +90,7 @@ public class MainActivity extends AppCompatActivity  implements DownloadCallback
             Toast.makeText(this, "Already downloading", Toast.LENGTH_SHORT).show();
     }
 
-    private String UrlBuilder(){
+    public static String UrlBuilder(){
         String url = "api.openweathermap.org/data/2.5/weather?id=" + WEATHER_CITY_KEY + "&appid=" + WEATHER_API_KEY;
         return url;
     }
@@ -93,6 +101,12 @@ public class MainActivity extends AppCompatActivity  implements DownloadCallback
         Gson gson = new Gson();
         wr = gson.fromJson(downloadResult, WeatherResponse.class);
         jsonTextView.setText(String.valueOf(wr.getMain().getTemp()));
+    }
+
+    private void BtnToVolleyClicked()
+    {
+        Intent i = new Intent(this, VolleyActivity.class);
+        startActivity(i);
     }
 
 
