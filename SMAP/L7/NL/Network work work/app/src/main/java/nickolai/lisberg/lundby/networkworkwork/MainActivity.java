@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity  implements DownloadCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mCallback = (DownloadCallback<String>) getBaseContext();
+
+        mCallback = (DownloadCallback<String>) this;
 
         btnCheckConnection = findViewById(R.id.btn_checkConnection);
         btnGetWeather = findViewById(R.id.btn_getAarhusWeather);
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity  implements DownloadCallback
     }
 
     public static String UrlBuilder(){
-        String url = "api.openweathermap.org/data/2.5/weather?id=" + WEATHER_CITY_KEY + "&appid=" + WEATHER_API_KEY;
+        String url = "https://api.openweathermap.org/data/2.5/weather?id=" + WEATHER_CITY_KEY + "&appid=" + WEATHER_API_KEY;
         return url;
     }
 
