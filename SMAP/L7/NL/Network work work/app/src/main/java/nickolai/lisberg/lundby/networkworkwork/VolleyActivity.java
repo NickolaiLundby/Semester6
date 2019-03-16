@@ -80,9 +80,14 @@ public class VolleyActivity extends AppCompatActivity {
 
     private void BtnParseJsonClicked()
     {
-        WeatherResponse wr = new WeatherResponse();
-        Gson gson = new Gson();
-        wr = gson.fromJson(downloadResult, WeatherResponse.class);
-        txtWeatherJson.setText(String.valueOf(wr.getMain().getTemp()));
+        try {
+            WeatherResponse wr = new WeatherResponse();
+            Gson gson = new Gson();
+            wr = gson.fromJson(downloadResult, WeatherResponse.class);
+            txtWeatherJson.setText(String.valueOf(wr.getMain().getTemp()));
+        } catch (Exception e) {
+            txtWeatherJson.setText(e.toString());
+        }
+
     }
 }

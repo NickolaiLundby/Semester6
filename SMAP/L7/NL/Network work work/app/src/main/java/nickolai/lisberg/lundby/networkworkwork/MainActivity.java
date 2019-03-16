@@ -98,10 +98,15 @@ public class MainActivity extends AppCompatActivity  implements DownloadCallback
 
     private void BtnParseJson()
     {
-        WeatherResponse wr = new WeatherResponse();
-        Gson gson = new Gson();
-        wr = gson.fromJson(downloadResult, WeatherResponse.class);
-        jsonTextView.setText(String.valueOf(wr.getMain().getTemp()));
+        try {
+            WeatherResponse wr = new WeatherResponse();
+            Gson gson = new Gson();
+            wr = gson.fromJson(downloadResult, WeatherResponse.class);
+            jsonTextView.setText(String.valueOf(wr.getMain().getTemp()));
+        } catch (Exception e) {
+            jsonTextView.setText(e.toString());
+        }
+
     }
 
     private void BtnToVolleyClicked()
