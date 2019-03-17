@@ -63,8 +63,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:text="@string/weatherresult_json"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_temp"
+        app:layout_constraintStart_toEndOf="@+id/tv_temp"
+        app:layout_constraintTop_toTopOf="@+id/tv_temp" />
+
+    <TextView
+        android:id="@+id/tv_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/temperature_in_c"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_volleyParseJson" />
 </android.support.constraint.ConstraintLayout>

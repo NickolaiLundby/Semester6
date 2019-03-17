@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity  implements DownloadCallback
     TextView weatherDetails, jsonTextView;
     String downloadResult;
 
-    public static final String WEATHER_URL_KEY = "k";
     public static final String WEATHER_API_KEY = "32b48f79191e458466c3f517369b0d79";
     public static final String WEATHER_CITY_KEY = "2624652";
 
@@ -92,19 +91,17 @@ public class MainActivity extends AppCompatActivity  implements DownloadCallback
     }
 
     public static String UrlBuilder(){
-        String url = "https://api.openweathermap.org/data/2.5/weather?id=" + WEATHER_CITY_KEY + "&appid=" + WEATHER_API_KEY;
-        return url;
+        return "https://api.openweathermap.org/data/2.5/weather?id=" + WEATHER_CITY_KEY + "&appid=" + WEATHER_API_KEY;
     }
 
     private void BtnParseJson()
     {
         try {
-            WeatherResponse wr = new WeatherResponse();
             Gson gson = new Gson();
-            wr = gson.fromJson(downloadResult, WeatherResponse.class);
-            jsonTextView.setText(String.valueOf(wr.getMain().getTemp()));
+            WeatherResponse wr = gson.fromJson(downloadResult, WeatherResponse.class);
+            jsonTextView.setText(String.format("%.2f", wr.getMain().getTemp() - 272.15));
         } catch (Exception e) {
-            jsonTextView.setText(e.toString());
+            jsonTextView.setText(getString(R.string.parse_error));
         }
 
     }

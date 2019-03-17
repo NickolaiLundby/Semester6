@@ -11,4 +11,7 @@
     <string name="get_weather">Get Weather</string>
     <string name="weather_result">Weather Result</string>
     <string name="weatherresult_json">WeatherResult JSON</string>
+    <string name="temperature_in_c">Temperature in C:</string>
+    <string name="connection_error">Connection error!</string>
+    <string name="parse_error">Parsing error!</string>
 </resources>

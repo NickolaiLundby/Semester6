@@ -71,7 +71,7 @@ public class VolleyActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                txtWeatherResult.setText("That didn't work!");
+                txtWeatherResult.setText(getString(R.string.connection_error));
             }
         });
 
@@ -81,12 +81,11 @@ public class VolleyActivity extends AppCompatActivity {
     private void BtnParseJsonClicked()
     {
         try {
-            WeatherResponse wr = new WeatherResponse();
             Gson gson = new Gson();
-            wr = gson.fromJson(downloadResult, WeatherResponse.class);
-            txtWeatherJson.setText(String.valueOf(wr.getMain().getTemp()));
+            WeatherResponse wr = gson.fromJson(downloadResult, WeatherResponse.class);
+            txtWeatherJson.setText(String.format("%.2f", wr.getMain().getTemp() - 272.15));
         } catch (Exception e) {
-            txtWeatherJson.setText(e.toString());
+            txtWeatherJson.setText(getString(R.string.parse_error));
         }
 
     }
