@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">A Fragmented World</string>
+    <string name="lvTextUserRating">User Rating:</string>
+    <string name="lvTextImdbRating">IMDB Rating:</string>
+    <string name="editWatched">Watched?</string>
+    <string name="lvRating">9.0</string>
+    <string name="lvTitle">TITLE</string>
+    <string name="detailsGenresText">Genres:</string>
+    <string name="detailsGenres">GENRES</string>
+    <string name="detailsPlotText">Plot of the movie:</string>
+    <string name="detailsCommentText">User comment:</string>
+    <string name="placeHolder">0</string>
+    <string name="detailsPlot">PLOT</string>
+    <string name="detailsComment">COMMENT</string>
+    <string name="detailsWatched">Watched?</string>
+    <string name="textImdbRating">IMDB Rating:</string>
+    <string name="textUserRating">User Rating:</string>
+    <string name="ButtonOkay">OKAY</string>
+    <string name="ButtonCancel">Cancel</string>
+    <string name="detailsTitle">TITLE</string>
+</resources>
