@@ -110,7 +110,7 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
     }
 
     public Filter getFilter() {
-        Filter filter = new Filter() {
+        return new Filter() {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 movies = (ArrayList<Movie>) results.values;
@@ -142,6 +142,5 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
                 return results;
             }
         };
-        return filter;
     }
 }

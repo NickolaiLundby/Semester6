@@ -11,10 +11,10 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
+// I wish to have in-app functionality of changing the language, eg. at runtime.
 // Inspiration for externalizing all the locale functions goes to DevDeeds:
 // http://devdeeds.com/android-change-language-at-runtime/
-
-public class LocaleClass {
+public class LocaleHelper {
     private static final String SELECTED_LANGUAGE = "Locale.Helper.Selected.Language";
 
     public static Context onAttach(Context context) {

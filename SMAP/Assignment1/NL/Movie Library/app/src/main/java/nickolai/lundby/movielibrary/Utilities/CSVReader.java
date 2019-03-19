@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import nickolai.lundby.movielibrary.Models.Movie;
 import nickolai.lundby.movielibrary.R;
 
+// Inspiration for CSVReader class came from this stackoverflow:
+// https://stackoverflow.com/questions/43055661/reading-csv-file-in-android-app
 public class CSVReader {
     InputStream inputStream;
 
@@ -25,65 +28,16 @@ public class CSVReader {
             while ((csvLine = reader.readLine()) != null) {
                 String[] row = csvLine.split(";");
                 String[] genres = row[2].split(",");
-                List<String> genreList = new ArrayList();
-                for (String genre : genres) {
-                    genreList.add(genre);
-                }
-                Boolean myBool;
-                if(row[5].toUpperCase().equals("FALSE"))
-                    myBool = false;
-                else
-                    myBool = true;
+                List<String> genreList = new ArrayList<>();
+                Collections.addAll(genreList, genres);
 
-                int myPoster;
-                switch(genreList.get(0).toUpperCase()){
-                    case "ACTION":
-                        myPoster = R.drawable.action_50;
-                        break;
-                    case "ADVENTURE":
-                        myPoster = R.drawable.adventure_50;
-                        break;
-                    case "ANIMATION":
-                        myPoster = R.drawable.animation_50;
-                        break;
-                    case "ANIME":
-                        myPoster = R.drawable.anime_50;
-                        break;
-                    case "BIOGRAPHY":
-                        myPoster = R.drawable.biography_50;
-                        break;
-                    case "COMEDY":
-                        myPoster = R.drawable.comedy_50;
-                        break;
-                    case "DOCUMENTARY":
-                        myPoster = R.drawable.documentary_50;
-                        break;
-                    case "DRAMA":
-                        myPoster = R.drawable.drama_50;
-                        break;
-                    case "HORROR":
-                        myPoster = R.drawable.horror_50;
-                        break;
-                    case "MUSICAL":
-                        myPoster = R.drawable.musical_50;
-                        break;
-                    case "NATURE":
-                        myPoster = R.drawable.nature_50;
-                        break;
-                    case "ROMANCE":
-                        myPoster = R.drawable.romance_50;
-                        break;
-                    case "SCIFI":
-                        myPoster = R.drawable.scifi_50;
-                        break;
-                    case "WESTERN":
-                        myPoster = R.drawable.western_50;
-                        break;
-                    default:
-                        myPoster = R.drawable.default_50;
-                        break;
-                }
-                Movie m = new Movie(row[0], row[1], genreList, Double.parseDouble(row[3]), Double.parseDouble(row[4]), myBool, myPoster, row[6]);
+                int myPoster = GetGenre(genreList.get(0));
+
+                // This sets watched to true in cases where row[5] is "true", in all other cases, this value becomes "false", even if row[5] is null.
+                // This behaviour is okay, but could be unwanted in other scenarios.
+                Boolean watched = Boolean.valueOf(row[5].toLowerCase());
+
+                Movie m = new Movie(row[0], row[1], genreList, Double.parseDouble(row[3]), Double.parseDouble(row[4]), watched, myPoster, "");
                 resultList.add(m);
             }
         }
@@ -99,6 +53,42 @@ public class CSVReader {
             }
         }
         return resultList;
+    }
+
+    private int GetGenre(String genre)
+    {
+        switch(genre.toUpperCase()){
+            case "ACTION":
+                return R.drawable.action_50;
+            case "ADVENTURE":
+                return R.drawable.adventure_50;
+            case "ANIMATION":
+                return R.drawable.animation_50;
+            case "ANIME":
+                return R.drawable.anime_50;
+            case "BIOGRAPHY":
+                return R.drawable.biography_50;
+            case "COMEDY":
+                return R.drawable.comedy_50;
+            case "DOCUMENTARY":
+                return R.drawable.documentary_50;
+            case "DRAMA":
+                return R.drawable.drama_50;
+            case "HORROR":
+                return R.drawable.horror_50;
+            case "MUSICAL":
+                return R.drawable.musical_50;
+            case "NATURE":
+                return R.drawable.nature_50;
+            case "ROMANCE":
+                return R.drawable.romance_50;
+            case "SCIFI":
+                return R.drawable.scifi_50;
+            case "WESTERN":
+                return R.drawable.western_50;
+            default:
+                return R.drawable.default_50;
+        }
     }
 }
 

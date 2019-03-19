@@ -46,10 +46,12 @@ public class EditActivity extends AppCompatActivity {
         watched = findViewById(R.id.edit_watched);
         comment = findViewById(R.id.edit_comment);
 
-        yourRating.setText(Double.toString(movie.getUserRating()));
+        // Assign widget values
+        yourRating.setText(String.valueOf(movie.getUserRating()));
         ratingSeekbar.setProgress((int) movie.getUserRating()*10);
         title.setText(movie.getTitle());
-        comment.setText(movie.getComment());
+        if(!movie.getComment().isEmpty())
+            comment.setText(movie.getComment());
         watched.setChecked(movie.isWatched());
 
         // Listeners
@@ -59,30 +61,24 @@ public class EditActivity extends AppCompatActivity {
                 BtnOkayClick();
             }
         });
-
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BtnCancelClick();
             }
         });
-
         ratingSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 double rating = progress / 10.0;
-                yourRating.setText(Double.toString(rating));
+                yourRating.setText(String.valueOf(rating));
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) { }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) { }
         });
     }
 
@@ -92,7 +88,7 @@ public class EditActivity extends AppCompatActivity {
         movie.setComment(comment.getText().toString());
         movie.setUserRating(Double.parseDouble(yourRating.getText().toString()));
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(OverviewActivity.RESULT_EDIT, (Movie) movie);
+        resultIntent.putExtra(OverviewActivity.RESULT_EDIT, movie);
         resultIntent.putExtra(OverviewActivity.MOVIE_POSITION, moviePosition);
         setResult(RESULT_OK, resultIntent);
         finish();

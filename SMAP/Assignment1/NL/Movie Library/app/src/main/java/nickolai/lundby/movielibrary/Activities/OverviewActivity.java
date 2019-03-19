@@ -4,16 +4,13 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -24,7 +21,7 @@ import nickolai.lundby.movielibrary.Utilities.MovieAdapter;
 import nickolai.lundby.movielibrary.Database.MovieDatabase;
 import nickolai.lundby.movielibrary.R;
 import nickolai.lundby.movielibrary.Utilities.CSVReader;
-import nickolai.lundby.movielibrary.Utilities.LocaleClass;
+import nickolai.lundby.movielibrary.Utilities.LocaleHelper;
 
 
 public class OverviewActivity extends AppCompatActivity {
@@ -60,7 +57,7 @@ public class OverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_overview);
 
         // Variable initialization
-        LocaleClass.onAttach(OverviewActivity.this);
+        LocaleHelper.onAttach(OverviewActivity.this);
         DatabaseApplication dba = (DatabaseApplication) getApplicationContext();
         db = dba.GetDatabase();
         arrayOfMovies = new ArrayList<>(db.movieDao().getAll());
@@ -154,17 +151,18 @@ public class OverviewActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.select_language){
-            switch(LocaleClass.getLanguage(OverviewActivity.this)){
+            String s = LocaleHelper.getLanguage(OverviewActivity.this);
+            switch(LocaleHelper.getLanguage(OverviewActivity.this)){
                 case "en":
-                    LocaleClass.setLocale(OverviewActivity.this, "dk");
+                    LocaleHelper.setLocale(OverviewActivity.this, "da");
                     recreate();
                     break;
-                case "dk":
-                    LocaleClass.setLocale(OverviewActivity.this, "en");
+                case "da":
+                    LocaleHelper.setLocale(OverviewActivity.this, "en");
                     recreate();
                     break;
                 default:
-                    LocaleClass.setLocale(OverviewActivity.this, "en");
+                    LocaleHelper.setLocale(OverviewActivity.this, "en");
                     recreate();
                     break;
             }

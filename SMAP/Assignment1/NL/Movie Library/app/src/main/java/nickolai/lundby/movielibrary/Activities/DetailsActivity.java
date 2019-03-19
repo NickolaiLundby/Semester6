@@ -19,7 +19,8 @@ public class DetailsActivity extends AppCompatActivity {
 
     // Variables
     Movie movie;
-    String genres = "";
+    String prefix = "";
+    StringBuilder genres = new StringBuilder();
 
     // Widgets
     Button btnOkay;
@@ -43,10 +44,15 @@ public class DetailsActivity extends AppCompatActivity {
         picture = findViewById(R.id.details_picture);
         genre = findViewById(R.id.details_genres);
 
-
+        // Variable initialization
         movie = getIntent().getExtras().getParcelable(OverviewActivity.MOVIE_DETAILS_CONTENT);
-        for (String s: movie.getGenres())
-            genres = genres + " " + s;
+        for (String s: movie.getGenres()) {
+            genres.append(prefix);
+            genres.append(s);
+            prefix = " ";
+        }
+
+        // Assign widget values
         title.setText(movie.getTitle());
         imdbRating.setText(String.valueOf(movie.getImdbRating()));
         yourRating.setText(String.valueOf(movie.getUserRating()));
@@ -54,7 +60,7 @@ public class DetailsActivity extends AppCompatActivity {
         comment.setText(movie.getComment());
         watched.setChecked(movie.isWatched());
         picture.setImageBitmap(BitmapFactory.decodeResource(getResources(), movie.getPoster()));
-        genre.setText(genres);
+        genre.setText(genres.toString());
 
         // Listeners
         btnOkay.setOnClickListener(new View.OnClickListener() {

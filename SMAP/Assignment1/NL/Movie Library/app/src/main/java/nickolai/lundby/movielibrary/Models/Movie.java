@@ -8,6 +8,9 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+// To pass a movie object from one activity to another, it needs to implement either Serializable or Parcelable.
+// I've gone with the Parcelable implementation, using the following plugin:
+// https://plugins.jetbrains.com/plugin/7332-android-parcelable-code-generator
 @Entity
 public class Movie implements Parcelable {
 
@@ -38,6 +41,7 @@ public class Movie implements Parcelable {
 
     }
 
+    @NonNull
     public String getTitle() {
         return Title;
     }

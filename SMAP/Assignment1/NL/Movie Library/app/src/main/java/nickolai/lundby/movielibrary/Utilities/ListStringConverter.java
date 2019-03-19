@@ -9,6 +9,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+// Need to convert the List<String> that is Movie Genres to something that can be handled by Room DB.
+// Android developer: https://developer.android.com/reference/android/arch/persistence/room/TypeConverter
+// Stackoverflow example: https://stackoverflow.com/questions/44986626/android-room-database-how-to-handle-arraylist-in-an-entity
 public class ListStringConverter {
 
     @TypeConverter
