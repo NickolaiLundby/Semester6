@@ -10,6 +10,7 @@ import nickolai.lisberg.lundby.afragmentedworld.R;
 
 public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
+    private boolean isTwoPane;
 
     public final static String MOVIE_KEY = "Movie.Key.Helper";
 
@@ -19,9 +20,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         fragmentManager = getSupportFragmentManager();
 
+        if (findViewById(R.id.detailContainer) != null) {
+            isTwoPane = true;
+        } else
+            isTwoPane = false;
+
         if(savedInstanceState == null){
             fragmentManager.beginTransaction()
                     .add(R.id.container, new OverviewFragment())
+                    .commit();
+        }
+
+        if(isTwoPane) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.detailContainer, new DetailsFragment())
                     .commit();
         }
     }
