@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import nickolai.lisberg.lundby.afragmentedworld.Fragment.OverviewFragment.OnListFragmentInteractionListener;
-import nickolai.lisberg.lundby.afragmentedworld.Fragment.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
