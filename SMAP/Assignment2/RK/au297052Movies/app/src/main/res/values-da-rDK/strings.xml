@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="overview_top">Mine Film</string>
+    <string name="exit">Luk</string>
+    <string name="rating">Bedømmelse:</string>
+    <string name="user_rating">Brugerbedømmelse:</string>
+    <string name="plot">Plot</string>
+    <string name="user_comment">Brugerkommentar</string>
+    <string name="watched">Set</string>
+    <string name="genres">Genrer</string>
+    <string name="ur">BB:</string>
+    <string name="r">B:</string>
+    <string name="delete">Slet</string>
+</resources>
