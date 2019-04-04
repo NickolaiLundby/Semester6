@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.DetailsActivity">
+
+    <Button
+        android:id="@+id/details_btnOkay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/fff_tusj"
+        android:text="@string/ButtonOkay"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/details_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars[0]" />
+
+    <TextView
+        android:id="@+id/details_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/fff_tusj"
+        android:text="@string/detailsTitle"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/details_text_genres" />
+
+    <TextView
+        android:id="@+id/textImdbRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/fff_tusj"
+        android:paddingLeft="8dp"
+        android:text="@string/textImdbRating"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline12"
+        app:layout_constraintStart_toEndOf="@+id/details_picture"
+        app:layout_constraintTop_toTopOf="@+id/details_picture" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/textUserRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:fontFamily="@font/fff_tusj"
+        android:paddingLeft="8dp"
+        android:text="@string/textUserRating"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/details_imdbRating"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="@+id/details_imdbRating" />
+
+    <TextView
+        android:id="@+id/details_imdbRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:fontFamily="@font/fff_tusj"
+        android:text="@string/placeHolder"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textImdbRating"
+        app:layout_constraintStart_toEndOf="@+id/textImdbRating"
+        app:layout_constraintTop_toTopOf="@+id/textImdbRating" />
+
+    <TextView
+        android:id="@+id/details_plot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/fff_tusj"
+        android:gravity="left"
+        android:maxWidth="500dp"
+        android:singleLine="false"
+        android:text="@string/detailsPlot"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/details_text_plot"
+        app:layout_constraintTop_toTopOf="@+id/guideline12" />
+
+    <CheckBox
+        android:id="@+id/details_watched"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:clickable="false"
+        android:fontFamily="@font/fff_tusj"
+        android:text="@string/detailsWatched"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/details_title"
+        app:layout_constraintTop_toBottomOf="@+id/details_title" />
+
+    <TextView
+        android:id="@+id/details_yourRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:fontFamily="@font/fff_tusj"
+        android:text="@string/placeHolder"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textUserRating"
+        app:layout_constraintStart_toEndOf="@+id/textUserRating"
+        app:layout_constraintTop_toTopOf="@+id/textUserRating" />
+
+    <TextView
+        android:id="@+id/details_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/fff_tusj"
+        android:text="@string/detailsComment"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/details_text_comment"
+        app:layout_constraintStart_toStartOf="@+id/details_plot"
+        app:layout_constraintTop_toTopOf="@+id/details_text_comment" />
+
+    <TextView
+        android:id="@+id/details_text_plot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/fff_tusj"
+        android:paddingLeft="8dp"
+        android:text="@string/detailsPlotText"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/details_picture"
+        app:layout_constraintTop_toTopOf="@+id/guideline12" />
+
+    <TextView
+        android:id="@+id/details_text_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/fff_tusj"
+        android:paddingLeft="8dp"
+        android:text="@string/detailsCommentText"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/details_picture"
+        app:layout_constraintTop_toBottomOf="@+id/details_plot" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.11" />
+
+    <TextView
+        android:id="@+id/details_text_genres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="8dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
+        android:text="@string/detailsGenresText"
+        app:layout_constraintStart_toEndOf="@+id/details_picture"
+        app:layout_constraintTop_toBottomOf="@+id/details_comment" />
+
+    <TextView
+        android:id="@+id/details_genres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/detailsGenres"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/fff_tusj"
+        app:layout_constraintBottom_toBottomOf="@+id/details_text_genres"
+        app:layout_constraintStart_toStartOf="@+id/details_plot"
+        app:layout_constraintTop_toTopOf="@+id/details_text_genres" />
+
+</android.support.constraint.ConstraintLayout>
