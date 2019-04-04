@@ -2,6 +2,7 @@ package nickolai.lisberg.lundby.au259814movies.Services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 
 import com.android.volley.Request;
@@ -25,16 +26,13 @@ import nickolai.lisberg.lundby.au259814movies.Utilities.CSVReader;
 import nickolai.lisberg.lundby.au259814movies.Utilities.MovieHelperClass;
 
 public class MovieService extends Service {
+
     // Variables
     ArrayList<Movie> arrayOfMovies;
     MovieDatabase db;
     Movie movieResult;
-    Gson gson = new Gson();
-    CSVReader csvReader;
+    IBinder mBinder = new LocalBinder();
 
-    public MovieService()
-    {
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
@@ -45,7 +43,7 @@ public class MovieService extends Service {
         if(arrayOfMovies.isEmpty())
         {
             InputStream inputStream = getResources().openRawResource(R.raw.movielist);
-            csvReader = new CSVReader(inputStream);
+            CSVReader csvReader = new CSVReader(inputStream);
             arrayOfMovies = csvReader.read();
             for(Movie m : arrayOfMovies)
                 db.movieDao().insertMovie(m);
@@ -63,8 +61,7 @@ public class MovieService extends Service {
     @Override
     public IBinder onBind(Intent intent)
     {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return mBinder;
     }
 
     private void GetMovieByTitle(String title)
@@ -79,6 +76,7 @@ public class MovieService extends Service {
                         // http://omdbapi.com. We will use MovieAPI class to parse it.
                         // As we don't need the entire data structure, we convert it to
                         // our simpler Movie object using our helper function.
+                        Gson gson = new Gson();
                         MovieAPI movieAPI = gson.fromJson(response, MovieAPI.class);
                         if(db.movieDao().findByTitle(movieAPI.getTitle()) != null)
                         {
@@ -121,6 +119,12 @@ public class MovieService extends Service {
         catch (Exception ex)
         {
             ex.printStackTrace();
+        }
+    }
+
+    public class LocalBinder extends Binder {
+        public MovieService getServerInstance() {
+            return MovieService.this;
         }
     }
 }
