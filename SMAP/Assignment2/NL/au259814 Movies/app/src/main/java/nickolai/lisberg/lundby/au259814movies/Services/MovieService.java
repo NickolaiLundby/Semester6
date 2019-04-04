@@ -123,7 +123,7 @@ public class MovieService extends Service {
     }
 
     public class LocalBinder extends Binder {
-        public MovieService getServerInstance() {
+        public MovieService getServiceInstance() {
             return MovieService.this;
         }
     }

@@ -1,10 +1,13 @@
 package nickolai.lisberg.lundby.au259814movies.Activities;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -23,6 +26,7 @@ import nickolai.lisberg.lundby.au259814movies.Database.DatabaseApplication;
 import nickolai.lisberg.lundby.au259814movies.Database.MovieDatabase;
 import nickolai.lisberg.lundby.au259814movies.Models.Movie;
 import nickolai.lisberg.lundby.au259814movies.R;
+import nickolai.lisberg.lundby.au259814movies.Services.MovieService;
 import nickolai.lisberg.lundby.au259814movies.Utilities.CSVReader;
 import nickolai.lisberg.lundby.au259814movies.Utilities.LocaleHelper;
 import nickolai.lisberg.lundby.au259814movies.Utilities.MovieAdapter;
@@ -35,6 +39,8 @@ public class OverviewActivity extends AppCompatActivity {
     MovieAdapter movieAdapter;
     CSVReader csvReader;
     MovieDatabase db;
+    boolean mBound;
+    MovieService mService;
 
     // Widgets
     Button btnExit;
@@ -179,6 +185,38 @@ public class OverviewActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Intent mIntent = new Intent(this, MovieService.class);
+        bindService(mIntent, mConnection, BIND_AUTO_CREATE);
+    }
+
+    ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBound = true;
+            MovieService.LocalBinder mLocalBinder = (MovieService.LocalBinder)service;
+            mService = mLocalBinder.getServiceInstance();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound = false;
+            mService = null;
+        }
+    };
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
     }
 
     private void RegisterMyReceiver(){
