@@ -1,0 +1,24 @@
+<layer-list>
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#7B1FA2"/>
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+    <item>
+        <vector android:height="100dp" android:viewportHeight="500"
+            android:viewportWidth="500" android:width="100dp" xmlns:android="http://schemas.android.com/apk/res/android">
+            <path android:fillColor="#FF000000" android:pathData="M345.3,307.4v141.3H71.9V93.4h130.7l-22.2,27.3H99.2v300.7h218.7V313.3L345.3,307.4z"/>
+            <path android:fillColor="#FF000000" android:pathData="M345.3,307.4v141.3H71.9V93.4h130.7l-22.2,27.3H99.2v300.7h218.7V313.3L345.3,307.4z"/>
+            <path android:fillColor="#FF000000" android:pathData="M235.9,107L263.3,107"/>
+            <path android:fillColor="#FF000000" android:pathData="M140.2,339.4h136.7v27.3h-136.7z"/>
+            <path android:fillColor="#FF000000" android:pathData="M235.9,312.1l-95.7,0l0,-27.4l65,0"/>
+            <path android:fillColor="#FF000000" android:pathData="M177.8,257.4l-37.6,0l0,-27.4l26.2,0"/>
+            <path android:fillColor="#FF000000" android:pathData="M290.6,326.9c-76,0 -137.9,-61.9 -137.9,-137.9c0,-76 61.9,-137.9 137.9,-137.9c76,0 137.9,61.9 137.9,137.9C428.5,265.1 366.6,326.9 290.6,326.9zM290.6,78.5c-60.9,0 -110.5,49.6 -110.5,110.5c0,60.9 49.6,110.5 110.5,110.5c61,0 110.5,-49.6 110.5,-110.5C401.1,128.1 351.5,78.5 290.6,78.5z"/>
+            <path android:fillColor="#FF000000" android:pathData="M290.6,204.8c-31.9,0 -57.8,-25.9 -57.8,-57.8s25.9,-57.8 57.8,-57.8s57.8,25.9 57.8,57.8S322.5,204.8 290.6,204.8zM290.6,116.6c-16.8,0 -30.5,13.7 -30.5,30.5s13.7,30.5 30.5,30.5c16.8,0 30.5,-13.7 30.5,-30.5S307.4,116.6 290.6,116.6z"/>
+            <path android:fillColor="#FF000000" android:pathData="M370.5,257.4h-27.3c0,-29 -23.6,-52.5 -52.5,-52.5c-29,0 -52.5,23.6 -52.5,52.5h-27.3c0,-44 35.8,-79.9 79.9,-79.9S370.5,213.3 370.5,257.4z"/>
+        </vector>
+    </item>
+</layer-list>
+
+
