@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">au259814 Movies</string>
+    <string name="ExitButton">EXIT</string>
+    <string name="ButtonOkay">OKAY</string>
+    <string name="ButtonCancel">Cancel</string>
+    <string name="detailsTitle">TITLE</string>
+    <string name="textImdbRating">IMDB Rating:</string>
+    <string name="textUserRating">User Rating:</string>
+    <string name="lvTextImdbRating">IMDB:</string>
+    <string name="lvTextUserRating">USER:</string>
+    <string name="placeHolder">0</string>
+    <string name="detailsPlot">PLOT</string>
+    <string name="detailsComment">COMMENT</string>
+    <string name="detailsWatched">Watched?</string>
+    <string name="editTitle">TITLE</string>
+    <string name="editWatched">Watched?</string>
+    <string name="editComment">User comment</string>
+    <string name="lvTitle">TITLE</string>
+    <string name="lvRating">9.0</string>
+    <string name="pictureDescriber">Picture reflecting genre</string>
+    <string name="detailsPlotText">Plot of the movie:</string>
+    <string name="detailsCommentText">User comment:</string>
+    <string name="overviewMyMovies">MY MOVIES</string>
+    <string name="menu_action_search">Search</string>
+    <string name="menuLanguage">DANSK</string>
+    <string name="detailsGenresText">Genres:</string>
+    <string name="detailsGenres">GENRES</string>
+    <string name="edit_comment_hint">Your comment here</string>
+</resources>
