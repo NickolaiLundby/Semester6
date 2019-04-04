@@ -10,7 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.EditActivity"></activity>
+        <service
+            android:name=".Services.MovieService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".Activities.EditActivity" />
         <activity android:name=".Activities.DetailsActivity" />
         <activity android:name=".Activities.OverviewActivity">
             <intent-filter>
