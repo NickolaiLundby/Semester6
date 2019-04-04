@@ -1,6 +1,9 @@
 package nickolai.lisberg.lundby.au259814movies.Activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -51,10 +55,17 @@ public class OverviewActivity extends AppCompatActivity {
     public final static String MOVIE_EDIT_CONTENT = "Content.Helper.Movie.Edit";
     public final static String MOVIE_POSITION = "Content.Helper.Movie.Position";
 
+    // Service constants
+    public final static String DATABASE_BROADCAST = "Broadcast.Database.Updated";
+    public final static String MOVIE_BROADCAST = "Broadcast.Movie.Updated";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
+
+        // New stuff
+        //RegisterMyReceiver();
 
         // Variable initialization
         LocaleHelper.onAttach(OverviewActivity.this);
@@ -169,4 +180,25 @@ public class OverviewActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    private void RegisterMyReceiver(){
+        try
+        {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(DATABASE_BROADCAST);
+            registerReceiver(receiver, intentFilter);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Movie m = intent.getExtras().getParcelable(MOVIE_BROADCAST);
+            Toast.makeText(getBaseContext(), m.getTitle(), Toast.LENGTH_SHORT).show();
+        }
+    };
 }

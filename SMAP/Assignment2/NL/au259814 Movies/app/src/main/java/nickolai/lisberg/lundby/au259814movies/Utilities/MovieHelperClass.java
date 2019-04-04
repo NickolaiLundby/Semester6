@@ -7,7 +7,7 @@ import nickolai.lisberg.lundby.au259814movies.Models.Movie;
 import nickolai.lisberg.lundby.au259814movies.R;
 
 public class MovieHelperClass {
-    public static Movie ConvertAPIMovie(MovieAPI movieApi){
+    public static Movie MovieFromMovieAPI(MovieAPI movieApi){
         return new Movie(
                 movieApi.getTitle(),
                 movieApi.getPlot(),
@@ -15,11 +15,23 @@ public class MovieHelperClass {
                 Double.parseDouble(movieApi.getImdbRating()),
                 0,
                 false,
-                getPosterId(movieApi.getGenre()),
+                GetPosterId(movieApi.getGenre()),
                 "");
     }
 
-    public static int getPosterId(String genres)
+    public static Movie MovieFromMovieAndMovieAPI(MovieAPI movieApi, Movie movie){
+        return new Movie(
+                movieApi.getTitle(),
+                movieApi.getPlot(),
+                movieApi.getGenre(),
+                Double.parseDouble(movieApi.getImdbRating()),
+                movie.getUserRating(),
+                movie.isWatched(),
+                GetPosterId(movieApi.getGenre()),
+                movie.getComment());
+    }
+
+    public static int GetPosterId(String genres)
     {
         String[] genre = genres.split(",");
         switch(genre[0].toUpperCase()){
@@ -54,5 +66,9 @@ public class MovieHelperClass {
             default:
                 return R.drawable.default_50;
         }
+    }
+
+    public static String UrlBuilder(String title){
+        return "http://www.omdbapi.com/?t=" + title.replaceAll(" ", "+") + "&apikey=69750eef";
     }
 }

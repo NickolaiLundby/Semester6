@@ -24,7 +24,7 @@ public class CSVReader {
             while ((csvLine = reader.readLine()) != null) {
                 String[] row = csvLine.split(";");
 
-                int myPoster = MovieHelperClass.getPosterId(row[2]);
+                int myPoster = MovieHelperClass.GetPosterId(row[2]);
 
                 // This sets watched to true in cases where row[5] is "true", in all other cases, this value becomes "false", even if row[5] is null.
                 // This behaviour is okay, but could be unwanted in other scenarios.
