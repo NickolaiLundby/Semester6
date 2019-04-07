@@ -26,4 +26,5 @@
     <string name="detailsGenresText">Genres:</string>
     <string name="detailsGenres">GENRES</string>
     <string name="edit_comment_hint">Your comment here</string>
+    <string name="service_response_error_already">Movie already in list</string>
 </resources>

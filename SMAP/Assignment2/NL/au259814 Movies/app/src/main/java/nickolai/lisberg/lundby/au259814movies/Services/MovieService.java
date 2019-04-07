@@ -21,6 +21,7 @@ import nickolai.lisberg.lundby.au259814movies.Database.DatabaseApplication;
 import nickolai.lisberg.lundby.au259814movies.Database.MovieDatabase;
 import nickolai.lisberg.lundby.au259814movies.Models.APIModels.MovieAPI;
 import nickolai.lisberg.lundby.au259814movies.Models.Movie;
+import nickolai.lisberg.lundby.au259814movies.Models.ServiceResponse;
 import nickolai.lisberg.lundby.au259814movies.R;
 import nickolai.lisberg.lundby.au259814movies.Utilities.CSVReader;
 import nickolai.lisberg.lundby.au259814movies.Utilities.MovieHelperClass;
@@ -32,22 +33,15 @@ public class MovieService extends Service {
     MovieDatabase db;
     Movie movieResult;
     IBinder mBinder = new LocalBinder();
+    RequestQueue requestQueue;
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        DatabaseApplication dba = (DatabaseApplication) getApplicationContext();
-        db = dba.GetDatabase();
-        arrayOfMovies = new ArrayList<>(db.movieDao().getAll());
-        if(arrayOfMovies.isEmpty())
-        {
-            InputStream inputStream = getResources().openRawResource(R.raw.movielist);
-            CSVReader csvReader = new CSVReader(inputStream);
-            arrayOfMovies = csvReader.read();
-            for(Movie m : arrayOfMovies)
-                db.movieDao().insertMovie(m);
-        }
+        InitializeDatabase();
+
+        requestQueue = Volley.newRequestQueue(this);
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -62,48 +56,6 @@ public class MovieService extends Service {
     public IBinder onBind(Intent intent)
     {
         return mBinder;
-    }
-
-    private void GetMovieByTitle(String title)
-    {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = MovieHelperClass.UrlBuilder(title);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // The response is received as a JSON, formatted as seen on
-                        // http://omdbapi.com. We will use MovieAPI class to parse it.
-                        // As we don't need the entire data structure, we convert it to
-                        // our simpler Movie object using our helper function.
-                        Gson gson = new Gson();
-                        MovieAPI movieAPI = gson.fromJson(response, MovieAPI.class);
-                        if(db.movieDao().findByTitle(movieAPI.getTitle()) != null)
-                        {
-                            // If the movie is already stored on the database, eg. with
-                            // user comments and rating, we wan't to keep this user info.
-                            movieResult = MovieHelperClass.MovieFromMovieAndMovieAPI(movieAPI, db.movieDao().findByTitle(movieAPI.getTitle()));
-                        }
-                        else
-                        {
-                            // If the movie isn't already stored, we created a new object,
-                            // entirely based on the API object, with empty user comment and rating.
-                            movieResult = MovieHelperClass.MovieFromMovieAPI(movieAPI);
-                        }
-                        // We then need to update the database with this object.
-                        db.movieDao().update(movieResult);
-                        // Let all activities listening know that the database was
-                        // updated, and specifically that movie object.
-                        SendABroadCast(movieResult);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                throw new UnsupportedOperationException("Not yet implemented");
-            }
-        });
-
-        queue.add(stringRequest);
     }
 
     private void SendABroadCast(Movie movie)
@@ -125,6 +77,101 @@ public class MovieService extends Service {
     public class LocalBinder extends Binder {
         public MovieService getServiceInstance() {
             return MovieService.this;
+        }
+    }
+
+    public void InitializeDatabase()
+    {
+        DatabaseApplication dba = (DatabaseApplication) getApplicationContext();
+        db = dba.GetDatabase();
+        arrayOfMovies = new ArrayList<>(db.movieDao().getAll());
+        if(arrayOfMovies.isEmpty())
+        {
+            InputStream inputStream = getResources().openRawResource(R.raw.movielist);
+            CSVReader csvReader = new CSVReader(inputStream);
+            arrayOfMovies = csvReader.read();
+            for(Movie m : arrayOfMovies)
+                db.movieDao().insertMovie(m);
+        }
+    }
+
+    public void AddToDatabase(Movie movie)
+    {
+        String url = MovieHelperClass.UrlBuilder(movie.getTitle());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Gson gson = new Gson();
+                        MovieAPI movieAPI = gson.fromJson(response, MovieAPI.class);
+                        if(movieAPI.getTitle().isEmpty())
+                        {
+                            // Handle empty response from API
+                        }
+                        if (db.movieDao().findByTitle(movieAPI.getTitle()) != null)
+                        {
+                            // Handle database already containing movie
+                        }
+                        else
+                        {
+                            // Add the movie
+                            movieResult = MovieHelperClass.MovieFromMovieAPI(movieAPI);
+                            db.movieDao().insertMovie(movieResult);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                throw new UnsupportedOperationException();
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
+
+    public void DeleteFromDatabase(Movie movie)
+    {
+        db.movieDao().delete(movie);
+    }
+
+    public void UpdateMovie(Movie movie)
+    {
+        db.movieDao().update(movie);
+    }
+
+    public void UpdateAllMovies()
+    {
+        for(Movie movie: db.movieDao().getAll()){
+            String url = MovieHelperClass.UrlBuilder(movie.getTitle());
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Gson gson = new Gson();
+                            MovieAPI movieAPI = gson.fromJson(response, MovieAPI.class);
+                            if(movieAPI.getTitle().isEmpty())
+                            {
+                                // Handle empty response from API
+                            }
+                            if (db.movieDao().findByTitle(movieAPI.getTitle()) != null)
+                            {
+                                // Handle database already containing movie
+                                movieResult = MovieHelperClass.MovieFromMovieAndMovieAPI(movieAPI, db.movieDao().findByTitle(movieAPI.getTitle()));
+                                db.movieDao().update(movieResult);
+                            }
+                            else
+                            {
+                                // Add the movie
+                                movieResult = MovieHelperClass.MovieFromMovieAPI(movieAPI);
+                                db.movieDao().insertMovie(movieResult);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    throw new UnsupportedOperationException();
+                }
+            });
+            requestQueue.add(stringRequest);
         }
     }
 }
