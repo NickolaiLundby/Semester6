@@ -3,18 +3,22 @@ package nickolai.lisberg.lundby.au259814movies.Activities;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -39,13 +43,14 @@ public class OverviewActivity extends AppCompatActivity {
     MovieAdapter movieAdapter;
     CSVReader csvReader;
     MovieDatabase db;
+    String mAddMovieTitle;
 
     // Service
     boolean mBound;
     MovieService mService;
 
     // Widgets
-    Button btnExit;
+    Button btnExit, btnAdd;
     ListView listView;
 
     // Request constants
@@ -74,6 +79,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         // Widget initialization
         btnExit = findViewById(R.id.overview_btnExit);
+        btnAdd = findViewById(R.id.overview_btnAdd);
         listView = findViewById(R.id.overview_listview_movies);
 
         // Listeners
@@ -81,6 +87,12 @@ public class OverviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 BtnExitClick();
+            }
+        });
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BtnAddClick();
             }
         });
     }
@@ -92,19 +104,49 @@ public class OverviewActivity extends AppCompatActivity {
             Toast.makeText(this, "Not bound to service", Toast.LENGTH_SHORT).show();
     }
 
-    public void DetailsClick(Intent intent)
+    public void DetailsClick(Intent intent, Movie movie)
     {
+        mService.setCurrentMovie(movie);
         startActivityForResult(intent, REQUEST_DETAIL);
     }
 
-    public void EditClick(Intent intent)
+    public void EditClick(Intent intent, Movie movie)
     {
+        mService.setCurrentMovie(movie);
         startActivityForResult(intent, REQUEST_EDIT);
     }
 
     private void BtnExitClick() {
         finish();
         System.exit(0);
+    }
+
+    private void BtnAddClick() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Title");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mAddMovieTitle = input.getText().toString();
+                if(!mService.AddToDatabase(mAddMovieTitle).Success)
+                    Toast.makeText(getApplicationContext(), mService.AddToDatabase(mAddMovieTitle).Message, Toast.LENGTH_SHORT).show();
+                else
+                    ReadDatabase();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     @Override
@@ -114,11 +156,7 @@ public class OverviewActivity extends AppCompatActivity {
         switch(requestCode){
             case REQUEST_EDIT:
                 if (resultCode == RESULT_OK) {
-                    int i = data.getExtras().getInt(MOVIE_POSITION);
-                    Movie add = data.getExtras().getParcelable(RESULT_EDIT);
-                    movieAdapter.remove(movieAdapter.getItem(i));
-                    movieAdapter.insert(add, i);
-                    db.movieDao().update(add);
+                    ReadDatabase();
                 }
             default:
                 break;
@@ -199,13 +237,4 @@ public class OverviewActivity extends AppCompatActivity {
             mService = null;
         }
     };
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(mBound) {
-            unbindService(mConnection);
-            mBound = false;
-        }
-    }
 }

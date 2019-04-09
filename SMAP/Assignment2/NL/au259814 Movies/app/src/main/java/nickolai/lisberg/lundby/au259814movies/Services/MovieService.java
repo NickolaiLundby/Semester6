@@ -36,6 +36,11 @@ public class MovieService extends Service {
     Movie movieResult;
     IBinder mBinder = new LocalBinder();
     RequestQueue requestQueue;
+    Movie currentMovie;
+
+    public void setCurrentMovie(Movie currentMovie) {
+        this.currentMovie = currentMovie;
+    }
 
     @Override
     public void onDestroy()
@@ -78,37 +83,40 @@ public class MovieService extends Service {
         }
     }
 
-    public void AddToDatabase(Movie movie)
+    public ServiceResponse AddToDatabase(String movieTitle)
     {
-        String url = MovieHelperClass.UrlBuilder(movie.getTitle());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Gson gson = new Gson();
-                        MovieAPI movieAPI = gson.fromJson(response, MovieAPI.class);
-                        if(movieAPI.getTitle().isEmpty())
-                        {
-                            // Handle empty response from API
+        if(db.movieDao().findByTitle(movieTitle) != null){
+            return new ServiceResponse(false, "Movie already in database");
+        }
+        else{
+            String url = MovieHelperClass.UrlBuilder(movieTitle);
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Gson gson = new Gson();
+                            MovieAPI movieAPI = gson.fromJson(response, MovieAPI.class);
+                            if(movieAPI == null)
+                            {
+                                Toast.makeText(getApplicationContext(), "EMPTY", Toast.LENGTH_SHORT).show();
+                            }
+                            Toast.makeText(getApplicationContext(), movieAPI.getTitle(), Toast.LENGTH_SHORT).show();
+                            //else
+                            //{
+                                // Add the movie
+                                //movieResult = MovieHelperClass.MovieFromMovieAPI(movieAPI);
+                                //Toast.makeText(getApplicationContext(), movieResult.getTitle(), Toast.LENGTH_SHORT).show();
+                            //}
                         }
-                        if (db.movieDao().findByTitle(movieAPI.getTitle()) != null)
-                        {
-                            // Handle database already containing movie
-                        }
-                        else
-                        {
-                            // Add the movie
-                            movieResult = MovieHelperClass.MovieFromMovieAPI(movieAPI);
-                            db.movieDao().insertMovie(movieResult);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                throw new UnsupportedOperationException();
-            }
-        });
-        requestQueue.add(stringRequest);
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    throw new UnsupportedOperationException();
+                }
+            });
+            requestQueue.add(stringRequest);
+        }
+        return new ServiceResponse(true, "Movie added");
     }
 
     public void DeleteFromDatabase(Movie movie)
@@ -157,16 +165,15 @@ public class MovieService extends Service {
         }
     }
 
-    public Movie GetMovieByTitle(String title) {
+    public Movie GetCurrentMovie() {
         try{
-            return db.movieDao().findByTitle(title);
+            return db.movieDao().findByTitle(currentMovie.getTitle());
         } catch(Exception e){
             throw new UnsupportedOperationException();
         }
     }
 
     public ArrayList<Movie> GetAllMovies() {
-        Toast.makeText(this, "Hep from Service", Toast.LENGTH_SHORT).show();
         return new ArrayList<>(db.movieDao().getAll());
     }
 }

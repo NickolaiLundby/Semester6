@@ -22,9 +22,6 @@ public class DetailsActivity extends AppCompatActivity {
 
     // Variables
     Movie movie;
-    String prefix = "";
-    StringBuilder genres = new StringBuilder();
-    Intent intent;
 
     // Service
     boolean mBound;
@@ -52,10 +49,6 @@ public class DetailsActivity extends AppCompatActivity {
         picture = findViewById(R.id.details_picture);
         genre = findViewById(R.id.details_genres);
 
-        intent = getIntent();
-
-
-
         // Listeners
         btnOkay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,9 +58,8 @@ public class DetailsActivity extends AppCompatActivity {
         });
     }
 
-    public void LoadMovieFromDatabase()
-    {
-        movie = mService.GetMovieByTitle(intent.getExtras().getString(OverviewActivity.MOVIE_DETAILS_TITLE));
+    public void LoadMovie() {
+        movie = mService.GetCurrentMovie();
         title.setText(movie.getTitle());
         imdbRating.setText(String.valueOf(movie.getImdbRating()));
         yourRating.setText(String.valueOf(movie.getUserRating()));
@@ -92,6 +84,7 @@ public class DetailsActivity extends AppCompatActivity {
             mBound = true;
             MovieService.LocalBinder mLocalBinder = (MovieService.LocalBinder)service;
             mService = mLocalBinder.getServiceInstance();
+            LoadMovie();
         }
 
         @Override
@@ -103,14 +96,16 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void BtnOkayClick()
     {
-        Intent resultIntent = new Intent();
-        setResult(RESULT_OK, resultIntent);
+        setResult(RESULT_OK, new Intent());
         finish();
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-        outState.putParcelable(OverviewActivity.STORAGE_DETAIL, movie);
+    protected void onStop() {
+        super.onStop();
+        if(mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
     }
 }

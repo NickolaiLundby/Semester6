@@ -148,7 +148,6 @@
         android:layout_margin="8dp"
         android:minWidth="100dp"
         android:background="@android:color/transparent"
-        android:text="@string/editComment"
         android:hint="@string/edit_comment_hint"
         android:textSize="12sp"
         android:textStyle="bold"

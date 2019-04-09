@@ -1,7 +1,10 @@
 package nickolai.lisberg.lundby.au259814movies.Activities;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -12,12 +15,16 @@ import android.widget.TextView;
 
 import nickolai.lisberg.lundby.au259814movies.Models.Movie;
 import nickolai.lisberg.lundby.au259814movies.R;
+import nickolai.lisberg.lundby.au259814movies.Services.MovieService;
 
 public class EditActivity extends AppCompatActivity {
 
     // Variables
     Movie movie;
-    int moviePosition;
+
+    // Service
+    boolean mBound;
+    MovieService mService;
 
     // Widgets
     Button btnOkay, btnCancel;
@@ -31,10 +38,6 @@ public class EditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        // Variable initialization
-        movie = getIntent().getExtras().getParcelable(OverviewActivity.MOVIE_EDIT_CONTENT);
-        moviePosition = getIntent().getExtras().getInt(OverviewActivity.MOVIE_POSITION);
-
         // Widget initialization
         btnOkay = findViewById(R.id.edit_buttonOkay);
         btnCancel = findViewById(R.id.edit_buttonCancel);
@@ -44,14 +47,6 @@ public class EditActivity extends AppCompatActivity {
         ratingSeekbar.setMax(100);
         watched = findViewById(R.id.edit_watched);
         comment = findViewById(R.id.edit_comment);
-
-        // Assign widget values
-        yourRating.setText(String.valueOf(movie.getUserRating()));
-        ratingSeekbar.setProgress((int) movie.getUserRating()*10);
-        title.setText(movie.getTitle());
-        if(!movie.getComment().isEmpty())
-            comment.setText(movie.getComment());
-        watched.setChecked(movie.isWatched());
 
         // Listeners
         btnOkay.setOnClickListener(new View.OnClickListener() {
@@ -81,15 +76,48 @@ public class EditActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Intent mIntent = new Intent(this, MovieService.class);
+        bindService(mIntent, mConnection, BIND_AUTO_CREATE);
+    }
+
+    ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBound = true;
+            MovieService.LocalBinder mLocalBinder = (MovieService.LocalBinder)service;
+            mService = mLocalBinder.getServiceInstance();
+            LoadMovie();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound = false;
+            mService = null;
+        }
+    };
+
+    public void LoadMovie() {
+        movie = mService.GetCurrentMovie();
+        yourRating.setText(String.valueOf(movie.getUserRating()));
+        ratingSeekbar.setProgress((int) movie.getUserRating()*10);
+        title.setText(movie.getTitle());
+        if(!movie.getComment().isEmpty())
+            comment.setText(movie.getComment());
+        watched.setChecked(movie.isWatched());
+    }
+
     private void BtnOkayClick()
     {
         movie.setWatched(watched.isChecked());
         movie.setComment(comment.getText().toString());
         movie.setUserRating(Double.parseDouble(yourRating.getText().toString()));
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra(OverviewActivity.RESULT_EDIT, movie);
-        resultIntent.putExtra(OverviewActivity.MOVIE_POSITION, moviePosition);
-        setResult(RESULT_OK, resultIntent);
+        mService.UpdateMovie(movie);
+
+        setResult(RESULT_OK, new Intent());
         finish();
     }
 
@@ -97,5 +125,14 @@ public class EditActivity extends AppCompatActivity {
     {
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
     }
 }

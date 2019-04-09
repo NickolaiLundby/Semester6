@@ -67,9 +67,8 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
             @Override
             public void onClick(View v) {
                 Intent detailsIntent = new Intent(getContext(), DetailsActivity.class);
-                detailsIntent.putExtra(OverviewActivity.MOVIE_DETAILS_CONTENT, (Movie) getItem(position));
                 if(getContext() instanceof OverviewActivity){
-                    ((OverviewActivity)getContext()).DetailsClick(detailsIntent);
+                    ((OverviewActivity)getContext()).DetailsClick(detailsIntent, (Movie) getItem(position));
                 }
             }
         });
@@ -77,10 +76,8 @@ public class MovieAdapter extends ArrayAdapter implements Filterable {
             @Override
             public boolean onLongClick(View v) {
                 Intent editIntent = new Intent(getContext(), EditActivity.class);
-                editIntent.putExtra(OverviewActivity.MOVIE_EDIT_CONTENT, (Movie) getItem(position));
-                editIntent.putExtra(OverviewActivity.MOVIE_POSITION, position);
                 if(getContext() instanceof OverviewActivity){
-                    ((OverviewActivity)getContext()).EditClick(editIntent);
+                    ((OverviewActivity)getContext()).EditClick(editIntent, (Movie) getItem(position));
                 }
                 return true;
             }

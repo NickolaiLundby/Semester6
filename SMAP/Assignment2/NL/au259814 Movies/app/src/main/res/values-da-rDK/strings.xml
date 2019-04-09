@@ -27,4 +27,5 @@
     <string name="detailsGenres">GENRER</string>
     <string name="edit_comment_hint">Din kommentar her</string>
     <string name="service_response_error_already">Filmen er allerede på listen</string>
+    <string name="overviewbutton_add">Add</string>
 </resources>

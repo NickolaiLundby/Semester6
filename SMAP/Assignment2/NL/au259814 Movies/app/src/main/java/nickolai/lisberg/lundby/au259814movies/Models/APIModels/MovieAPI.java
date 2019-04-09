@@ -1,6 +1,8 @@
 package nickolai.lisberg.lundby.au259814movies.Models.APIModels;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MovieAPI {
 
@@ -29,6 +31,7 @@ public class MovieAPI {
     private String production;
     private String website;
     private String response;
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public String getTitle() {
         return title;
@@ -230,4 +233,11 @@ public class MovieAPI {
         this.response = response;
     }
 
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
 }
