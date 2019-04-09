@@ -39,6 +39,8 @@ public class OverviewActivity extends AppCompatActivity {
     MovieAdapter movieAdapter;
     CSVReader csvReader;
     MovieDatabase db;
+
+    // Service
     boolean mBound;
     MovieService mService;
 
@@ -75,23 +77,10 @@ public class OverviewActivity extends AppCompatActivity {
 
         // Variable initialization
         LocaleHelper.onAttach(OverviewActivity.this);
-        DatabaseApplication dba = (DatabaseApplication) getApplicationContext();
-        db = dba.GetDatabase();
-        arrayOfMovies = new ArrayList<>(db.movieDao().getAll());
-        if(arrayOfMovies.isEmpty())
-        {
-            InputStream inputStream = getResources().openRawResource(R.raw.movielist);
-            csvReader = new CSVReader(inputStream);
-            arrayOfMovies = csvReader.read();
-            for(Movie m : arrayOfMovies)
-                db.movieDao().insertMovie(m);
-        }
-        movieAdapter = new MovieAdapter(this, arrayOfMovies);
 
         // Widget initialization
         btnExit = findViewById(R.id.overview_btnExit);
         listView = findViewById(R.id.overview_listview_movies);
-        listView.setAdapter(movieAdapter);
 
         // Listeners
         btnExit.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +89,14 @@ public class OverviewActivity extends AppCompatActivity {
                 BtnExitClick();
             }
         });
+    }
+
+    private void ReadDatabase()
+    {
+        if(mBound)
+            listView.setAdapter(new MovieAdapter(this, mService.GetAllMovies()));
+        else
+            Toast.makeText(this, "Not bound to service", Toast.LENGTH_SHORT).show();
     }
 
     public void DetailsClick(Intent intent)
@@ -112,8 +109,7 @@ public class OverviewActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_EDIT);
     }
 
-    private void BtnExitClick()
-    {
+    private void BtnExitClick() {
         finish();
         System.exit(0);
     }
@@ -201,6 +197,7 @@ public class OverviewActivity extends AppCompatActivity {
             mBound = true;
             MovieService.LocalBinder mLocalBinder = (MovieService.LocalBinder)service;
             mService = mLocalBinder.getServiceInstance();
+            ReadDatabase();
         }
 
         @Override
@@ -218,25 +215,4 @@ public class OverviewActivity extends AppCompatActivity {
             mBound = false;
         }
     }
-
-    private void RegisterMyReceiver(){
-        try
-        {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(DATABASE_BROADCAST);
-            registerReceiver(receiver, intentFilter);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Movie m = intent.getExtras().getParcelable(MOVIE_BROADCAST);
-            Toast.makeText(getBaseContext(), m.getTitle(), Toast.LENGTH_SHORT).show();
-        }
-    };
 }

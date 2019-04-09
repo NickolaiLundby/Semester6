@@ -2,8 +2,10 @@ package nickolai.lisberg.lundby.au259814movies.Services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,17 +37,6 @@ public class MovieService extends Service {
     IBinder mBinder = new LocalBinder();
     RequestQueue requestQueue;
 
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
-    {
-        InitializeDatabase();
-
-        requestQueue = Volley.newRequestQueue(this);
-
-        return super.onStartCommand(intent, flags, startId);
-    }
-
     @Override
     public void onDestroy()
     {
@@ -55,23 +46,11 @@ public class MovieService extends Service {
     @Override
     public IBinder onBind(Intent intent)
     {
+        InitializeDatabase();
+
+        requestQueue = Volley.newRequestQueue(this);
+
         return mBinder;
-    }
-
-    private void SendABroadCast(Movie movie)
-    {
-        try
-        {
-            Intent broadCastIntent = new Intent();
-            broadCastIntent.setAction(OverviewActivity.DATABASE_BROADCAST);
-            broadCastIntent.putExtra(OverviewActivity.MOVIE_BROADCAST, movie);
-
-            sendBroadcast(broadCastIntent);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
     }
 
     public class LocalBinder extends Binder {
@@ -80,6 +59,10 @@ public class MovieService extends Service {
         }
     }
 
+
+    /// ************************ ///
+    /// DATABASE FUNCTIONS BELOW ///
+    /// ************************ ///
     public void InitializeDatabase()
     {
         DatabaseApplication dba = (DatabaseApplication) getApplicationContext();
@@ -173,5 +156,11 @@ public class MovieService extends Service {
             });
             requestQueue.add(stringRequest);
         }
+    }
+
+    public ArrayList<Movie> GetAllMovies()
+    {
+        Toast.makeText(this, "Hep from Service", Toast.LENGTH_SHORT).show();
+        return new ArrayList<>(db.movieDao().getAll());
     }
 }
