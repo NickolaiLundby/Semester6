@@ -121,8 +121,7 @@ public class MovieService extends Service {
         db.movieDao().update(movie);
     }
 
-    public void UpdateAllMovies()
-    {
+    public void UpdateAllMovies() {
         for(Movie movie: db.movieDao().getAll()){
             String url = MovieHelperClass.UrlBuilder(movie.getTitle());
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -158,8 +157,15 @@ public class MovieService extends Service {
         }
     }
 
-    public ArrayList<Movie> GetAllMovies()
-    {
+    public Movie GetMovieByTitle(String title) {
+        try{
+            return db.movieDao().findByTitle(title);
+        } catch(Exception e){
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    public ArrayList<Movie> GetAllMovies() {
         Toast.makeText(this, "Hep from Service", Toast.LENGTH_SHORT).show();
         return new ArrayList<>(db.movieDao().getAll());
     }

@@ -59,21 +59,15 @@ public class OverviewActivity extends AppCompatActivity {
     public final static String STORAGE_DETAIL = "Storage.Helper.DetailActivity";
 
     // Content keys
+    public final static String MOVIE_DETAILS_TITLE = "Content.Helper.Movie.Details.Title";
     public final static String MOVIE_DETAILS_CONTENT = "Content.Helper.Movie.Details";
     public final static String MOVIE_EDIT_CONTENT = "Content.Helper.Movie.Edit";
     public final static String MOVIE_POSITION = "Content.Helper.Movie.Position";
-
-    // Service constants
-    public final static String DATABASE_BROADCAST = "Broadcast.Database.Updated";
-    public final static String MOVIE_BROADCAST = "Broadcast.Movie.Updated";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
-
-        // New stuff
-        //RegisterMyReceiver();
 
         // Variable initialization
         LocaleHelper.onAttach(OverviewActivity.this);
@@ -91,8 +85,7 @@ public class OverviewActivity extends AppCompatActivity {
         });
     }
 
-    private void ReadDatabase()
-    {
+    private void ReadDatabase() {
         if(mBound)
             listView.setAdapter(new MovieAdapter(this, mService.GetAllMovies()));
         else
