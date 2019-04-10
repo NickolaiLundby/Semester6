@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -69,6 +70,9 @@ public class OverviewActivity extends AppCompatActivity {
     public final static String MOVIE_EDIT_CONTENT = "Content.Helper.Movie.Edit";
     public final static String MOVIE_POSITION = "Content.Helper.Movie.Position";
 
+    // Broadcasts
+    public final static String BROADCAST_DATABASE_UPDATED = "Broadcast.Helper.Database.Updated";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +80,9 @@ public class OverviewActivity extends AppCompatActivity {
 
         // Variable initialization
         LocaleHelper.onAttach(OverviewActivity.this);
+
+        // Receiving from service
+        RegisterMyReceiver();
 
         // Widget initialization
         btnExit = findViewById(R.id.overview_btnExit);
@@ -158,6 +165,11 @@ public class OverviewActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     ReadDatabase();
                 }
+            case REQUEST_DETAIL:
+                if (resultCode == RESULT_CANCELED) {
+                    Toast.makeText(getApplicationContext(), "MovieDeleted", Toast.LENGTH_SHORT).show();
+                    ReadDatabase();
+                }
             default:
                 break;
         }
@@ -235,6 +247,27 @@ public class OverviewActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName name) {
             mBound = false;
             mService = null;
+        }
+    };
+
+    private void RegisterMyReceiver(){
+        try
+        {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(BROADCAST_DATABASE_UPDATED);
+            registerReceiver(receiver, intentFilter);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ReadDatabase();
+            Log.d("BroadcastReceived", "Reading database");
         }
     };
 }

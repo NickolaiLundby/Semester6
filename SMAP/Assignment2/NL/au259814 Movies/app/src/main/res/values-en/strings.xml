@@ -28,4 +28,5 @@
     <string name="edit_comment_hint">Your comment here</string>
     <string name="service_response_error_already">Movie already in list</string>
     <string name="overviewbutton_add">Add</string>
+    <string name="details_delete">Delete</string>
 </resources>

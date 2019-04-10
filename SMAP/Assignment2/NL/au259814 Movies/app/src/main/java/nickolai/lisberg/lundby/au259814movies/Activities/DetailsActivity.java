@@ -28,7 +28,7 @@ public class DetailsActivity extends AppCompatActivity {
     MovieService mService;
 
     // Widgets
-    Button btnOkay;
+    Button btnOkay, btnDelete;
     TextView title, imdbRating, yourRating, plot, comment, genre;
     CheckBox watched;
     ImageView picture;
@@ -40,6 +40,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         // Widget initialization
         btnOkay = findViewById(R.id.details_btnOkay);
+        btnDelete = findViewById(R.id.details_btnDelete);
         title = findViewById(R.id.details_title);
         imdbRating = findViewById(R.id.details_imdbRating);
         yourRating = findViewById(R.id.details_yourRating);
@@ -54,6 +55,12 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 BtnOkayClick();
+            }
+        });
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BtnDeleteClick();
             }
         });
     }
@@ -97,6 +104,13 @@ public class DetailsActivity extends AppCompatActivity {
     private void BtnOkayClick()
     {
         setResult(RESULT_OK, new Intent());
+        finish();
+    }
+
+    private void BtnDeleteClick()
+    {
+        mService.DeleteMovie();
+        setResult(RESULT_CANCELED, new Intent());
         finish();
     }
 

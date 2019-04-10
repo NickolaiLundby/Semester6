@@ -6,7 +6,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.List;
+
+import nickolai.lisberg.lundby.au259814movies.Utilities.MovieHelperClass;
 
 // To pass a movie object from one activity to another, it needs to implement either Serializable or Parcelable.
 // I've gone with the Parcelable implementation, using the following plugin:
@@ -36,8 +41,37 @@ public class Movie implements Parcelable {
         Comment = comment;
     }
 
-    public Movie()
+    public Movie(String apiResponse)
     {
+        JSONObject jsonObject = null;
+        try{
+            jsonObject = new JSONObject(apiResponse);
+            Title = jsonObject.getString("Title");
+            Plot = jsonObject.getString("Plot");
+            Genres = jsonObject.getString("Genre");
+            JSONArray ratings = jsonObject.getJSONArray("Ratings");
+            for (int i = 0; i < ratings.length(); i++) {
+                JSONObject jo = ratings.getJSONObject(i);
+                if(jo.getString("Source").equals("Internet Movie Database"))
+                    ImdbRating = Double.parseDouble(jo.getString("Value").split("/")[0]);
+                }
+            UserRating = 0.0;
+            Watched = false;
+            Poster = MovieHelperClass.GetPosterId(jsonObject.getString("Genre"));
+            Comment = "";
+        } catch (Exception e) {
+            Title = null;
+            Plot = null;
+            Genres = null;
+            ImdbRating = 0.0;
+            UserRating = 0.0;
+            Watched = false;
+            Poster = MovieHelperClass.GetPosterId("default");
+            Comment = null;
+        }
+    }
+
+    public Movie() {
 
     }
 

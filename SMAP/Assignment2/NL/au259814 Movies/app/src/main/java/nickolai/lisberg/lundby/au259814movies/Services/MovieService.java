@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -14,6 +15,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -94,19 +98,17 @@ public class MovieService extends Service {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Gson gson = new Gson();
-                            MovieAPI movieAPI = gson.fromJson(response, MovieAPI.class);
-                            if(movieAPI == null)
+                            Log.d("APIResponse", "Response: " + response);
+                            Movie m = new Movie(response);
+                            if(m.getTitle() == null)
                             {
-                                Toast.makeText(getApplicationContext(), "EMPTY", Toast.LENGTH_SHORT).show();
+                                Log.d("APIResponse", "Null object");
                             }
-                            Toast.makeText(getApplicationContext(), movieAPI.getTitle(), Toast.LENGTH_SHORT).show();
-                            //else
-                            //{
-                                // Add the movie
-                                //movieResult = MovieHelperClass.MovieFromMovieAPI(movieAPI);
-                                //Toast.makeText(getApplicationContext(), movieResult.getTitle(), Toast.LENGTH_SHORT).show();
-                            //}
+                            else {
+                                Log.d("APIResponse", "Movie: " + m.getTitle());
+                                db.movieDao().insertMovie(m);
+                                sendMyBroadCast();
+                            }
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -119,9 +121,10 @@ public class MovieService extends Service {
         return new ServiceResponse(true, "Movie added");
     }
 
-    public void DeleteFromDatabase(Movie movie)
+    public void DeleteMovie()
     {
-        db.movieDao().delete(movie);
+        db.movieDao().delete(currentMovie);
+        Log.d("DatabaseOperation", "Movie deleted: " + currentMovie.getTitle());
     }
 
     public void UpdateMovie(Movie movie)
@@ -175,5 +178,17 @@ public class MovieService extends Service {
 
     public ArrayList<Movie> GetAllMovies() {
         return new ArrayList<>(db.movieDao().getAll());
+    }
+
+    private void sendMyBroadCast()
+    {
+        try
+        {
+            sendBroadcast(new Intent().setAction(OverviewActivity.BROADCAST_DATABASE_UPDATED));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }
