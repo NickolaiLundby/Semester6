@@ -1,36 +1,8 @@
 package nickolai.lisberg.lundby.au259814movies.Utilities;
 
-import java.util.List;
-
-import nickolai.lisberg.lundby.au259814movies.Models.APIModels.MovieAPI;
-import nickolai.lisberg.lundby.au259814movies.Models.Movie;
 import nickolai.lisberg.lundby.au259814movies.R;
 
 public class MovieHelperClass {
-    public static Movie MovieFromMovieAPI(MovieAPI movieApi){
-        return new Movie(
-                movieApi.getTitle(),
-                movieApi.getPlot(),
-                movieApi.getGenre(),
-                Double.parseDouble(movieApi.getImdbRating()),
-                0,
-                false,
-                GetPosterId(movieApi.getGenre()),
-                "");
-    }
-
-    public static Movie MovieFromMovieAndMovieAPI(MovieAPI movieApi, Movie movie){
-        return new Movie(
-                movieApi.getTitle(),
-                movieApi.getPlot(),
-                movieApi.getGenre(),
-                Double.parseDouble(movieApi.getImdbRating()),
-                movie.getUserRating(),
-                movie.isWatched(),
-                GetPosterId(movieApi.getGenre()),
-                movie.getComment());
-    }
-
     public static int GetPosterId(String genres)
     {
         String[] genre = genres.split(",");

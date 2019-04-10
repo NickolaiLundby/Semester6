@@ -8,8 +8,8 @@ public class DatabaseApplication extends Application {
 
     public MovieDatabase GetDatabase(){
         if (database == null){
-            // Allow main thread query. This is obviously bad practice
-            database = Room.databaseBuilder(getApplicationContext(), MovieDatabase.class, "movie-database").allowMainThreadQueries().build();
+            database = Room.databaseBuilder(getApplicationContext(), MovieDatabase.class, "movie-database")
+                    .build();
         }
         return database;
     }

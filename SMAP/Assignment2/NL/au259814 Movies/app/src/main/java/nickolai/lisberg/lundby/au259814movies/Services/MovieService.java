@@ -2,11 +2,9 @@ package nickolai.lisberg.lundby.au259814movies.Services;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,9 +13,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -25,7 +20,6 @@ import java.util.ArrayList;
 import nickolai.lisberg.lundby.au259814movies.Activities.OverviewActivity;
 import nickolai.lisberg.lundby.au259814movies.Database.DatabaseApplication;
 import nickolai.lisberg.lundby.au259814movies.Database.MovieDatabase;
-import nickolai.lisberg.lundby.au259814movies.Models.APIModels.MovieAPI;
 import nickolai.lisberg.lundby.au259814movies.Models.Movie;
 import nickolai.lisberg.lundby.au259814movies.Models.ServiceResponse;
 import nickolai.lisberg.lundby.au259814movies.R;
@@ -37,7 +31,6 @@ public class MovieService extends Service {
     // Variables
     ArrayList<Movie> arrayOfMovies;
     MovieDatabase db;
-    Movie movieResult;
     IBinder mBinder = new LocalBinder();
     RequestQueue requestQueue;
     Movie currentMovie;
@@ -139,23 +132,18 @@ public class MovieService extends Service {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Gson gson = new Gson();
-                            MovieAPI movieAPI = gson.fromJson(response, MovieAPI.class);
-                            if(movieAPI.getTitle().isEmpty())
+                            Movie m = new Movie(response);
+                            if(m.getTitle() == null)
                             {
                                 // Handle empty response from API
                             }
-                            if (db.movieDao().findByTitle(movieAPI.getTitle()) != null)
+                            if (db.movieDao().findByTitle(m.getTitle()) != null)
                             {
                                 // Handle database already containing movie
-                                movieResult = MovieHelperClass.MovieFromMovieAndMovieAPI(movieAPI, db.movieDao().findByTitle(movieAPI.getTitle()));
-                                db.movieDao().update(movieResult);
                             }
                             else
                             {
                                 // Add the movie
-                                movieResult = MovieHelperClass.MovieFromMovieAPI(movieAPI);
-                                db.movieDao().insertMovie(movieResult);
                             }
                         }
                     }, new Response.ErrorListener() {
