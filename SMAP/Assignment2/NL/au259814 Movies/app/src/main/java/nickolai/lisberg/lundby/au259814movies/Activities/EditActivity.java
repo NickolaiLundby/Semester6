@@ -100,6 +100,15 @@ public class EditActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+    }
+
     public void LoadMovie() {
         movie = mService.GetCurrentMovie();
         yourRating.setText(String.valueOf(movie.getUserRating()));
@@ -125,14 +134,5 @@ public class EditActivity extends AppCompatActivity {
     {
         setResult(RESULT_CANCELED);
         finish();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(mBound) {
-            unbindService(mConnection);
-            mBound = false;
-        }
     }
 }

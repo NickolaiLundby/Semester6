@@ -1,5 +1,6 @@
 package nickolai.lisberg.lundby.au259814movies.Utilities;
 
+import nickolai.lisberg.lundby.au259814movies.Models.Movie;
 import nickolai.lisberg.lundby.au259814movies.R;
 
 public class MovieHelperClass {
@@ -31,7 +32,7 @@ public class MovieHelperClass {
                 return R.drawable.nature_50;
             case "ROMANCE":
                 return R.drawable.romance_50;
-            case "SCIFI":
+            case "SCI-FI":
                 return R.drawable.scifi_50;
             case "WESTERN":
                 return R.drawable.western_50;
@@ -42,5 +43,9 @@ public class MovieHelperClass {
 
     public static String UrlBuilder(String title){
         return "http://www.omdbapi.com/?t=" + title.replaceAll(" ", "+") + "&apikey=69750eef";
+    }
+
+    public static Movie UpdatedMovie(Movie movieDB, Movie movieAPI){
+        return new Movie(movieAPI.getTitle(), movieAPI.getPlot(), movieAPI.getGenres(), movieAPI.getImdbRating(), movieDB.getUserRating(), movieDB.isWatched(), GetPosterId(movieAPI.getGenres()), movieDB.getComment());
     }
 }

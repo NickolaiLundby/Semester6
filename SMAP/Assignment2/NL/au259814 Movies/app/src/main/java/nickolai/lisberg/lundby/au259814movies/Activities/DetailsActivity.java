@@ -65,18 +65,6 @@ public class DetailsActivity extends AppCompatActivity {
         });
     }
 
-    public void LoadMovie() {
-        movie = mService.GetCurrentMovie();
-        title.setText(movie.getTitle());
-        imdbRating.setText(String.valueOf(movie.getImdbRating()));
-        yourRating.setText(String.valueOf(movie.getUserRating()));
-        plot.setText(movie.getPlot());
-        comment.setText(movie.getComment());
-        watched.setChecked(movie.isWatched());
-        picture.setImageBitmap(BitmapFactory.decodeResource(getResources(), movie.getPoster()));
-        genre.setText(movie.getGenres());
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -101,6 +89,15 @@ public class DetailsActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+    }
+
     private void BtnOkayClick()
     {
         setResult(RESULT_OK, new Intent());
@@ -114,12 +111,16 @@ public class DetailsActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(mBound) {
-            unbindService(mConnection);
-            mBound = false;
-        }
+
+    public void LoadMovie() {
+        movie = mService.GetCurrentMovie();
+        title.setText(movie.getTitle());
+        imdbRating.setText(String.valueOf(movie.getImdbRating()));
+        yourRating.setText(String.valueOf(movie.getUserRating()));
+        plot.setText(movie.getPlot());
+        comment.setText(movie.getComment());
+        watched.setChecked(movie.isWatched());
+        picture.setImageBitmap(BitmapFactory.decodeResource(getResources(), movie.getPoster()));
+        genre.setText(movie.getGenres());
     }
 }

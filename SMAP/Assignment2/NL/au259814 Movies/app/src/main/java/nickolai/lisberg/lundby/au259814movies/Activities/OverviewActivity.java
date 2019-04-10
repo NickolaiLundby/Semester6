@@ -104,58 +104,6 @@ public class OverviewActivity extends AppCompatActivity {
         });
     }
 
-    private void ReadDatabase() {
-        if(mBound)
-            listView.setAdapter(new MovieAdapter(this, mService.GetAllMovies()));
-        else
-            Toast.makeText(this, "Not bound to service", Toast.LENGTH_SHORT).show();
-    }
-
-    public void DetailsClick(Intent intent, Movie movie)
-    {
-        mService.setCurrentMovie(movie);
-        startActivityForResult(intent, REQUEST_DETAIL);
-    }
-
-    public void EditClick(Intent intent, Movie movie)
-    {
-        mService.setCurrentMovie(movie);
-        startActivityForResult(intent, REQUEST_EDIT);
-    }
-
-    private void BtnExitClick() {
-        finish();
-        System.exit(0);
-    }
-
-    private void BtnAddClick() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Title");
-
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mAddMovieTitle = input.getText().toString();
-                if(!mService.AddToDatabase(mAddMovieTitle).Success)
-                    Toast.makeText(getApplicationContext(), mService.AddToDatabase(mAddMovieTitle).Message, Toast.LENGTH_SHORT).show();
-                else
-                    ReadDatabase();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -167,7 +115,6 @@ public class OverviewActivity extends AppCompatActivity {
                 }
             case REQUEST_DETAIL:
                 if (resultCode == RESULT_CANCELED) {
-                    Toast.makeText(getApplicationContext(), "MovieDeleted", Toast.LENGTH_SHORT).show();
                     ReadDatabase();
                 }
             default:
@@ -250,6 +197,58 @@ public class OverviewActivity extends AppCompatActivity {
         }
     };
 
+    private void ReadDatabase() {
+        if(mBound)
+            listView.setAdapter(new MovieAdapter(this, mService.GetAllMovies()));
+        else
+            Toast.makeText(this, getResources().getString(R.string.error_unbound_service), Toast.LENGTH_SHORT).show();
+    }
+
+    public void DetailsClick(Intent intent, Movie movie)
+    {
+        mService.setCurrentMovie(movie);
+        startActivityForResult(intent, REQUEST_DETAIL);
+    }
+
+    public void EditClick(Intent intent, Movie movie)
+    {
+        mService.setCurrentMovie(movie);
+        startActivityForResult(intent, REQUEST_EDIT);
+    }
+
+    private void BtnExitClick() {
+        finish();
+        System.exit(0);
+    }
+
+    private void BtnAddClick() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getResources().getString(R.string.prompt_button_title));
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton(getResources().getString(R.string.ButtonOkay), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mAddMovieTitle = input.getText().toString();
+                if(!mService.AddToDatabase(mAddMovieTitle).Success)
+                    Toast.makeText(getApplicationContext(), mService.AddToDatabase(mAddMovieTitle).Message, Toast.LENGTH_SHORT).show();
+                else
+                    ReadDatabase();
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.ButtonCancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
     private void RegisterMyReceiver(){
         try
         {
@@ -267,7 +266,7 @@ public class OverviewActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             ReadDatabase();
-            Log.d("BroadcastReceived", "Reading database");
+            Log.d("Broadcast", "Received in OverviewActivity");
         }
     };
 }

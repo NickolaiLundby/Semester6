@@ -14,6 +14,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
+import org.json.JSONObject;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -83,7 +85,8 @@ public class MovieService extends Service {
     public ServiceResponse AddToDatabase(String movieTitle)
     {
         if(db.movieDao().findByTitle(movieTitle) != null){
-            return new ServiceResponse(false, "Movie already in database");
+            Log.d("Database", "Not added: " + movieTitle);
+            return new ServiceResponse(false, getResources().getString(R.string.service_response_already));
         }
         else{
             String url = MovieHelperClass.UrlBuilder(movieTitle);
@@ -91,15 +94,16 @@ public class MovieService extends Service {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Log.d("APIResponse", "Response: " + response);
+                            Log.d("APIResponse", "Raw response: " + response);
                             Movie m = new Movie(response);
-                            if(m.getTitle() == null)
+                            if(m.getTitle().isEmpty())
                             {
                                 Log.d("APIResponse", "Null object");
                             }
                             else {
-                                Log.d("APIResponse", "Movie: " + m.getTitle());
+                                Log.d("APIResponse", "Movie title: " + m.getTitle());
                                 db.movieDao().insertMovie(m);
+                                Log.d("Database", "Added: " + m.getTitle());
                                 sendMyBroadCast();
                             }
                         }
@@ -111,39 +115,47 @@ public class MovieService extends Service {
             });
             requestQueue.add(stringRequest);
         }
-        return new ServiceResponse(true, "Movie added");
+        return new ServiceResponse(true, getResources().getString(R.string.service_response_added));
     }
 
     public void DeleteMovie()
     {
         db.movieDao().delete(currentMovie);
-        Log.d("DatabaseOperation", "Movie deleted: " + currentMovie.getTitle());
+        Log.d("Database", "Deleted: " + currentMovie.getTitle());
     }
 
     public void UpdateMovie(Movie movie)
     {
         db.movieDao().update(movie);
+        Log.d("Database", "Updated: " + currentMovie.getTitle());
     }
 
     public void UpdateAllMovies() {
-        for(Movie movie: db.movieDao().getAll()){
-            String url = MovieHelperClass.UrlBuilder(movie.getTitle());
+        ArrayList<Movie> movieArrayList = new ArrayList<>(db.movieDao().getAll());
+        for (int i = 0; i < movieArrayList.size(); i++) {
+            String url = MovieHelperClass.UrlBuilder(movieArrayList.get(i).getTitle());
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Movie m = new Movie(response);
-                            if(m.getTitle() == null)
+                            if(m.getTitle().isEmpty())
                             {
-                                // Handle empty response from API
-                            }
-                            if (db.movieDao().findByTitle(m.getTitle()) != null)
-                            {
-                                // Handle database already containing movie
+                                Log.d("APIResponse", "Null object");
                             }
                             else
                             {
-                                // Add the movie
+                                Log.d("APIResponse", "Movie title: " + m.getTitle());
+                                if (db.movieDao().findByTitle(m.getTitle()) != null)
+                                {
+                                    db.movieDao().update(MovieHelperClass.UpdatedMovie(db.movieDao().findByTitle(m.getTitle()), m));
+                                    Log.d("Database", "Updated: " + m.getTitle());
+                                }
+                                else
+                                {
+                                    db.movieDao().insertMovie(m);
+                                    Log.d("Database", "Added: " + m.getTitle());
+                                }
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -153,6 +165,8 @@ public class MovieService extends Service {
                 }
             });
             requestQueue.add(stringRequest);
+            if(i == movieArrayList.size())
+                sendMyBroadCast();
         }
     }
 
@@ -173,6 +187,7 @@ public class MovieService extends Service {
         try
         {
             sendBroadcast(new Intent().setAction(OverviewActivity.BROADCAST_DATABASE_UPDATED));
+            Log.d("Broadcast", "Sending broadcast from MovieService");
         }
         catch (Exception e)
         {
