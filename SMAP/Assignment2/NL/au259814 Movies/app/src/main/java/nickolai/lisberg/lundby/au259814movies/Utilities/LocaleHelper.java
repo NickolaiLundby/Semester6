@@ -9,12 +9,12 @@ import android.preference.PreferenceManager;
 
 import java.util.Locale;
 
+import nickolai.lisberg.lundby.au259814movies.Models.Constants;
+
 // I wish to have in-app functionality of changing the language, eg. at runtime.
 // Inspiration for externalizing all the locale functions goes to DevDeeds:
 // http://devdeeds.com/android-change-language-at-runtime/
 public class LocaleHelper {
-    private static final String SELECTED_LANGUAGE = "Locale.Helper.Selected.Language";
-
     public static Context onAttach(Context context) {
         String language = getPersistedData(context, Locale.getDefault().getLanguage());
         return setLocale(context, language);
@@ -38,13 +38,13 @@ public class LocaleHelper {
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = myPref.edit();
 
-        editor.putString(SELECTED_LANGUAGE, language);
+        editor.putString(Constants.SELECTED_LANGUAGE, language);
         editor.apply();
     }
 
     private static String getPersistedData(Context context, String defaultLanguage) {
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(context);
-        return myPref.getString(SELECTED_LANGUAGE, defaultLanguage);
+        return myPref.getString(Constants.SELECTED_LANGUAGE, defaultLanguage);
     }
 
     // New SDK uses the configuration.setLocale

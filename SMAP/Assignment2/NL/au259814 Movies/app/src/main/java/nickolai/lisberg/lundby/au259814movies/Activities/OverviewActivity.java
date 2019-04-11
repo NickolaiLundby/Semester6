@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import nickolai.lisberg.lundby.au259814movies.Database.DatabaseApplication;
 import nickolai.lisberg.lundby.au259814movies.Database.MovieDatabase;
+import nickolai.lisberg.lundby.au259814movies.Models.Constants;
 import nickolai.lisberg.lundby.au259814movies.Models.Movie;
 import nickolai.lisberg.lundby.au259814movies.R;
 import nickolai.lisberg.lundby.au259814movies.Services.MovieService;
@@ -40,10 +41,7 @@ import nickolai.lisberg.lundby.au259814movies.Utilities.MovieAdapter;
 public class OverviewActivity extends AppCompatActivity {
 
     // Variables
-    ArrayList<Movie> arrayOfMovies;
     MovieAdapter movieAdapter;
-    CSVReader csvReader;
-    MovieDatabase db;
     String mAddMovieTitle;
 
     // Service
@@ -53,25 +51,6 @@ public class OverviewActivity extends AppCompatActivity {
     // Widgets
     Button btnExit, btnAdd;
     ListView listView;
-
-    // Request constants
-    public final static int REQUEST_EDIT = 100;
-    public final static int REQUEST_DETAIL = 101;
-
-    // Result constants
-    public final static String RESULT_EDIT = "Result.Helper.EditActivity";
-
-    // Storage constants
-    public final static String STORAGE_DETAIL = "Storage.Helper.DetailActivity";
-
-    // Content keys
-    public final static String MOVIE_DETAILS_TITLE = "Content.Helper.Movie.Details.Title";
-    public final static String MOVIE_DETAILS_CONTENT = "Content.Helper.Movie.Details";
-    public final static String MOVIE_EDIT_CONTENT = "Content.Helper.Movie.Edit";
-    public final static String MOVIE_POSITION = "Content.Helper.Movie.Position";
-
-    // Broadcasts
-    public final static String BROADCAST_DATABASE_UPDATED = "Broadcast.Helper.Database.Updated";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,11 +88,11 @@ public class OverviewActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch(requestCode){
-            case REQUEST_EDIT:
+            case Constants.REQUEST_EDIT:
                 if (resultCode == RESULT_OK) {
                     ReadDatabase();
                 }
-            case REQUEST_DETAIL:
+            case Constants.REQUEST_DETAIL:
                 if (resultCode == RESULT_CANCELED) {
                     ReadDatabase();
                 }
@@ -199,21 +178,19 @@ public class OverviewActivity extends AppCompatActivity {
 
     private void ReadDatabase() {
         if(mBound)
-            listView.setAdapter(new MovieAdapter(this, mService.GetAllMovies()));
+            listView.setAdapter(new MovieAdapter(this, mService.getArrayOfMovies()));
         else
             Toast.makeText(this, getResources().getString(R.string.error_unbound_service), Toast.LENGTH_SHORT).show();
     }
 
-    public void DetailsClick(Intent intent, Movie movie)
-    {
+    public void DetailsClick(Intent intent, Movie movie) {
         mService.setCurrentMovie(movie);
-        startActivityForResult(intent, REQUEST_DETAIL);
+        startActivityForResult(intent, Constants.REQUEST_DETAIL);
     }
 
-    public void EditClick(Intent intent, Movie movie)
-    {
+    public void EditClick(Intent intent, Movie movie) {
         mService.setCurrentMovie(movie);
-        startActivityForResult(intent, REQUEST_EDIT);
+        startActivityForResult(intent, Constants.REQUEST_EDIT);
     }
 
     private void BtnExitClick() {
@@ -233,10 +210,7 @@ public class OverviewActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mAddMovieTitle = input.getText().toString();
-                if(!mService.AddToDatabase(mAddMovieTitle).Success)
-                    Toast.makeText(getApplicationContext(), mService.AddToDatabase(mAddMovieTitle).Message, Toast.LENGTH_SHORT).show();
-                else
-                    ReadDatabase();
+                mService.AddToDatabase(mAddMovieTitle);
             }
         });
         builder.setNegativeButton(getResources().getString(R.string.ButtonCancel), new DialogInterface.OnClickListener() {
@@ -253,7 +227,7 @@ public class OverviewActivity extends AppCompatActivity {
         try
         {
             IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(BROADCAST_DATABASE_UPDATED);
+            intentFilter.addAction(Constants.BROADCAST_DATABASE_UPDATED);
             registerReceiver(receiver, intentFilter);
         }
         catch (Exception ex)
@@ -266,7 +240,7 @@ public class OverviewActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             ReadDatabase();
-            Log.d("Broadcast", "Received in OverviewActivity");
+            Log.d(Constants.DEBUG_BROADCAST_TAG, Constants.DEBUG_BROADCAST_RECEIVED);
         }
     };
 }

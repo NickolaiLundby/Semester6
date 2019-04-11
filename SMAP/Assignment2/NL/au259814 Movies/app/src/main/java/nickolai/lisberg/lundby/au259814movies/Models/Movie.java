@@ -53,14 +53,7 @@ public class Movie {
             Poster = MovieHelperClass.GetPosterId(jsonObject.getString("Genre"));
             Comment = "";
         } catch (Exception e) {
-            Title = null;
-            Plot = null;
-            Genres = null;
-            ImdbRating = 0.0;
-            UserRating = 0.0;
-            Watched = false;
-            Poster = MovieHelperClass.GetPosterId("default");
-            Comment = null;
+            e.printStackTrace();
         }
     }
 

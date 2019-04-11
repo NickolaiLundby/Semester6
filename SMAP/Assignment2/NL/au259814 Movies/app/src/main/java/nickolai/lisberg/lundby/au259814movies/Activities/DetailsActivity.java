@@ -113,7 +113,7 @@ public class DetailsActivity extends AppCompatActivity {
 
 
     public void LoadMovie() {
-        movie = mService.GetCurrentMovie();
+        movie = mService.getCurrentMovie();
         title.setText(movie.getTitle());
         imdbRating.setText(String.valueOf(movie.getImdbRating()));
         yourRating.setText(String.valueOf(movie.getUserRating()));

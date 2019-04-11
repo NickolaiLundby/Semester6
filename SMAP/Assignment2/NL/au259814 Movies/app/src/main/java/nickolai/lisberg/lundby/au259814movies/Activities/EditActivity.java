@@ -110,7 +110,7 @@ public class EditActivity extends AppCompatActivity {
     }
 
     public void LoadMovie() {
-        movie = mService.GetCurrentMovie();
+        movie = mService.getCurrentMovie();
         yourRating.setText(String.valueOf(movie.getUserRating()));
         ratingSeekbar.setProgress((int) movie.getUserRating()*10);
         title.setText(movie.getTitle());
