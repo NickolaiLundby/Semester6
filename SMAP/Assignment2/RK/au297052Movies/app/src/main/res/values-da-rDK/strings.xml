@@ -11,4 +11,7 @@
     <string name="ur">BB:</string>
     <string name="r">B:</string>
     <string name="delete">Slet</string>
+    <string name="add">Tilføj</string>
+    <string name="title">Titel</string>
+    <string name="add_movie">Tilføj film</string>
 </resources>

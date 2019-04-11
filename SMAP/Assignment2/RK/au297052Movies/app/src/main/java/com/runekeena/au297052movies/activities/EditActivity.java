@@ -118,7 +118,7 @@ public class EditActivity extends AppCompatActivity {
     private void returnEdits(){
         // return result code ok and intent with movie object and position. Finish activity
         Intent resultIntent = new Intent(EditActivity.this, OverviewActivity.class);
-        m.setComment(editTxtComment.getText().toString());
+        m.setUserComment(editTxtComment.getText().toString());
         resultIntent.putExtra(OverviewActivity.MOVIE_DETAILS, m);
         resultIntent.putExtra(OverviewActivity.MOVIE_POSITION, position);
         setResult(RESULT_OK, resultIntent);

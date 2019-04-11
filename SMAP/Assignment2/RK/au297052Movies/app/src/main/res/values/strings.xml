@@ -11,4 +11,7 @@
     <string name="ur">UR:</string>
     <string name="r">R:</string>
     <string name="delete">Delete</string>
+    <string name="add">Add</string>
+    <string name="title">Title</string>
+    <string name="add_movie">Add movie</string>
 </resources>

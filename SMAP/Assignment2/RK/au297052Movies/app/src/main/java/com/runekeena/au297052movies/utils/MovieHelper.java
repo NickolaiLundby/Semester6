@@ -10,10 +10,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CSVReader {
+public class MovieHelper {
 
     // reads from CSV file and returns ArrayList of movie objects
-    public ArrayList<Movie> readMovieData(InputStream inputStream){
+    public ArrayList<Movie> readMovieCSVData(InputStream inputStream){
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         ArrayList<Movie> movieArrayList = new ArrayList<>();
         try{
@@ -42,7 +42,7 @@ public class CSVReader {
     }
 
     // adds icon resource depending on genre
-    private int getImgId(String genre){
+    public static int getImgId(String genre){
         int imgId;
         String[] g = genre.split(",");
         switch (g[0].toUpperCase()){
@@ -93,5 +93,9 @@ public class CSVReader {
                 break;
         }
         return imgId;
+    }
+
+    public static String UrlBuilder(String title){
+        return "http://www.omdbapi.com/?t=" + title.replaceAll(" ", "+") + "&apikey=a58be0d";
     }
 }

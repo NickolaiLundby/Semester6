@@ -6,6 +6,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.runekeena.au297052movies.utils.MovieHelper;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.List;
 
 // Parsable generated with plugin - https://github.com/mcharmas/android-parcelable-intellij-plugin
@@ -85,12 +90,12 @@ public class Movie implements Parcelable {
         return UserComment;
     }
 
-    public void setComment(String comment) {
+    public void setUserComment(String comment) {
         UserComment = comment;
     }
 
     // Constructors
-    public Movie(@NonNull String title, String plot, String genres, double rating, double userRating, boolean watched, int imgId, String userComment) {
+    public Movie(String title, String plot, String genres, double rating, double userRating, boolean watched, int imgId, String userComment) {
         Title = title;
         Plot = plot;
         Genres = genres;
@@ -101,7 +106,7 @@ public class Movie implements Parcelable {
         UserComment = userComment;
     }
 
-    public Movie(@NonNull String title, String plot, String genres, double rating, boolean watched, int imgId) {
+    public Movie(String title, String plot, String genres, double rating, boolean watched, int imgId) {
         UserRating = -1;
         UserComment = null;
         Title = title;
@@ -110,6 +115,31 @@ public class Movie implements Parcelable {
         Rating = rating;
         Watched = watched;
         ImgId = imgId;
+    }
+
+    public Movie(){};
+
+    public Movie(String apiResponse)
+    {
+        JSONObject jsonObject = null;
+        try{
+            jsonObject = new JSONObject(apiResponse);
+            Title = jsonObject.getString("Title");
+            Plot = jsonObject.getString("Plot");
+            Genres = jsonObject.getString("Genre");
+            JSONArray ratings = jsonObject.getJSONArray("Ratings");
+            for (int i = 0; i < ratings.length(); i++) {
+                JSONObject jo = ratings.getJSONObject(i);
+                if(jo.getString("Source").equals("Internet Movie Database"))
+                    Rating = Double.parseDouble(jo.getString("Value").split("/")[0]);
+            }
+            UserRating = 0.0;
+            Watched = false;
+            ImgId = MovieHelper.getImgId(jsonObject.getString("Genre"));
+            UserComment = "";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // Parcelable

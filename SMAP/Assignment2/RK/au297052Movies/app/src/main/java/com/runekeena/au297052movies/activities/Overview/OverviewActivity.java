@@ -1,18 +1,32 @@
 package com.runekeena.au297052movies.activities.Overview;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.runekeena.au297052movies.R;
 import com.runekeena.au297052movies.activities.DetailsActivity;
 import com.runekeena.au297052movies.activities.EditActivity;
-import com.runekeena.au297052movies.utils.CSVReader;
+import com.runekeena.au297052movies.services.MovieService;
+import com.runekeena.au297052movies.utils.MovieHelper;
 import com.runekeena.au297052movies.model.Movie;
 
 import java.io.InputStream;
@@ -22,6 +36,7 @@ public class OverviewActivity extends AppCompatActivity {
 
     //UI elements
     private Button btnExit;
+    private Button btnAdd;
     private ListView listMovies;
 
     // Constants
@@ -29,28 +44,81 @@ public class OverviewActivity extends AppCompatActivity {
     public final static String MOVIE_POSITION = "movie_position";
     private final static int REQUEST_EDIT = 10;
     private final static  String MOVIE_ARRAY_LIST = "movie_array_list";
+    public final static String DATABASE_UPDATED = "database_updated";
 
     // Variables
     private MovieAdapter movieAdapter;
-    private ArrayList<Movie> movieArrayList;
+    MovieService movieService;
+    private boolean bound;
 
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setListView();
+            Log.d("Broadcast", "Received in OverviewActivity");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
-        // get saved instance state or load movie data from CSV file
-        if(savedInstanceState == null){
-            InputStream inputStream = this.getResources().openRawResource(R.raw.movielist);
-            CSVReader csvReader = new CSVReader();
-            movieArrayList = csvReader.readMovieData(inputStream);
-        } else {
-            movieArrayList = savedInstanceState.getParcelableArrayList(MOVIE_ARRAY_LIST);
+        try
+        {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(DATABASE_UPDATED);
+            registerReceiver(receiver, intentFilter);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
         }
 
+        // Setup exit button
+        btnExit = findViewById(R.id.btnExit);
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        btnAdd = findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addDialog();
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Intent i = new Intent(this, MovieService.class);
+        bindService(i, connection, BIND_AUTO_CREATE);
+    }
+
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            bound = true;
+            MovieService.LocalBinder mLocalBinder = (MovieService.LocalBinder)service;
+            movieService = mLocalBinder.getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            bound = false;
+            movieService = null;
+        }
+    };
+
+    private void setListView(){
         // Setup ListView
-        movieAdapter = new MovieAdapter(this, movieArrayList);
+        movieAdapter = new MovieAdapter(this, movieService.getMovieList());
         listMovies = findViewById(R.id.listMovies);
         listMovies.setAdapter(movieAdapter);
         listMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -66,21 +134,41 @@ public class OverviewActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+    private void addDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogTheme);
+        TextView title = new TextView(this);
+        title.setText(R.string.add_movie);
+        title.setTextAppearance(this, R.style.DialogTitleTheme);
+        builder.setCustomTitle(title);
 
-        // Setup e xit button
-        btnExit = findViewById(R.id.btnExit);
-        btnExit.setOnClickListener(new View.OnClickListener() {
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton(getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                finish();
+            public void onClick(DialogInterface dialog, int which) {
+                String s = input.getText().toString();
+                movieService.addMovie(s);
             }
         });
+        builder.setNegativeButton(getResources().getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
     }
 
     private void startDetailActivity(AdapterView<?> parent, int position){
         Intent detailsIntent = new Intent(OverviewActivity.this, DetailsActivity.class);
         Movie m = (Movie) parent.getItemAtPosition(position);
-        detailsIntent.putExtra("movie_details", m);
+        //detailsIntent.putExtra("movie_details", m);
+        movieService.setCurrentMovie(m);
         startActivity(detailsIntent);
     }
 
@@ -92,11 +180,13 @@ public class OverviewActivity extends AppCompatActivity {
         startActivityForResult(editIntent, REQUEST_EDIT);
     }
 
+    /*
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(MOVIE_ARRAY_LIST, movieArrayList);
     }
+    */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
