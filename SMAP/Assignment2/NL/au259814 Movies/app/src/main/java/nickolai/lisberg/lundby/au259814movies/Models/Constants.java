@@ -24,4 +24,5 @@ public class Constants {
     public static final String DEBUG_BROADCAST_TAG = "Debug.Broadcast.Tag";
     public static final String DEBUG_BROADCAST_SENT = "Sent broadcast from Service";
     public static final String DEBUG_BROADCAST_RECEIVED = "Received broadcast in activity";
+    public static final String DEBUG_EXCEPTION_TAG = "Debug.Exception.Tag";
 }

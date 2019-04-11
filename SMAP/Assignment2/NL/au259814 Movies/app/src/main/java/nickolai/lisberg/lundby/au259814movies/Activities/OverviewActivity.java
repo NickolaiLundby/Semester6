@@ -210,7 +210,7 @@ public class OverviewActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mAddMovieTitle = input.getText().toString();
-                mService.AddToDatabase(mAddMovieTitle);
+                mService.AddMovie(mAddMovieTitle);
             }
         });
         builder.setNegativeButton(getResources().getString(R.string.ButtonCancel), new DialogInterface.OnClickListener() {

@@ -39,6 +39,7 @@ public class MovieService extends Service {
     RequestQueue requestQueue;
     Movie currentMovie;
     Movie updateMovie;
+    Movie apiMovie;
 
     @Override
     public void onDestroy()
@@ -86,8 +87,7 @@ public class MovieService extends Service {
         new MyTask().execute("Initialize");
     }
 
-    private void InitializeDatabaseImpl()
-    {
+    private void InitializeDatabaseImpl() {
         DatabaseApplication dba = (DatabaseApplication) getApplicationContext();
         db = dba.GetDatabase();
         setArrayOfMovies(new ArrayList<>(db.movieDao().getAll()));
@@ -101,60 +101,42 @@ public class MovieService extends Service {
         }
     }
 
-    public void AddToDatabase(String movieTitle) {
+    public void AddMovie(String movieTitle) {
         new MyTask().execute("Add", movieTitle);
     }
 
-    private void apiCallback(Movie movie) {
-        new MyTask().execute("Callback");
-    }
-
-    private void AddToDatabaseImpl(String movieTitle)
-    {
-        if(db.movieDao().findByTitle(movieTitle) != null){
-            Log.d(Constants.DEBUG_DATABASE_TAG, Constants.DEBUG_DATABASE_NOT_ADDED + movieTitle);
-        }
-        else{
-            String url = MovieHelperClass.UrlBuilder(movieTitle);
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d(Constants.DEBUG_API_TAG, Constants.DEBUG_API_RAW + response);
-                            Movie m = new Movie(response);
-                            if(m.getTitle().isEmpty())
-                            {
-                                Log.d(Constants.DEBUG_API_TAG, Constants.DEBUG_API_NULL);
-                            }
-                            else {
-                                Log.d(Constants.DEBUG_API_TAG, Constants.DEBUG_API_TITLE + m.getTitle());
-                                AddMovie(m);
-                                sendMyBroadCast();
-                            }
+    private void AddMovieImpl(String movieTitle) {
+        String url = MovieHelperClass.UrlBuilder(movieTitle);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(Constants.DEBUG_API_TAG, Constants.DEBUG_API_RAW + response);
+                        Movie m = new Movie(response);
+                        if(m.getTitle().isEmpty())
+                        {
+                            Log.d(Constants.DEBUG_API_TAG, Constants.DEBUG_API_NULL);
                         }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    throw new UnsupportedOperationException();
-                }
-            });
-            requestQueue.add(stringRequest);
-        }
-    }
-
-    private void AddMovie(Movie movie)
-    {
-        db.movieDao().insertMovie(movie);
-        setArrayOfMovies(new ArrayList<>(db.movieDao().getAll()));
-        Log.d(Constants.DEBUG_DATABASE_TAG, Constants.DEBUG_DATABASE_ADDED + movie.getTitle());
+                        else {
+                            Log.d(Constants.DEBUG_API_TAG, Constants.DEBUG_API_TITLE + m.getTitle());
+                            apiMovie = m;
+                            ApiCallback();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(Constants.DEBUG_EXCEPTION_TAG, error.networkResponse.toString());
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 
     public void DeleteMovie() {
         new MyTask().execute("Delete");
     }
 
-    private void DeleteMovieImpl()
-    {
+    private void DeleteMovieImpl() {
         db.movieDao().delete(currentMovie);
         setArrayOfMovies(new ArrayList<>(db.movieDao().getAll()));
         Log.d(Constants.DEBUG_DATABASE_TAG, Constants.DEBUG_DATABASE_DELETED + currentMovie.getTitle());
@@ -165,53 +147,21 @@ public class MovieService extends Service {
         new MyTask().execute("Update");
     }
 
-    public void UpdateMovieImpl(Movie movie)
-    {
+    public void UpdateMovieImpl(Movie movie) {
         db.movieDao().update(movie);
         setArrayOfMovies(new ArrayList<>(db.movieDao().getAll()));
         Log.d(Constants.DEBUG_DATABASE_TAG, Constants.DEBUG_DATABASE_UPDATED + currentMovie.getTitle());
     }
 
-    public void UpdateAllMovies(){
-        new MyTask().execute("UpdateAll");
+    private void ApiCallback(){
+        new MyTask().execute("Callback");
     }
 
-    private void UpdateAllMoviesImpl() {
-        ArrayList<Movie> movieArrayList = new ArrayList<>(db.movieDao().getAll());
-        for (int i = 0; i < movieArrayList.size(); i++) {
-            String url = MovieHelperClass.UrlBuilder(movieArrayList.get(i).getTitle());
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Movie m = new Movie(response);
-                            if(m.getTitle().isEmpty())
-                            {
-                                Log.d(Constants.DEBUG_API_TAG, Constants.DEBUG_API_NULL);
-                            }
-                            else
-                            {
-                                Log.d(Constants.DEBUG_API_TAG, Constants.DEBUG_API_TITLE + m.getTitle());
-                                if (db.movieDao().findByTitle(m.getTitle()) != null)
-                                {
-                                    UpdateMovie(MovieHelperClass.UpdatedMovie(db.movieDao().findByTitle(m.getTitle()), m));
-                                }
-                                else
-                                {
-                                    AddMovie(m);
-                                }
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    throw new UnsupportedOperationException();
-                }
-            });
-            requestQueue.add(stringRequest);
-            if(i == movieArrayList.size())
-                sendMyBroadCast();
-        }
+    private void ApiCallbackImpl() {
+        db.movieDao().insertMovie(apiMovie);
+        setArrayOfMovies(new ArrayList<>(db.movieDao().getAll()));
+        Log.d(Constants.DEBUG_DATABASE_TAG, Constants.DEBUG_DATABASE_ADDED + apiMovie.getTitle());
+        sendMyBroadCast();
     }
 
     private class MyTask extends AsyncTask<String, Integer, String>{
@@ -232,15 +182,16 @@ public class MovieService extends Service {
                     DeleteMovieImpl();
                     break;
                 case "Add":
-                    AddToDatabaseImpl(params[1]);
+                    if(db.movieDao().findByTitle(params[1]) != null)
+                        Log.d(Constants.DEBUG_DATABASE_TAG, Constants.DEBUG_DATABASE_NOT_ADDED + params[1]);
+                    else
+                        AddMovieImpl(params[1]);
                     break;
                 case "Update":
                     UpdateMovieImpl(updateMovie);
                     break;
-                case "UpdateAll":
-                    UpdateAllMoviesImpl();
-                    break;
                 case "Callback":
+                    ApiCallbackImpl();
                     break;
                 default:
                     break;
@@ -260,8 +211,7 @@ public class MovieService extends Service {
         }
     }
 
-    private void sendMyBroadCast()
-    {
+    private void sendMyBroadCast() {
         try
         {
             sendBroadcast(new Intent().setAction(Constants.BROADCAST_DATABASE_UPDATED));
