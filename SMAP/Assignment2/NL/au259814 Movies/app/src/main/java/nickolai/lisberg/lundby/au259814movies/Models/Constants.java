@@ -17,6 +17,13 @@ public class Constants {
     public static final String CHANNEL_DESCRIPTION = "Movie.Notification.Channel";
     public static final int NOTIFICATION_ID = 1000371;
 
+    // Async operations
+    public static final String ASYNC_INITIALIZE = "Async.Initialize";
+    public static final String ASYNC_ADD = "Async.Add";
+    public static final String ASYNC_DELETE = "Async.Delete";
+    public static final String ASYNC_UPDATE = "Async.Update";
+    public static final String ASYNC_CALLBACK = "Async.Callback";
+
     // Debugging constants
     public static final String DEBUG_API_TAG = "Debug.Api.Tag";
     public static final String DEBUG_API_NULL = "Null response";
@@ -34,4 +41,5 @@ public class Constants {
     public static final String DEBUG_NOTIFICATION_TAG = "Debug.Notification.Tag";
     public static final String DEBUG_NOTIFICATION_CREATED = "Notification Created";
     public static final String DEBUG_NOTIFICATION_RECEIVED = "Notification Received";
+    public static final String DEBUG_NOTIFICATION_NOT_CREATED = "Notification NOT created. No unwatched movies";
 }

@@ -1,17 +1,10 @@
 package nickolai.lisberg.lundby.au259814movies.Services;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.app.TaskStackBuilder;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -20,20 +13,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-import nickolai.lisberg.lundby.au259814movies.Activities.OverviewActivity;
 import nickolai.lisberg.lundby.au259814movies.Database.DatabaseApplication;
 import nickolai.lisberg.lundby.au259814movies.Database.MovieDatabase;
 import nickolai.lisberg.lundby.au259814movies.Models.Constants;
 import nickolai.lisberg.lundby.au259814movies.Models.Movie;
-import nickolai.lisberg.lundby.au259814movies.Models.ServiceResponse;
 import nickolai.lisberg.lundby.au259814movies.R;
 import nickolai.lisberg.lundby.au259814movies.Utilities.CSVReader;
 import nickolai.lisberg.lundby.au259814movies.Utilities.MovieHelperClass;
@@ -96,7 +84,7 @@ public class MovieService extends Service {
     /// DATABASE FUNCTIONS BELOW ///
     /// ************************ ///
     public void InitializeDatabase(){
-        new MyTask().execute("Initialize");
+        new MyTask().execute(Constants.ASYNC_INITIALIZE);
     }
 
     private void InitializeDatabaseImpl() {
@@ -114,7 +102,7 @@ public class MovieService extends Service {
     }
 
     public void AddMovie(String movieTitle) {
-        new MyTask().execute("Add", movieTitle);
+        new MyTask().execute(Constants.ASYNC_ADD, movieTitle);
     }
 
     private void AddMovieImpl(String movieTitle) {
@@ -145,7 +133,7 @@ public class MovieService extends Service {
     }
 
     public void DeleteMovie() {
-        new MyTask().execute("Delete");
+        new MyTask().execute(Constants.ASYNC_DELETE);
     }
 
     private void DeleteMovieImpl() {
@@ -156,7 +144,7 @@ public class MovieService extends Service {
 
     public void UpdateMovie(Movie movie) {
         updateMovie = movie;
-        new MyTask().execute("Update");
+        new MyTask().execute(Constants.ASYNC_UPDATE);
     }
 
     public void UpdateMovieImpl(Movie movie) {
@@ -166,54 +154,43 @@ public class MovieService extends Service {
     }
 
     private void ApiCallback(){
-        new MyTask().execute("Callback");
+        new MyTask().execute(Constants.ASYNC_CALLBACK);
     }
 
     private void ApiCallbackImpl() {
         db.movieDao().insertMovie(apiMovie);
         setArrayOfMovies(new ArrayList<>(db.movieDao().getAll()));
         Log.d(Constants.DEBUG_DATABASE_TAG, Constants.DEBUG_DATABASE_ADDED + apiMovie.getTitle());
-        sendMyBroadCast();
     }
 
     private class MyTask extends AsyncTask<String, Integer, String>{
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
         @Override
         protected String doInBackground(String... params) {
             String myParam = params[0];
 
             switch(myParam) {
-                case "Initialize":
+                case Constants.ASYNC_INITIALIZE:
                     InitializeDatabaseImpl();
                     break;
-                case "Delete":
+                case Constants.ASYNC_DELETE:
                     DeleteMovieImpl();
                     break;
-                case "Add":
+                case Constants.ASYNC_ADD:
                     if(db.movieDao().findByTitle(params[1]) != null)
                         Log.d(Constants.DEBUG_DATABASE_TAG, Constants.DEBUG_DATABASE_NOT_ADDED + params[1]);
                     else
                         AddMovieImpl(params[1]);
                     break;
-                case "Update":
+                case Constants.ASYNC_UPDATE:
                     UpdateMovieImpl(updateMovie);
                     break;
-                case "Callback":
+                case Constants.ASYNC_CALLBACK:
                     ApiCallbackImpl();
                     break;
                 default:
                     break;
             }
             return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
         }
 
         @Override

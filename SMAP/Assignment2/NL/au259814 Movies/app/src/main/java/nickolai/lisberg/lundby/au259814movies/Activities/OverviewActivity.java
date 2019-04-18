@@ -59,7 +59,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         // Receiving from service
         RegisterMyReceiver();
-        notifcationManager();
+        NotifcationManager();
 
         // Widget initialization
         btnExit = findViewById(R.id.overview_btnExit);
@@ -242,7 +242,7 @@ public class OverviewActivity extends AppCompatActivity {
         }
     };
 
-    private void notifcationManager(){
+    private void NotifcationManager(){
         Intent notificationIntent = new Intent(this, NotificationService.class);
         PendingIntent contentIntent = PendingIntent.getService(this, 0, notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
@@ -250,6 +250,12 @@ public class OverviewActivity extends AppCompatActivity {
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         am.cancel(contentIntent);
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
-                + 20000, 20000, contentIntent);
+                + 20000, 60000, contentIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
     }
 }
