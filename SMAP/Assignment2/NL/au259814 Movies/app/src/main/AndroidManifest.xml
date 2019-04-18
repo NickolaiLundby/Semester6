@@ -16,6 +16,10 @@
             android:name=".Services.MovieService"
             android:enabled="true"
             android:exported="true"></service>
+        <service
+            android:name=".Services.NotificationService"
+            android:enabled="true"
+            android:exported="true"></service>
 
         <activity android:name=".Activities.EditActivity" />
         <activity android:name=".Activities.DetailsActivity" />

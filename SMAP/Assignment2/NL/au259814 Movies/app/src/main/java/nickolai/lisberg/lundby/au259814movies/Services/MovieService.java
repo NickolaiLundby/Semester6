@@ -1,10 +1,17 @@
 package nickolai.lisberg.lundby.au259814movies.Services;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -19,6 +26,7 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 import nickolai.lisberg.lundby.au259814movies.Activities.OverviewActivity;
 import nickolai.lisberg.lundby.au259814movies.Database.DatabaseApplication;
@@ -48,8 +56,7 @@ public class MovieService extends Service {
     }
 
     @Override
-    public IBinder onBind(Intent intent)
-    {
+    public IBinder onBind(Intent intent) {
         InitializeDatabase();
 
         if(requestQueue == null)
@@ -78,6 +85,11 @@ public class MovieService extends Service {
 
     public void setArrayOfMovies(ArrayList<Movie> arrayOfMovies) {
         this.arrayOfMovies = arrayOfMovies;
+    }
+
+    private Movie GetRandomMovie(){
+        Random rand = new Random();
+        return arrayOfMovies.get(rand.nextInt(arrayOfMovies.size()));
     }
 
     /// ************************ ///

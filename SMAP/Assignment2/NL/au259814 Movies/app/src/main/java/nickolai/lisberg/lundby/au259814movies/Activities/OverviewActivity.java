@@ -1,5 +1,7 @@
 package nickolai.lisberg.lundby.au259814movies.Activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -24,16 +26,11 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-
-import nickolai.lisberg.lundby.au259814movies.Database.DatabaseApplication;
-import nickolai.lisberg.lundby.au259814movies.Database.MovieDatabase;
 import nickolai.lisberg.lundby.au259814movies.Models.Constants;
 import nickolai.lisberg.lundby.au259814movies.Models.Movie;
 import nickolai.lisberg.lundby.au259814movies.R;
 import nickolai.lisberg.lundby.au259814movies.Services.MovieService;
-import nickolai.lisberg.lundby.au259814movies.Utilities.CSVReader;
+import nickolai.lisberg.lundby.au259814movies.Services.NotificationService;
 import nickolai.lisberg.lundby.au259814movies.Utilities.LocaleHelper;
 import nickolai.lisberg.lundby.au259814movies.Utilities.MovieAdapter;
 
@@ -62,6 +59,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         // Receiving from service
         RegisterMyReceiver();
+        notifcationManager();
 
         // Widget initialization
         btnExit = findViewById(R.id.overview_btnExit);
@@ -243,4 +241,15 @@ public class OverviewActivity extends AppCompatActivity {
             Log.d(Constants.DEBUG_BROADCAST_TAG, Constants.DEBUG_BROADCAST_RECEIVED);
         }
     };
+
+    private void notifcationManager(){
+        Intent notificationIntent = new Intent(this, NotificationService.class);
+        PendingIntent contentIntent = PendingIntent.getService(this, 0, notificationIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        am.cancel(contentIntent);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
+                + 20000, 20000, contentIntent);
+    }
 }

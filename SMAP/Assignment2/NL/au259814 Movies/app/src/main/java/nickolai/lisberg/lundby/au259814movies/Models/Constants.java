@@ -11,6 +11,12 @@ public class Constants {
     // Locale
     public static final String SELECTED_LANGUAGE = "Locale.Helper.Selected.Language";
 
+    // Notifications
+    public static final String CHANNEL_ID = "Movie.Notification.Channel.Id";
+    public static final String CHANNEL_NAME = "Movie.Channel";
+    public static final String CHANNEL_DESCRIPTION = "Movie.Notification.Channel";
+    public static final int NOTIFICATION_ID = 1000371;
+
     // Debugging constants
     public static final String DEBUG_API_TAG = "Debug.Api.Tag";
     public static final String DEBUG_API_NULL = "Null response";
@@ -25,4 +31,7 @@ public class Constants {
     public static final String DEBUG_BROADCAST_SENT = "Sent broadcast from Service";
     public static final String DEBUG_BROADCAST_RECEIVED = "Received broadcast in activity";
     public static final String DEBUG_EXCEPTION_TAG = "Debug.Exception.Tag";
+    public static final String DEBUG_NOTIFICATION_TAG = "Debug.Notification.Tag";
+    public static final String DEBUG_NOTIFICATION_CREATED = "Notification Created";
+    public static final String DEBUG_NOTIFICATION_RECEIVED = "Notification Received";
 }
