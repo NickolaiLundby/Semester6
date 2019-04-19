@@ -36,7 +36,6 @@ public class MovieService extends Service {
 
     // Variables
     ArrayList<Movie> arrayOfMovies;
-    ArrayList<Movie> arrayOfUnwatchedMovies;
     MovieDatabase db;
     IBinder mBinder = new LocalBinder();
     RequestQueue requestQueue;
@@ -51,19 +50,7 @@ public class MovieService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Intent notificationIntent = new Intent(this, OverviewActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, notificationIntent, 0);
-
-        Notification notification = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
-                .setContentTitle("Movie suggestion!")
-                .setContentText("Title: ")
-                .setSmallIcon(MovieHelperClass.GetPosterId("Default"))
-                .setContentIntent(pendingIntent)
-                .build();
-
-        startForeground(1, notification);
-
+        NotificationLogic();
         return START_STICKY;
     }
 
@@ -103,15 +90,9 @@ public class MovieService extends Service {
         this.arrayOfMovies = arrayOfMovies;
     }
 
-    private void SyncUnwatchedMovies(){
-        for(Movie m : getArrayOfMovies())
-            if(!m.isWatched())
-                arrayOfUnwatchedMovies.add(m);
-    }
-
-    private Movie randomUnwatchedMovie(){
+    private Movie randomMovie(){
         Random rand = new Random();
-        return arrayOfUnwatchedMovies.get(rand.nextInt(arrayOfUnwatchedMovies.size()));
+        return arrayOfMovies.get(rand.nextInt(arrayOfMovies.size()));
     }
 
     /// ************************ ///
@@ -164,6 +145,38 @@ public class MovieService extends Service {
             }
         });
         requestQueue.add(stringRequest);
+    }
+
+    private void NotificationLogic(){
+        new MyTask().execute(Constants.ASYNC_NOTIFICATION);
+    }
+
+    private void NotificationLogicImpl(Movie m){
+        Intent notificationIntent = new Intent(this, OverviewActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                0, notificationIntent, 0);
+
+        if(!m.isWatched()){
+            Notification notification = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
+                    .setContentTitle(getResources().getString(R.string.notification_new_suggestion))
+                    .setContentText(getResources().getString(R.string.titel) + m.getTitle())
+                    .setSmallIcon(MovieHelperClass.GetPosterId(m.getGenres()))
+                    .setContentIntent(pendingIntent)
+                    .build();
+
+            startForeground(1, notification);
+        }
+        else{
+            Notification notification = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
+                    .setContentTitle(getResources().getString(R.string.notification_rewatch_suggestion))
+                    .setContentText(getResources().getString(R.string.titel) + m.getTitle())
+                    .setSmallIcon(MovieHelperClass.GetPosterId(m.getGenres()))
+                    .setContentIntent(pendingIntent)
+                    .build();
+
+            startForeground(1, notification);
+        }
+        Log.d(Constants.DEBUG_NOTIFICATION_TAG, Constants.DEBUG_NOTIFICATION_CREATED);
     }
 
     public void DeleteMovie() {
@@ -220,6 +233,9 @@ public class MovieService extends Service {
                     break;
                 case Constants.ASYNC_CALLBACK:
                     ApiCallbackImpl();
+                    break;
+                case Constants.ASYNC_NOTIFICATION:
+                    NotificationLogicImpl(randomMovie());
                     break;
                 default:
                     break;

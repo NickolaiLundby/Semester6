@@ -4,8 +4,7 @@ import nickolai.lisberg.lundby.au259814movies.Models.Movie;
 import nickolai.lisberg.lundby.au259814movies.R;
 
 public class MovieHelperClass {
-    public static int GetPosterId(String genres)
-    {
+    public static int GetPosterId(String genres) {
         String[] genre = genres.split(",");
         switch(genre[0].toUpperCase()){
             case "ACTION":
@@ -43,9 +42,5 @@ public class MovieHelperClass {
 
     public static String UrlBuilder(String title){
         return "http://www.omdbapi.com/?t=" + title.replaceAll(" ", "+") + "&apikey=69750eef";
-    }
-
-    public static Movie UpdatedMovie(Movie movieDB, Movie movieAPI){
-        return new Movie(movieAPI.getTitle(), movieAPI.getPlot(), movieAPI.getGenres(), movieAPI.getImdbRating(), movieDB.getUserRating(), movieDB.isWatched(), GetPosterId(movieAPI.getGenres()), movieDB.getComment());
     }
 }

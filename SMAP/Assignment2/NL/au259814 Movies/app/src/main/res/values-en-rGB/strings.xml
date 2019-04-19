@@ -33,4 +33,7 @@
     <string name="prompt_button_title">Movie title</string>
     <string name="service_response_already">Movie already in database</string>
     <string name="service_response_added">Movie added to database</string>
+    <string name="notification_new_suggestion">New movie suggestion!</string>
+    <string name="notification_rewatch_suggestion">Rewatch this movie!</string>
+    <string name="titel">Title: </string>
 </resources>

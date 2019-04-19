@@ -33,4 +33,7 @@
     <string name="prompt_button_title">Filmtitel</string>
     <string name="service_response_already">Filmen er allerede i databasen</string>
     <string name="service_response_added">Filmen tilføjet databasen</string>
+    <string name="notification_new_suggestion">Nyt film forslag!</string>
+    <string name="notification_rewatch_suggestion">Gense denne film!</string>
+    <string name="titel">Titel: </string>
 </resources>
