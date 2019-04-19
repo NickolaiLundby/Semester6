@@ -30,7 +30,7 @@
     <string name="overviewbutton_add">Add</string>
     <string name="details_delete">Slet</string>
     <string name="error_unbound_service">Ikke bundet til service</string>
-    <string name="prompt_button_title">Filmtitel at tilføje</string>
+    <string name="prompt_button_title">Filmtitel</string>
     <string name="service_response_already">Filmen er allerede i databasen</string>
     <string name="service_response_added">Filmen tilføjet databasen</string>
 </resources>

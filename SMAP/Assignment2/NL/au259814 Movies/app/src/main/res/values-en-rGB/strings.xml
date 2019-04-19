@@ -30,7 +30,7 @@
     <string name="overviewbutton_add">Add</string>
     <string name="details_delete">Delete</string>
     <string name="error_unbound_service">Not bound to service</string>
-    <string name="prompt_button_title">Movie title to add</string>
+    <string name="prompt_button_title">Movie title</string>
     <string name="service_response_already">Movie already in database</string>
     <string name="service_response_added">Movie added to database</string>
 </resources>

@@ -1,7 +1,5 @@
 package nickolai.lisberg.lundby.au259814movies.Activities;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -12,6 +10,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -30,7 +29,6 @@ import nickolai.lisberg.lundby.au259814movies.Models.Constants;
 import nickolai.lisberg.lundby.au259814movies.Models.Movie;
 import nickolai.lisberg.lundby.au259814movies.R;
 import nickolai.lisberg.lundby.au259814movies.Services.MovieService;
-import nickolai.lisberg.lundby.au259814movies.Services.NotificationService;
 import nickolai.lisberg.lundby.au259814movies.Utilities.LocaleHelper;
 import nickolai.lisberg.lundby.au259814movies.Utilities.MovieAdapter;
 
@@ -59,7 +57,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         // Receiving from service
         RegisterMyReceiver();
-        NotifcationManager();
+        StartForegroundService();
 
         // Widget initialization
         btnExit = findViewById(R.id.overview_btnExit);
@@ -242,16 +240,16 @@ public class OverviewActivity extends AppCompatActivity {
         }
     };
 
-    private void NotifcationManager(){
-        Intent notificationIntent = new Intent(this, NotificationService.class);
-        PendingIntent contentIntent = PendingIntent.getService(this, 0, notificationIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
-
-        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        am.cancel(contentIntent);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
-                + 20000, 60000, contentIntent);
+    private void StartForegroundService(){
+        Intent serviceIntent = new Intent(this, MovieService.class);
+        ContextCompat.startForegroundService(this, serviceIntent);
     }
+
+    private void StopForegroundService(){
+        Intent serviceIntent = new Intent(this, MovieService.class);
+        stopService(serviceIntent);
+    }
+
 
     @Override
     protected void onDestroy() {
