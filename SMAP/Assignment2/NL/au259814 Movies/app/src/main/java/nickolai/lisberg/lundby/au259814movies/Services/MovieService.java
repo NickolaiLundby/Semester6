@@ -55,11 +55,9 @@ public class MovieService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
 
-        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
         Notification notification = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
                 .setContentTitle("Movie suggestion!")
-                .setContentText("Title: " + "Title goes here")
+                .setContentText("Title: ")
                 .setSmallIcon(MovieHelperClass.GetPosterId("Default"))
                 .setContentIntent(pendingIntent)
                 .build();
@@ -105,12 +103,7 @@ public class MovieService extends Service {
         this.arrayOfMovies = arrayOfMovies;
     }
 
-    public void setArrayOfUnwatchedMovies(ArrayList<Movie> arrayOfUnwatchedMovies) {
-        this.arrayOfUnwatchedMovies = arrayOfUnwatchedMovies;
-    }
-
     private void SyncUnwatchedMovies(){
-        setArrayOfUnwatchedMovies(new ArrayList<Movie>());
         for(Movie m : getArrayOfMovies())
             if(!m.isWatched())
                 arrayOfUnwatchedMovies.add(m);
@@ -140,8 +133,6 @@ public class MovieService extends Service {
             for(Movie m : getArrayOfMovies())
                 db.movieDao().insertMovie(m);
         }
-
-        SyncUnwatchedMovies();
     }
 
     public void AddMovie(String movieTitle) {
@@ -182,7 +173,6 @@ public class MovieService extends Service {
     private void DeleteMovieImpl() {
         db.movieDao().delete(currentMovie);
         setArrayOfMovies(new ArrayList<>(db.movieDao().getAll()));
-        SyncUnwatchedMovies();
         Log.d(Constants.DEBUG_DATABASE_TAG, Constants.DEBUG_DATABASE_DELETED + currentMovie.getTitle());
     }
 
@@ -194,7 +184,6 @@ public class MovieService extends Service {
     public void UpdateMovieImpl(Movie movie) {
         db.movieDao().update(movie);
         setArrayOfMovies(new ArrayList<>(db.movieDao().getAll()));
-        SyncUnwatchedMovies();
         Log.d(Constants.DEBUG_DATABASE_TAG, Constants.DEBUG_DATABASE_UPDATED + currentMovie.getTitle());
     }
 
@@ -205,7 +194,6 @@ public class MovieService extends Service {
     private void ApiCallbackImpl() {
         db.movieDao().insertMovie(apiMovie);
         setArrayOfMovies(new ArrayList<>(db.movieDao().getAll()));
-        SyncUnwatchedMovies();
         Log.d(Constants.DEBUG_DATABASE_TAG, Constants.DEBUG_DATABASE_ADDED + apiMovie.getTitle());
     }
 

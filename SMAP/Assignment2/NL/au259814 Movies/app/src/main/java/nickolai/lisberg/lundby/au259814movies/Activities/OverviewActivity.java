@@ -255,5 +255,6 @@ public class OverviewActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(receiver);
+        unbindService(mConnection);
     }
 }
