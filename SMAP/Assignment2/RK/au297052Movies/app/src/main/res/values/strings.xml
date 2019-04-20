@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Movie Tracker</string>
+    <string name="app_name" translatable="false">au297052 Movies</string>
     <string name="overview_top">My Movies</string>
     <string name="exit">Exit</string>
     <string name="rating">Rating:</string>
@@ -14,4 +14,5 @@
     <string name="add">Add</string>
     <string name="title">Title</string>
     <string name="add_movie">Add movie</string>
+    <string name="have_not_watched">You haven\'t watched</string>
 </resources>

@@ -14,4 +14,5 @@
     <string name="add">Tilføj</string>
     <string name="title">Titel</string>
     <string name="add_movie">Tilføj film</string>
+    <string name="have_not_watched">Du har ikke set</string>
 </resources>

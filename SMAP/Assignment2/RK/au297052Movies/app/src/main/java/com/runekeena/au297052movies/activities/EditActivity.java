@@ -1,7 +1,10 @@
 package com.runekeena.au297052movies.activities;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import com.runekeena.au297052movies.R;
 import com.runekeena.au297052movies.activities.Overview.OverviewActivity;
 import com.runekeena.au297052movies.model.Movie;
+import com.runekeena.au297052movies.services.MovieService;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -27,15 +31,68 @@ public class EditActivity extends AppCompatActivity {
     //Variables
     private Movie m;
     private int position;
+    boolean bound;
+    MovieService movieService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        // setup ok button
+        btnOk = findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                movieService.setCurrentMovie(m);
+                movieService.updateMovie();
+                finish();
+            }
+        });
 
-        // get movie object and position from intent
-        m = getIntent().getExtras().getParcelable(OverviewActivity.MOVIE_DETAILS);
-        position = getIntent().getExtras().getInt(OverviewActivity.MOVIE_POSITION);
+        // setup cancel button
+        btnCancel = findViewById(R.id.btnCancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent i = new Intent(this, MovieService.class);
+        bindService(i, connection, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (bound){
+            unbindService(connection);
+        }
+    }
+
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            bound = true;
+            MovieService.LocalBinder mLocalBinder = (MovieService.LocalBinder)service;
+            movieService = mLocalBinder.getService();
+            setMovie();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            bound = false;
+            movieService = null;
+        }
+    };
+
+    private void setMovie(){
+        // get movie object
+        m = movieService.getCurrentMovie();
 
         // set title
         txtTitle = findViewById(R.id.txtTitle);
@@ -92,36 +149,5 @@ public class EditActivity extends AppCompatActivity {
         // set up comment edittext
         editTxtComment = findViewById(R.id.editTxtComment);
         editTxtComment.setText(m.getUserComment());
-
-        // setup ok button
-        btnOk = findViewById(R.id.btnOk);
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                returnEdits();
-            }
-        });
-
-        // setup cancel button
-        btnCancel = findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // return resultcode canceled and finish activity
-                Intent cancelIntent = new Intent(EditActivity.this, OverviewActivity.class);
-                setResult(RESULT_CANCELED, cancelIntent);
-                finish();
-            }
-        });
-    }
-
-    private void returnEdits(){
-        // return result code ok and intent with movie object and position. Finish activity
-        Intent resultIntent = new Intent(EditActivity.this, OverviewActivity.class);
-        m.setUserComment(editTxtComment.getText().toString());
-        resultIntent.putExtra(OverviewActivity.MOVIE_DETAILS, m);
-        resultIntent.putExtra(OverviewActivity.MOVIE_POSITION, position);
-        setResult(RESULT_OK, resultIntent);
-        finish();
     }
 }

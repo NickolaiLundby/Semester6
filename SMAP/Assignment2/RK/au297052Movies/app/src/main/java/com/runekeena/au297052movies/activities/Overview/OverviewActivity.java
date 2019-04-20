@@ -1,5 +1,7 @@
 package com.runekeena.au297052movies.activities.Overview;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -8,9 +10,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -26,6 +31,7 @@ import com.runekeena.au297052movies.R;
 import com.runekeena.au297052movies.activities.DetailsActivity;
 import com.runekeena.au297052movies.activities.EditActivity;
 import com.runekeena.au297052movies.services.MovieService;
+import com.runekeena.au297052movies.services.NotificationService;
 import com.runekeena.au297052movies.utils.MovieHelper;
 import com.runekeena.au297052movies.model.Movie;
 
@@ -49,7 +55,7 @@ public class OverviewActivity extends AppCompatActivity {
     // Variables
     private MovieAdapter movieAdapter;
     MovieService movieService;
-    private boolean bound;
+    private boolean bound = false;
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -64,16 +70,9 @@ public class OverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
-        try
-        {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(DATABASE_UPDATED);
-            registerReceiver(receiver, intentFilter);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
+        Intent startIntent = new Intent(this, NotificationService.class);
+        startIntent.setAction(NotificationService.ACTION_START_FOREGROUND_SERVICE);
+        startService(startIntent);
 
         // Setup exit button
         btnExit = findViewById(R.id.btnExit);
@@ -97,8 +96,42 @@ public class OverviewActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        Intent i = new Intent(this, MovieService.class);
-        bindService(i, connection, BIND_AUTO_CREATE);
+        if(bound){
+            setListView();
+        } else {
+            Intent i = new Intent(this, MovieService.class);
+            bindService(i, connection, BIND_AUTO_CREATE);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try
+        {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(DATABASE_UPDATED);
+            registerReceiver(receiver, intentFilter);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(bound){
+            unbindService(connection);
+        }
     }
 
     ServiceConnection connection = new ServiceConnection() {
@@ -167,7 +200,6 @@ public class OverviewActivity extends AppCompatActivity {
     private void startDetailActivity(AdapterView<?> parent, int position){
         Intent detailsIntent = new Intent(OverviewActivity.this, DetailsActivity.class);
         Movie m = (Movie) parent.getItemAtPosition(position);
-        //detailsIntent.putExtra("movie_details", m);
         movieService.setCurrentMovie(m);
         startActivity(detailsIntent);
     }
@@ -175,33 +207,9 @@ public class OverviewActivity extends AppCompatActivity {
     private void startEditActivity(AdapterView<?> parent, int position){
         Intent editIntent = new Intent(OverviewActivity.this, EditActivity.class);
         Movie m = (Movie) parent.getItemAtPosition(position);
-        editIntent.putExtra(MOVIE_DETAILS, m);
-        editIntent.putExtra(MOVIE_POSITION, position);
-        startActivityForResult(editIntent, REQUEST_EDIT);
+        movieService.setCurrentMovie(m);
+        startActivity(editIntent);
     }
 
-    /*
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(MOVIE_ARRAY_LIST, movieArrayList);
-    }
-    */
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode){
-            case REQUEST_EDIT: if(resultCode == RESULT_OK) {
-                Movie m = (Movie) data.getExtras().getParcelable(MOVIE_DETAILS);
-                int p = (int) data.getExtras().getInt(MOVIE_POSITION);
-                movieAdapter.remove(movieAdapter.getItem(p));
-                movieAdapter.insert(m, p);
-                break;
-            }
-            default:
-                    break;
-        }
-    }
 }

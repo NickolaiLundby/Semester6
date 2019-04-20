@@ -1,10 +1,19 @@
 package com.runekeena.au297052movies.services;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -22,6 +31,9 @@ import com.runekeena.au297052movies.utils.MovieHelper;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MovieService extends Service {
 
@@ -36,7 +48,8 @@ public class MovieService extends Service {
     MovieDatabase movieDatabase;
     RequestQueue requestQueue;
     ArrayList<Movie> movieList;
-
+    Movie currentMovie;
+    Movie movieToSave = null;
     public Movie getCurrentMovie() {
         return currentMovie;
     }
@@ -45,23 +58,9 @@ public class MovieService extends Service {
         this.currentMovie = currentMovie;
     }
 
-    Movie currentMovie;
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     @Override
     public IBinder onBind(Intent intent) {
-        if (movieDatabase == null){
-            DatabaseApp dba = (DatabaseApp) getApplicationContext();
-            movieDatabase = dba.getDatabase();
-            InitDatabase();
-        }
-        if (requestQueue == null){
-            requestQueue = Volley.newRequestQueue(this);
-        }
+        InitDatabase();
         return iBinder;
     }
 
@@ -71,10 +70,10 @@ public class MovieService extends Service {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("API sucess responds", response);
+                        Log.d("API success responds", response);
                         Movie m = new Movie(response);
-                        currentMovie = m;
-                        new DBTasks().execute("add2");
+                        movieToSave = m;
+                        new DBTasks().execute("add", m.getTitle());
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -88,6 +87,13 @@ public class MovieService extends Service {
 
 
     private void InitDatabase(){
+        if (movieDatabase == null){
+            DatabaseApp dba = (DatabaseApp) getApplicationContext();
+            movieDatabase = dba.getDatabase();
+        }
+        if (requestQueue == null){
+            requestQueue = Volley.newRequestQueue(this);
+        }
         new DBTasks().execute("init");
     }
 
@@ -97,6 +103,10 @@ public class MovieService extends Service {
 
     public void addMovie(String title){
         new DBTasks().execute("add", title);
+    }
+
+    public void updateMovie(){
+        new DBTasks().execute("update");
     }
 
     private class DBTasks extends AsyncTask<String, Void, String> {
@@ -128,12 +138,16 @@ public class MovieService extends Service {
                     Log.d("Database", params[1]);
                     if(movieDatabase.movieDao().findByTitle(params[1]) != null){
                         Log.d("Database", params[1]+" found on db");
+                    } else if(movieToSave != null) {
+                        movieDatabase.movieDao().insertMovie(movieToSave);
+                        movieToSave = null;
                     } else {
                         getMovieOnline(params[1]);
                     }
+                    mList = new ArrayList<>(movieDatabase.movieDao().getAll());
                     break;
-                case "add2":
-                    movieDatabase.movieDao().insertMovie(currentMovie);
+                case "update":
+                    movieDatabase.movieDao().update(currentMovie);
                     mList = new ArrayList<>(movieDatabase.movieDao().getAll());
                     break;
                 default:
@@ -146,24 +160,11 @@ public class MovieService extends Service {
         @Override
         protected void onPostExecute(String p) {
             super.onPostExecute(p);
-            switch (p) {
-                case "init":
-                    setInitDatabase(mList);
-                    break;
-                case "del":
-                    setInitDatabase(mList);
-                    break;
-                case "add2":
-                    setInitDatabase(mList);
-                default:
-                    break;
-
-            }
-
+            databaseUpdated(mList);
         }
     }
 
-    private void setInitDatabase(ArrayList<Movie> movies){
+    private void databaseUpdated(ArrayList<Movie> movies){
         movieList = movies; //new ArrayList<>(movieDatabase.movieDao().getAll());
         broadcast();
     }
@@ -180,4 +181,5 @@ public class MovieService extends Service {
             e.printStackTrace();
         }
     }
+
 }

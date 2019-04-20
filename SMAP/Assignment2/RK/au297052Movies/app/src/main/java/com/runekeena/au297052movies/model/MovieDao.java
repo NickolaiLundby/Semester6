@@ -13,6 +13,9 @@ public interface MovieDao {
     @Query("SELECT * FROM movie")
     List<Movie> getAll();
 
+    @Query("SELECT * FROM movie WHERE NOT Movie.Watched")
+    List<Movie> getAllUnwatched();
+
     @Query("SELECT * FROM movie WHERE title LIKE :title")
     Movie findByTitle(String title);
 

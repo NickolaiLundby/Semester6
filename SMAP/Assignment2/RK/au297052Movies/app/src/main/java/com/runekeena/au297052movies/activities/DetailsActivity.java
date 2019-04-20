@@ -71,7 +71,6 @@ public class DetailsActivity extends AppCompatActivity {
         super.onStop();
         if (bound){
             unbindService(connection);
-            bound = false;
         }
     }
 
