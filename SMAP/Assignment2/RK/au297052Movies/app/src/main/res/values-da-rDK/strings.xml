@@ -15,4 +15,6 @@
     <string name="title">Titel</string>
     <string name="add_movie">Tilføj film</string>
     <string name="have_not_watched">Du har ikke set</string>
+    <string name="stop_notifications">Stop notifikationer</string>
+    <string name="watched_all">Du har set dem alle</string>
 </resources>

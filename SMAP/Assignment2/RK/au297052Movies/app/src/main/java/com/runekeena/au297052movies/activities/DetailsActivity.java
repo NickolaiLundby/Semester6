@@ -29,15 +29,28 @@ public class DetailsActivity extends AppCompatActivity {
 
     // Variables
     boolean bound;
+    boolean UWMovie;
     MovieService movieService;
+
+    // Constants
+    public static final String ACTION_UNWATCHED = "ACTION_UNWATCHED";
+    public static final String ACTION_CURRENT = "ACTION_CURRENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        // get movie object from indent
-        //Movie m = getIntent().getExtras().getParcelable(OverviewActivity.MOVIE_DETAILS);
+        String action = getIntent().getAction();
+        switch (action)
+        {
+            case ACTION_UNWATCHED:
+                UWMovie = true;
+                break;
+            default:
+                UWMovie = false;
+                break;
+        }
 
         // Setup ok button
         btnOk = findViewById(R.id.btnOk);
@@ -92,7 +105,13 @@ public class DetailsActivity extends AppCompatActivity {
 
 
     void setMovie(){
-        Movie m = movieService.getCurrentMovie();
+        Movie m;
+        if (UWMovie){
+            m = movieService.getCurrentUWMovie();
+            movieService.setCurrentMovie(m);
+        } else {
+            m = movieService.getCurrentMovie();
+        }
         // Set image, title, rating, plot and user comment
         imgMovie = findViewById(R.id.imgMovie);
         imgMovie.setImageResource(m.getImgId());

@@ -15,10 +15,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <service
-            android:name=".services.NotificationService"
-            android:enabled="true"
-            android:exported="true"></service>
-        <service
             android:name=".services.MovieService"
             android:enabled="true"
             android:exported="true" />

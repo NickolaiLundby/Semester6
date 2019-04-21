@@ -15,4 +15,6 @@
     <string name="title">Title</string>
     <string name="add_movie">Add movie</string>
     <string name="have_not_watched">You haven\'t watched</string>
+    <string name="stop_notifications">Stop notifications</string>
+    <string name="watched_all">You have watched them all</string>
 </resources>

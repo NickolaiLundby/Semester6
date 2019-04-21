@@ -1,7 +1,5 @@
 package com.runekeena.au297052movies.activities.Overview;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,13 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -31,12 +24,7 @@ import com.runekeena.au297052movies.R;
 import com.runekeena.au297052movies.activities.DetailsActivity;
 import com.runekeena.au297052movies.activities.EditActivity;
 import com.runekeena.au297052movies.services.MovieService;
-import com.runekeena.au297052movies.services.NotificationService;
-import com.runekeena.au297052movies.utils.MovieHelper;
 import com.runekeena.au297052movies.model.Movie;
-
-import java.io.InputStream;
-import java.util.ArrayList;
 
 public class OverviewActivity extends AppCompatActivity {
 
@@ -70,9 +58,11 @@ public class OverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
-        Intent startIntent = new Intent(this, NotificationService.class);
-        startIntent.setAction(NotificationService.ACTION_START_FOREGROUND_SERVICE);
+        /*
+        Intent startIntent = new Intent(this, MovieService.class);
+        startIntent.setAction(MovieService.ACTION_START_FOREGROUND_SERVICE);
         startService(startIntent);
+        */
 
         // Setup exit button
         btnExit = findViewById(R.id.btnExit);
@@ -199,6 +189,7 @@ public class OverviewActivity extends AppCompatActivity {
 
     private void startDetailActivity(AdapterView<?> parent, int position){
         Intent detailsIntent = new Intent(OverviewActivity.this, DetailsActivity.class);
+        detailsIntent.setAction(DetailsActivity.ACTION_CURRENT);
         Movie m = (Movie) parent.getItemAtPosition(position);
         movieService.setCurrentMovie(m);
         startActivity(detailsIntent);
