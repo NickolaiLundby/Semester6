@@ -13,7 +13,7 @@ public class Note {
     private String title;
 
     private String description;
-    
+
     private int priority;
 
     public Note(String title, String description, int priority) {
