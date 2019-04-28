@@ -79,7 +79,7 @@ public class EditActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             bound = true;
             MovieService.LocalBinder mLocalBinder = (MovieService.LocalBinder)service;
-            movieService = mLocalBinder.getService();
+            movieService = mLocalBinder.getServiceInstance();
             setMovie();
         }
 
