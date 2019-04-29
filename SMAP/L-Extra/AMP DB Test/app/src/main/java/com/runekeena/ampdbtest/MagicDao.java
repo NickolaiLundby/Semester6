@@ -31,12 +31,18 @@ public interface MagicDao {
     @Update
     void updateCard(Card card);
 
+    @Query("SELECT * FROM card_table WHERE caId LIKE :id")
+    LiveData<Card>  getCardById(int id);
+
     @Query("SELECT * FROM card_table WHERE title LIKE :title")
     LiveData<Card> getCardByTitle(String title);
 
     @Query("SELECT * FROM ref_card_table WHERE collectionId LIKE :id")
     LiveData<List<RefCard>> getRefCardsByCollectionId(int id);
 
-    @Query("SELECT * FROM card_table INNER JOIN ref_card_table ON card_table.id=ref_card_table.cardId WHERE ref_card_table.collectionId=:id")
+    @Query("SELECT * FROM card_table INNER JOIN ref_card_table ON card_table.caId=ref_card_table.cardId WHERE ref_card_table.collectionId=:id")
     LiveData<List<Card>> getCardsByCollectionId(int id);
+
+    @Query("SELECT * FROM collection_table WHERE coId = :id")
+    LiveData<List<ColllectionWithRefCards>> getCollectionWithRefCards(int id);
 }

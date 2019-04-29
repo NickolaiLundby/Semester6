@@ -1,18 +1,13 @@
 package com.runekeena.ampdbtest;
 
-import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.Relation;
 
-import java.util.List;
-
-@Entity(tableName = "collection_table",  indices = @Index(value = "id", unique = true))
+@Entity(tableName = "collection_table",  indices = @Index(value = "coId", unique = true))
 public class Collection {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int coId;
     private String title;
     private String description;
 
@@ -21,12 +16,12 @@ public class Collection {
         this.description = description;
     }
 
-    public int getId() {
-        return id;
+    public int getCoId() {
+        return coId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCoId(int coId) {
+        this.coId = coId;
     }
 
     public String getTitle() {

@@ -2,15 +2,14 @@ package com.runekeena.ampdbtest;
 
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "card_table", indices = @Index(value = "id", unique = true))
+@Entity(tableName = "card_table", indices = @Index(value = "caId", unique = true))
 public class Card {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int caId;
     private String title;
     private double price;
 
@@ -19,12 +18,12 @@ public class Card {
         this.price = price;
     }
 
-    public int getId() {
-        return id;
+    public int getCaId() {
+        return caId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCaId(int caId) {
+        this.caId = caId;
     }
 
     public String getTitle() {

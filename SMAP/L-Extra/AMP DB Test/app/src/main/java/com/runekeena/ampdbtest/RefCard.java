@@ -9,27 +9,31 @@ import android.arch.persistence.room.PrimaryKey;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "ref_card_table", foreignKeys = {
-        @ForeignKey(entity=Card.class,parentColumns = "id",childColumns = "cardId", onDelete = CASCADE),
-        @ForeignKey(entity=Collection.class,parentColumns = "id",childColumns = "collectionId", onDelete = CASCADE)
-        }, indices = {@Index(value = {"id"}, unique = true)})
+        @ForeignKey(entity=Card.class,parentColumns = "caId",childColumns = "cardId", onDelete = CASCADE),
+        @ForeignKey(entity=Collection.class,parentColumns = "coId",childColumns = "collectionId", onDelete = CASCADE)
+        }, indices = {@Index(value = {"rcId"}, unique = true)})
 public class RefCard {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int rcId;
     private int quantity;
     private int cardId;
     private int collectionId;
 
-    public RefCard(int quantity, int cardId) {
+    @Ignore
+    public RefCard(){};
+
+    public RefCard(int quantity, int cardId, int collectionId) {
         this.quantity = quantity;
         this.cardId = cardId;
+        this.collectionId = collectionId;
     }
 
-    public int getId() {
-        return id;
+    public int getRcId() {
+        return rcId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRcId(int rcId) {
+        this.rcId = rcId;
     }
 
     public int getQuantity() {
