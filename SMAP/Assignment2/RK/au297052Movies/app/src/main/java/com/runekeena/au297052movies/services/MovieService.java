@@ -34,8 +34,8 @@ import java.util.Random;
 
 public class MovieService extends Service {
 
-    public class LocalBinder extends Binder{
-        public MovieService getService(){
+    public class LocalBinder extends Binder {
+        public MovieService getServiceInstance() {
             return MovieService.this;
         }
     }
@@ -63,6 +63,12 @@ public class MovieService extends Service {
     public void setCurrentMovie(Movie currentMovie) {
         this.currentMovie = currentMovie;
     }
+    public void setMovies(ArrayList<Movie> movies) {
+        this.movieList = movies;
+    }
+    public ArrayList<Movie> getMovies() {
+        return movieList;
+    }
 
     //Constants
     private static final int NOTIFY_ID = 1;
@@ -71,8 +77,17 @@ public class MovieService extends Service {
 
     /// Notifications / Foreground service
 
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        setMovies(new ArrayList<Movie>());
+        InitDatabase();
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
 
         // Reference - Foreground Service - https://www.dev2qa.com/android-foreground-service-example/
 
@@ -99,7 +114,8 @@ public class MovieService extends Service {
                     break;
             }
         }
-        return super.onStartCommand(intent, flags, startId);
+
+        return START_STICKY;
     }
 
     private void startForegroundService(String title) {
@@ -188,7 +204,6 @@ public class MovieService extends Service {
             Log.d("Database", params[0]);
             DatabaseApp dba = (DatabaseApp) getApplicationContext();
             MovieDatabase mdb = dba.getDatabase();
-
             List<Movie> uwList = mdb.movieDao().getAllUnwatched();
 
             if (uwList.isEmpty()){
@@ -211,7 +226,6 @@ public class MovieService extends Service {
     }
     @Override
     public IBinder onBind(Intent intent) {
-        InitDatabaseNotifications();
         return iBinder;
     }
 
@@ -236,19 +250,12 @@ public class MovieService extends Service {
         requestQueue.add(stringRequest);
     }
 
-    private void InitDatabaseNotifications(){
-        if (movieDatabase == null){
-            DatabaseApp dba = (DatabaseApp) getApplicationContext();
-            movieDatabase = dba.getDatabase();
-        }
+    private void InitDatabase(){
         if (requestQueue == null){
             requestQueue = Volley.newRequestQueue(this);
         }
 
         new DBTasks().execute("init");
-        Intent startIntent = new Intent(this, MovieService.class);
-        startIntent.setAction(MovieService.ACTION_START_FOREGROUND_SERVICE);
-        startService(startIntent);
     }
 
     // Database methods
@@ -278,8 +285,11 @@ public class MovieService extends Service {
             String p = params[0];
             switch (p) {
                 case "init":
-                    mList = new ArrayList<>(movieDatabase.movieDao().getAll());
-                    if (mList.isEmpty()) {
+                    DatabaseApp dba = (DatabaseApp) getApplicationContext();
+                    movieDatabase = dba.getDatabase();
+                    setMovies(new ArrayList<>(movieDatabase.movieDao().getAll()));
+
+                    if (getMovies().isEmpty()) {
                         InputStream inputStream = getResources().openRawResource(R.raw.movielist);
                         MovieHelper mh = new MovieHelper();
                         movieList = mh.readMovieCSVData(inputStream);
@@ -319,7 +329,8 @@ public class MovieService extends Service {
         @Override
         protected void onPostExecute(String p) {
             super.onPostExecute(p);
-            databaseUpdated(mList);
+            if(p != "init")
+                databaseUpdated(mList);
         }
     }
 
@@ -327,10 +338,11 @@ public class MovieService extends Service {
         movieList = movies; //new ArrayList<>(movieDatabase.movieDao().getAll());
         broadcast();
     }
-
+    /*
     public ArrayList<Movie> getMovieList(){
         return movieList;
     }
+    */
 
     private void broadcast(){
         try{

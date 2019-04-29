@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.runekeena.au297052movies.R;
 import com.runekeena.au297052movies.activities.DetailsActivity;
@@ -41,15 +43,14 @@ public class OverviewActivity extends AppCompatActivity {
     public final static String DATABASE_UPDATED = "database_updated";
 
     // Variables
-    private MovieAdapter movieAdapter;
     MovieService movieService;
     private boolean bound = false;
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            setListView();
             Log.d("Broadcast", "Received in OverviewActivity");
+            updateList();
         }
     };
 
@@ -58,11 +59,12 @@ public class OverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
-        /*
+
+        //Start MovieService
         Intent startIntent = new Intent(this, MovieService.class);
         startIntent.setAction(MovieService.ACTION_START_FOREGROUND_SERVICE);
         startService(startIntent);
-        */
+
 
         // Setup exit button
         btnExit = findViewById(R.id.btnExit);
@@ -73,6 +75,7 @@ public class OverviewActivity extends AppCompatActivity {
             }
         });
 
+        // Setup add button
         btnAdd = findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,70 +83,9 @@ public class OverviewActivity extends AppCompatActivity {
                 addDialog();
             }
         });
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if(bound){
-            setListView();
-        } else {
-            Intent i = new Intent(this, MovieService.class);
-            bindService(i, connection, BIND_AUTO_CREATE);
-        }
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        try
-        {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(DATABASE_UPDATED);
-            registerReceiver(receiver, intentFilter);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(receiver);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(bound){
-            unbindService(connection);
-        }
-    }
-
-    ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            bound = true;
-            MovieService.LocalBinder mLocalBinder = (MovieService.LocalBinder)service;
-            movieService = mLocalBinder.getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            bound = false;
-            movieService = null;
-        }
-    };
-
-    private void setListView(){
         // Setup ListView
-        movieAdapter = new MovieAdapter(this, movieService.getMovieList());
         listMovies = findViewById(R.id.listMovies);
-        listMovies.setAdapter(movieAdapter);
         listMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -158,6 +100,62 @@ public class OverviewActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind Service
+        Intent i = new Intent(this, MovieService.class);
+        bindService(i, connection, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try
+        {
+            Log.d("Broadcast", "BroadcastReceiver registred in OverviewActivity");
+            // Register BroadcastReceiver
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(DATABASE_UPDATED);
+            registerReceiver(receiver, intentFilter);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Unregister BroadcastReceiver
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Unbind Service
+        unbindService(connection);
+    }
+
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            bound = true;
+            MovieService.LocalBinder mLocalBinder = (MovieService.LocalBinder)service;
+            movieService = mLocalBinder.getServiceInstance();
+            updateList();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            bound = false;
+            movieService = null;
+        }
+    };
+
     private void addDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogTheme);
         TextView title = new TextView(this);
@@ -202,5 +200,11 @@ public class OverviewActivity extends AppCompatActivity {
         startActivity(editIntent);
     }
 
-
+    private void updateList() {
+        if(bound) {
+            Log.d("List", "listview updated");
+            listMovies.setAdapter(new MovieAdapter(this, movieService.getMovies()));
+        } else
+            Toast.makeText(this, "Activity not bound to movie service", Toast.LENGTH_SHORT).show();
+    }
 }
