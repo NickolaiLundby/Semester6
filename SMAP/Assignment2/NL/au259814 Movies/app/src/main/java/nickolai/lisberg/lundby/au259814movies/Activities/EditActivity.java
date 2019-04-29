@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import nickolai.lisberg.lundby.au259814movies.Models.Constants;
 import nickolai.lisberg.lundby.au259814movies.Models.Movie;
 import nickolai.lisberg.lundby.au259814movies.R;
 import nickolai.lisberg.lundby.au259814movies.Services.MovieService;
@@ -90,7 +91,7 @@ public class EditActivity extends AppCompatActivity {
             mBound = true;
             MovieService.LocalBinder mLocalBinder = (MovieService.LocalBinder)service;
             mService = mLocalBinder.getServiceInstance();
-            LoadMovie();
+            LoadMovie(null);
         }
 
         @Override
@@ -109,14 +110,23 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
-    public void LoadMovie() {
-        movie = mService.getCurrentMovie();
-        yourRating.setText(String.valueOf(movie.getUserRating()));
-        ratingSeekbar.setProgress((int) movie.getUserRating()*10);
-        title.setText(movie.getTitle());
-        if(!movie.getComment().isEmpty())
-            comment.setText(movie.getComment());
-        watched.setChecked(movie.isWatched());
+    public void LoadMovie(Movie m) {
+        if (m == null) {
+            movie = mService.getCurrentMovie();
+            yourRating.setText(String.valueOf(movie.getUserRating()));
+            ratingSeekbar.setProgress((int) (movie.getUserRating()*10));
+            title.setText(movie.getTitle());
+            if(!movie.getComment().isEmpty())
+                comment.setText(movie.getComment());
+            watched.setChecked(movie.isWatched());
+        } else {
+            yourRating.setText(String.valueOf(m.getUserRating()));
+            ratingSeekbar.setProgress((int) (m.getUserRating()*10));
+            title.setText(m.getTitle());
+            if(!m.getComment().isEmpty())
+                comment.setText(m.getComment());
+            watched.setChecked(m.isWatched());
+        }
     }
 
     private void BtnOkayClick()
@@ -134,5 +144,21 @@ public class EditActivity extends AppCompatActivity {
     {
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        movie.setWatched(watched.isChecked());
+        movie.setComment(comment.getText().toString());
+        movie.setUserRating(Double.parseDouble(yourRating.getText().toString()));
+        outState.putParcelable(Constants.EDIT_SAVE_INSTANCE, movie);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Movie m = savedInstanceState.getParcelable(Constants.EDIT_SAVE_INSTANCE);
+        LoadMovie(m);
     }
 }

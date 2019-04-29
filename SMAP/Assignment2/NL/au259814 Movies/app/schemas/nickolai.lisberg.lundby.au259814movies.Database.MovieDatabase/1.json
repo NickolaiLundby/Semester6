@@ -1,0 +1,75 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "d95e24e16fd34c72ead39c0ab77e8bdd",
+    "entities": [
+      {
+        "tableName": "Movie",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Title` TEXT NOT NULL, `Plot` TEXT, `Genres` TEXT, `ImdbRating` REAL NOT NULL, `UserRating` REAL NOT NULL, `Watched` INTEGER NOT NULL, `Poster` INTEGER NOT NULL, `Comment` TEXT, PRIMARY KEY(`Title`))",
+        "fields": [
+          {
+            "fieldPath": "Title",
+            "columnName": "Title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "Plot",
+            "columnName": "Plot",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "Genres",
+            "columnName": "Genres",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ImdbRating",
+            "columnName": "ImdbRating",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "UserRating",
+            "columnName": "UserRating",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "Watched",
+            "columnName": "Watched",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "Poster",
+            "columnName": "Poster",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "Comment",
+            "columnName": "Comment",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "Title"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d95e24e16fd34c72ead39c0ab77e8bdd\")"
+    ]
+  }
+}

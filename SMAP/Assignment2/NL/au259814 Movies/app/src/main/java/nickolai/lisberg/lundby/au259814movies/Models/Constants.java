@@ -5,6 +5,9 @@ public class Constants {
     public final static int REQUEST_EDIT = 100;
     public final static int REQUEST_DETAIL = 101;
 
+    // Edit Activity
+    public static final String EDIT_SAVE_INSTANCE = "Edit.Activity.Save.Instance.State";
+
     // Broadcasts
     public final static String BROADCAST_DATABASE_UPDATED = "Broadcast.Helper.Database.Updated";
 
@@ -21,7 +24,6 @@ public class Constants {
     public static final String ASYNC_DELETE = "Async.Delete";
     public static final String ASYNC_UPDATE = "Async.Update";
     public static final String ASYNC_CALLBACK = "Async.Callback";
-    public static final String ASYNC_NOTIFICATION = "Async.Notification";
 
     // Debugging constants
     public static final String DEBUG_API_TAG = "Debug.Api.Tag";

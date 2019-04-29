@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 import nickolai.lisberg.lundby.au259814movies.Activities.OverviewActivity;
@@ -31,6 +33,7 @@ import nickolai.lisberg.lundby.au259814movies.Models.Movie;
 import nickolai.lisberg.lundby.au259814movies.R;
 import nickolai.lisberg.lundby.au259814movies.Utilities.CSVReader;
 import nickolai.lisberg.lundby.au259814movies.Utilities.MovieHelperClass;
+import nickolai.lisberg.lundby.au259814movies.Utilities.NotificationReceiver;
 
 public class MovieService extends Service {
 
@@ -51,6 +54,7 @@ public class MovieService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         NotificationLogic();
+        startAlarm();
         return START_STICKY;
     }
 
@@ -147,38 +151,6 @@ public class MovieService extends Service {
         requestQueue.add(stringRequest);
     }
 
-    private void NotificationLogic(){
-        new MyTask().execute(Constants.ASYNC_NOTIFICATION);
-    }
-
-    private void NotificationLogicImpl(Movie m){
-        Intent notificationIntent = new Intent(this, OverviewActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, notificationIntent, 0);
-
-        if(!m.isWatched()){
-            Notification notification = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
-                    .setContentTitle(getResources().getString(R.string.notification_new_suggestion))
-                    .setContentText(getResources().getString(R.string.titel) + m.getTitle())
-                    .setSmallIcon(MovieHelperClass.GetPosterId(m.getGenres()))
-                    .setContentIntent(pendingIntent)
-                    .build();
-
-            startForeground(1, notification);
-        }
-        else{
-            Notification notification = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
-                    .setContentTitle(getResources().getString(R.string.notification_rewatch_suggestion))
-                    .setContentText(getResources().getString(R.string.titel) + m.getTitle())
-                    .setSmallIcon(MovieHelperClass.GetPosterId(m.getGenres()))
-                    .setContentIntent(pendingIntent)
-                    .build();
-
-            startForeground(1, notification);
-        }
-        Log.d(Constants.DEBUG_NOTIFICATION_TAG, Constants.DEBUG_NOTIFICATION_CREATED);
-    }
-
     public void DeleteMovie() {
         new MyTask().execute(Constants.ASYNC_DELETE);
     }
@@ -234,9 +206,6 @@ public class MovieService extends Service {
                 case Constants.ASYNC_CALLBACK:
                     ApiCallbackImpl();
                     break;
-                case Constants.ASYNC_NOTIFICATION:
-                    NotificationLogicImpl(randomMovie());
-                    break;
                 default:
                     break;
             }
@@ -259,6 +228,73 @@ public class MovieService extends Service {
         catch (Exception e)
         {
             e.printStackTrace();
+        }
+    }
+
+    private void startAlarm() {
+        new AsyncAlarmTask().execute();
+    }
+
+    private class AsyncAlarmTask extends AsyncTask<Void, Void, Void> {
+        Movie randomMovie;
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ArrayList<Movie> allMovies = new ArrayList<>(db.movieDao().getAll());
+            Random rand = new Random();
+            randomMovie = allMovies.get(rand.nextInt(allMovies.size()));
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(MovieService.this, NotificationReceiver.class);
+            intent.putExtra("Title", randomMovie.getTitle());
+            intent.putExtra("Genre", randomMovie.getGenres());
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(MovieService.this, 1, intent, 0);
+
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 20000, pendingIntent);
+            super.onPostExecute(aVoid);
+        }
+    }
+
+    private void NotificationLogic(){
+        new NotificationAsyncTask().execute();
+    }
+
+    private void NotificationLogicImpl(Movie m){
+        Intent notificationIntent = new Intent(this, OverviewActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                0, notificationIntent, 0);
+
+        if(!m.isWatched()){
+            Notification notification = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
+                    .setContentTitle(getResources().getString(R.string.notification_new_suggestion))
+                    .setContentText(getResources().getString(R.string.titel) + m.getTitle())
+                    .setSmallIcon(MovieHelperClass.GetPosterId(m.getGenres()))
+                    .setContentIntent(pendingIntent)
+                    .build();
+
+            startForeground(1, notification);
+        }
+        else{
+            Notification notification = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
+                    .setContentTitle(getResources().getString(R.string.notification_rewatch_suggestion))
+                    .setContentText(getResources().getString(R.string.titel) + m.getTitle())
+                    .setSmallIcon(MovieHelperClass.GetPosterId(m.getGenres()))
+                    .setContentIntent(pendingIntent)
+                    .build();
+
+            startForeground(1, notification);
+        }
+        Log.d(Constants.DEBUG_NOTIFICATION_TAG, Constants.DEBUG_NOTIFICATION_CREATED);
+    }
+
+    private class NotificationAsyncTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            NotificationLogicImpl(randomMovie());
+            return null;
         }
     }
 }
