@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Transaction;
 import android.arch.persistence.room.Update;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public interface MagicDao {
     @Query("SELECT * FROM card_table INNER JOIN ref_card_table ON card_table.caId=ref_card_table.cardId WHERE ref_card_table.collectionId=:id")
     LiveData<List<Card>> getCardsByCollectionId(int id);
 
+    @Transaction
     @Query("SELECT * FROM collection_table WHERE coId = :id")
     LiveData<List<ColllectionWithRefCards>> getCollectionWithRefCards(int id);
 }

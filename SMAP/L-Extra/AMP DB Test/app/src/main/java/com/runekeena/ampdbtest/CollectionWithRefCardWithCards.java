@@ -6,7 +6,7 @@ import android.arch.persistence.room.Relation;
 import java.util.List;
 
 public class CollectionWithRefCardWithCards {
-    
+
     @Embedded
     Collection collection;
 
