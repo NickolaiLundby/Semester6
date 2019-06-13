@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Lab61
 {
-    public interface ICar
+    public class CarConcrete
     {
-        string Run();
+        public string Run()
+        {
+            return "Car running";
+        }
     }
 }
