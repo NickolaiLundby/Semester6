@@ -7,6 +7,22 @@ using Unity;
 
 namespace OpgaveA
 {
+	// One parameter constructor with dependency injection - concrete class as dependency(BMW)
+	class DriverBMW
+	{
+		private BMW _car = null;
+
+		public DriverBMW(BMW bmw)
+		{
+			_car = bmw;
+		}
+
+		public void RunCar()
+		{
+			Console.WriteLine("Running {0} - {1} mile ", _car.GetType().Name, _car.Run());
+		}
+	}
+
 	// One parameter constructor with dependency injection - also used in parameteroveride
 	class Driver
 	{

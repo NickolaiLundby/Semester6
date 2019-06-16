@@ -13,20 +13,24 @@ namespace OpgaveA
 	{
 		static void Main(string[] args)
 		{
-			/*Without unity
+			//Without unity
+			Console.WriteLine("Without unity \n");
 			Driver driver = new Driver(new BMW());
 			driver.RunCar();
-			*/
+
+			//Concrete Class - auto resolve
+			Console.WriteLine("\nAuto Resolve");
+			IUnityContainer container1 = new UnityContainer();
+			DriverBMW driver_bmw = container1.Resolve<DriverBMW>();
+			driver_bmw.RunCar();
 
 			//Constructor injection
-			/* one parameter part 
+			//one parameter part 
 			// With unity
+			Console.WriteLine("\nRegisterType + Resolve");
 			IUnityContainer container = new UnityContainer();
 			container.RegisterType<ICar, BMW>();
 			container.RegisterType<ICar, Audi>("LuxuryCar");
-
-			ICar bmw = container.Resolve<ICar>();  // return BMW object
-			ICar audi = container.Resolve<ICar>("LuxuryCar"); // return Audi object
 
 			container.RegisterType<Driver>("LuxuryCarDriver", new InjectionConstructor(container.Resolve<ICar>("LuxuryCar")));
 
@@ -36,7 +40,10 @@ namespace OpgaveA
 			Driver driver2 = container.Resolve<Driver>("LuxuryCarDriver"); // injects Audi
 			driver2.RunCar();
 
-			Console.WriteLine("\nInstance injection\n");
+
+			// Lifetime 
+
+			Console.WriteLine("\nInstance injection");
 			// Register instance
 			var containerIns = new UnityContainer();
 			ICar audiIns = new Audi();
@@ -48,7 +55,7 @@ namespace OpgaveA
 
 			Driver driver2Ins = containerIns.Resolve<Driver>();
 			driver2Ins.RunCar();
-			*/
+			
 
 			/* with two parameters part
 			var container = new UnityContainer();
