@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,6 +22,7 @@ namespace Lab42
     /// </summary>
     public partial class MainWindow : Window
     {
+        private CprCheck _cprCheck = new CprCheck();
         public MainWindow()
         {
             InitializeComponent();
@@ -29,9 +31,9 @@ namespace Lab42
         private void btnCheckCpr_Click(object sender, RoutedEventArgs e)
         {
             CprError cprError;
-            CprCheck cprCheck = new CprCheck();
 
-            cprCheck.Check(tbxCprNr.Text, out cprError);
+
+            _cprCheck.Check(tbxCprNr.Text, out cprError);
 
             switch (cprError)
             {
@@ -61,6 +63,16 @@ namespace Lab42
         private void tbxCprNr_TextChanged(object sender, TextChangedEventArgs e)
         {
             tblErrorMsg.Text = " ";
+        }
+
+        private void btnGetInfo_Click(object sender, RoutedEventArgs e)
+        {
+            Type assType = _cprCheck.GetType();
+            tbxAssName.Text = assType.Assembly.FullName;
+            AssemblyName assName = assType.Assembly.GetName();
+            tbxVersion.Text = assName.Version.ToString();
+            tbxLocation.Text = assType.Assembly.Location;
+            tbxLoadedFrom.Text = assType.Assembly.GlobalAssemblyCache.ToString();
         }
     }
 }
