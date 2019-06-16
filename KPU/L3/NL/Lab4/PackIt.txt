@@ -1,0 +1,4 @@
+1.Create a class library project.
+2.Generate a NuSpecmanifest from the project.nugetspec
+3.Update the project’s assembly metadata
+4.Use NuGet.exe to create the package.nugetpack
