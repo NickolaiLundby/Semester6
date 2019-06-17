@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
+/* Install in GAC:
+ * Developer Command Prompr:
+ * GacUtil -i Lab43
+ */
+
+
 namespace Lab43
 {
 	public enum CprError

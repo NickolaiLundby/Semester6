@@ -35,9 +35,12 @@
 			this.Start = new System.Windows.Forms.ToolStripMenuItem();
 			this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.resumeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.configurePathsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.configureMonitorPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.configureCollectionPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+			this.label1 = new System.Windows.Forms.Label();
 			this.contextMenuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -55,9 +58,10 @@
             this.Start,
             this.stopToolStripMenuItem,
             this.pauseToolStripMenuItem,
+            this.resumeToolStripMenuItem,
             this.configurePathsToolStripMenuItem});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(182, 100);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(182, 124);
 			// 
 			// Start
 			// 
@@ -79,6 +83,13 @@
 			this.pauseToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
 			this.pauseToolStripMenuItem.Text = "Pause";
 			this.pauseToolStripMenuItem.Click += new System.EventHandler(this.pauseToolStripMenuItem_Click);
+			// 
+			// resumeToolStripMenuItem
+			// 
+			this.resumeToolStripMenuItem.Name = "resumeToolStripMenuItem";
+			this.resumeToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
+			this.resumeToolStripMenuItem.Text = "Resume";
+			this.resumeToolStripMenuItem.Click += new System.EventHandler(this.resumeToolStripMenuItem_Click);
 			// 
 			// configurePathsToolStripMenuItem
 			// 
@@ -103,15 +114,26 @@
 			this.configureCollectionPathToolStripMenuItem.Text = "Configure Collection Path";
 			this.configureCollectionPathToolStripMenuItem.Click += new System.EventHandler(this.configureCollectionPathToolStripMenuItem_Click);
 			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(107, 52);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(46, 17);
+			this.label1.TabIndex = 1;
+			this.label1.Text = " ";
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(285, 144);
+			this.Controls.Add(this.label1);
 			this.Name = "Form1";
 			this.Text = "Form1";
 			this.contextMenuStrip1.ResumeLayout(false);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -125,6 +147,9 @@
 		private System.Windows.Forms.ToolStripMenuItem configurePathsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem configureMonitorPathToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem configureCollectionPathToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem resumeToolStripMenuItem;
+		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+		private System.Windows.Forms.Label label1;
 	}
 }
 

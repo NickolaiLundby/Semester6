@@ -4,7 +4,10 @@
 /* 
 Method: CreateDllObject
 	method to call to return a pointer to CDLlClass object
-Signature: CDLLclass * CreateDllObject();*/class CDLLclass
+Signature: CDLLclass * CreateDllObject();*//*
+Method: DeleteDllObject
+	method to call to teardown object from the DLL
+Signature: CDLLclass * DeleteDllObject();*/class CDLLclass
 {
 public:
 	virtual bool Init(CAppUtil * pUtil) = 0;
