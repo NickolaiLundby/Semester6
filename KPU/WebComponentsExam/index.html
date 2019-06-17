@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./my-component.js"></script>
+    <title>WebComponents Example</title>
+</head>
+<body>
+    <p>Hi, from your web server</p>
+    <my-component>
+        <span slot="greeting">Velkommen</span>
+        <span slot="name">KPU</span>
+    </my-component>
+    <br>
+    <my-component>
+        <span slot="greeting">Hey</span>
+        <span slot="name">Jude</span>
+    </my-component>
+    <br>
+    <my-component>
+        <span slot="greeting">Hej</span>
+        <span slot="name">Dig</span>
+    </my-component>
+</body>
+</html>

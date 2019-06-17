@@ -1,6 +1,7 @@
 #pragma once
 // To instantiate the mainclass from the DLL, call the method CreateDllObject.
 // CDLLclass * CreateDllObject();
+
 // To tear down the object again from the DLL, call the method DeleteDllObject.
 // CDLLClass * DeleteDllObject();
 #include "CAppUtil.h"
