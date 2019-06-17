@@ -13,11 +13,11 @@ namespace Lab12_Service
 {
 	public partial class KPUfileWatcherService : ServiceBase
 	{
-		private const string configPath = "C:\\Windows\\Temp\\KPU1\\kpuwservice.config";
+		private const string configPath = "C:\\Windows\\Temp\\KPU1\\kpuwserviceconfig";
 		private const string serviceName = "KPUfileWatcherService";
 		private const string logName = "Application";
-		private const int configMonitorPath = 221;
-		private const int configCollectionPath = 222;
+		private const int configMonitorPathCMD = 221;
+		private const int configCollectionPathCMD = 222;
 		private string MonitorPath { get; set; } = "C:\\Windows\\Temp\\KPU1\\";
 		private string CollectionPath { get; set; } = "C:\\Users\\runek\\Documents\\KPU1 Service Lab main file";
 		public KPUfileWatcherService()
@@ -29,6 +29,7 @@ namespace Lab12_Service
 		{
 			if (!EventLog.SourceExists(serviceName))
 				EventLog.CreateEventSource(serviceName,logName);
+			fileSystemWatcher = new FileSystemWatcher();
 			fileSystemWatcher.Path = MonitorPath;
 			fileSystemWatcher.EnableRaisingEvents = true;
 		}
@@ -36,6 +37,7 @@ namespace Lab12_Service
 		protected override void OnStop()
 		{
 			fileSystemWatcher.EnableRaisingEvents = false;
+			fileSystemWatcher.Dispose();
 		}
 
 		private void LogEvent(string message, EventLogEntryType entryType)
@@ -44,12 +46,19 @@ namespace Lab12_Service
 			eventLog.Source = serviceName;
 			eventLog.Log = logName;
 			eventLog.WriteEntry(message, entryType);
-		}
+		}
 
 		private void fileSystemWatcher_Created(object sender, System.IO.FileSystemEventArgs e)
 		{
 			string text ="";
-			try {text = File.ReadAllText(e.FullPath); } catch(Exception ex) { LogEvent(ex.Message, EventLogEntryType.Error); }
+			try
+			{
+				text = File.ReadAllText(e.FullPath);
+			}
+			catch (Exception ex)
+			{
+				LogEvent(ex.Message, EventLogEntryType.Error);
+			}
 			try
 			{
 				StreamWriter sw = File.AppendText(CollectionPath);
@@ -57,8 +66,10 @@ namespace Lab12_Service
 				sw.Close();
 				LogEvent("Read content of " + e.Name, EventLogEntryType.Information);
 			}
-			catch (Exception ex) { LogEvent(ex.Message, EventLogEntryType.Error); }
-
+			catch (Exception ex)
+			{
+				LogEvent(ex.Message, EventLogEntryType.Error);
+			}
 		}
 		
 		protected override void OnPause()
@@ -75,12 +86,15 @@ namespace Lab12_Service
 		{
 			switch (command)
 			{
-				case configMonitorPath:
+				case configMonitorPathCMD:
 					try
 					{
 						string path = File.ReadAllText(configPath);
 						MonitorPath = path;
 						File.WriteAllText(configPath, "");
+						fileSystemWatcher.EnableRaisingEvents = false;
+						fileSystemWatcher.Path = MonitorPath;
+						fileSystemWatcher.EnableRaisingEvents = true;
 						LogEvent("Configured monitor path", EventLogEntryType.Information);
 					}
 					catch(Exception ex)
@@ -88,7 +102,7 @@ namespace Lab12_Service
 						LogEvent("Failed to configue monitor path: " + ex.Message, EventLogEntryType.Error);
 					}					
 					break;
-				case configCollectionPath:
+				case configCollectionPathCMD:
 					try
 					{
 						string path = File.ReadAllText(configPath);
